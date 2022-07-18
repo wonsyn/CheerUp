@@ -6,6 +6,9 @@ import java.util.Optional;
 import com.web.curation.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
+//git test
 public interface UserDao extends JpaRepository<User, String> {
     User getUserByEmail(String email);
 
