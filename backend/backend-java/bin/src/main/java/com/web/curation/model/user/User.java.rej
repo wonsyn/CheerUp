@@ -1,0 +1,10 @@
+diff a/backend/backend-java/src/main/java/com/web/curation/model/user/User.java b/backend/backend-java/src/main/java/com/web/curation/model/user/User.java	(rejected hunks)
+@@ -16,7 +16,7 @@
+ import com.fasterxml.jackson.annotation.JsonInclude;
+ 
+ import java.time.LocalDateTime;
+-
++//
+ @Entity
+ @Data
+ @NoArgsConstructor
