@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
-import LoginView from "@/views/LoginVuew.vue"
-import SignUpView from "@/views/SignUpView.vue"
+import LoginView from "@/views/LoginView.vue";
+import SignUpView from "@/views/SignUpView.vue";
 // import CalendarView from "@/views/CalendarView.vue"
 // import FollowView from "@/views/FollowView.vue"
 // import NotFoundView from "@/views/NotFoundView.vue"
@@ -25,7 +25,7 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignUpView,
-  }
+  },
 ];
 
 const router = createRouter({
