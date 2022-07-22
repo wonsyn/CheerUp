@@ -1,7 +1,7 @@
 <template>
-  <nav v-if="isLogin == false">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/login">About</router-link>
+  <!-- <nav v-if="isLogin == false"> -->
+  <nav>
+    <router-link to="/">Home</router-link> | <router-link to="/login">About</router-link> |
     <router-link to="/signup">SignUp</router-link>
   </nav>
   <router-view />
