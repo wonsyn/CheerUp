@@ -1,31 +1,69 @@
 <template>
-  <div id="login">로그인</div>
-  <form>    
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1">아이디</span>
-      <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+  <div id="login" class="d-flex justify-content-center">
+    <div>
+      <h1>로그인</h1>
+      <img alt="logo" src="../assets/logo.png" />
     </div>
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon2">비밀번호</span>
-      <input type="text" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2" />
+    <div>
+      <!-- <account-error-list v-if="authError"></account-error-list> -->
+      <form @submit.prevent="login(credentials)">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" v-model="credentials.username" placeholder="Username" required />
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" v-model="credentials.password" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+      </form>
+      <div>
+        <p>소셜 계정으로 로그인:</p>
+        <div>
+          <div><img style="cursor: pointer; width: 25%" @click="test()" src="" alt="google-auth" /></div>
+          <div><img style="cursor: pointer; width: 25%" @click="test()" src="" alt="naver-auth" /></div>
+          <div><img style="cursor: pointer; width: 25%" @click="test()" src="" alt="kakao-auth" /></div>
+          <div><img style="cursor: pointer; width: 25%" @click="test()" src="" alt="twitter-auth" /></div>
+          <div><img style="cursor: pointer; width: 25%" @click="test()" src="" alt="facebook-auth" /></div>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">로그인</button>
-  </form>
-  <div>
-    <p>social login</p>
-    <div><button>Sign in with Naver</button></div>
-    <div><button>Sign in with Kakao</button></div>
-    <div><button>Sign in with Facebook</button></div>
-    <div><button>Sign in with Twitter</button></div>
-    <div><button>Sign in with Google</button></div>
   </div>
 </template>
 
 <script>
+// import AccountErrorList from @/components/AccountErrorList
+// import {mapActions, mapGetters } from 'vuex'
+
 export default {
   name: "LoginView",
-  components: {},
+  components: {
+    // AccountErrorList,
+  },
+  data() {
+    return {
+      credentials: {
+        username: "",
+        password: "",
+      },
+    };
+  },
+  computed: {
+    // ...mapGetters(['에러']),
+  },
+  methods: {
+    test() {
+      confirm("wow");
+    },
+    login() {
+      const msg = `ID: ${this.credentials.username} / Password: ${this.credentials.password}`;
+      confirm(msg);
+    },
+    // ...mapActions(['로그인']),
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+div {
+  border: 2px solid black;
+}
+</style>
