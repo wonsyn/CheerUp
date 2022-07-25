@@ -1,5 +1,5 @@
 <template>
-  <div id="login" class="d-flex justify-content-center">
+  <div id="login">
     <div>
       <h1>로그인</h1>
       <img alt="logo" src="../assets/logo.png" />
