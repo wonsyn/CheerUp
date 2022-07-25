@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <feed-list class="mt-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
+      <feed-list class="mt-3 p-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
     </div>
   </div>
 </template>
