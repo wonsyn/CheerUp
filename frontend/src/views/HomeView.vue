@@ -9,7 +9,7 @@
             <option value="2">정보글</option>
           </select>
           <select class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
-            <option selected>산업군</option>
+            <option selected value="0">산업군</option>
             <option value="1">금융권</option>
             <option value="2">게임</option>
             <option value="3">IT 서비스</option>
@@ -28,14 +28,17 @@
           </div>
         </div>
       </div>
+      <feed-list class="mt-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
     </div>
   </div>
 </template>
 
 <script>
-// import
+import FeedList from "@/components/FeedList.vue";
 export default {
   name: "HomeView",
-  components: {},
+  components: {
+    FeedList,
+  },
 };
 </script>
