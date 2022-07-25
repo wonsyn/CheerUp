@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="row">
-      <div>FeedList</div>
       <div class="col">
         col
         <feed-list-item></feed-list-item>
@@ -25,6 +24,9 @@ export default {
   name: "FeedList",
   components: {
     FeedListItem,
+  },
+  data() {
+    return {};
   },
 };
 </script>
