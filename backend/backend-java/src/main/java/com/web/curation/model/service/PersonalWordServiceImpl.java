@@ -17,4 +17,9 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 		personalWordDao.insertPersonalWord(personalWordDto);
 	}
 
+	@Override
+	public void deletePersonalWord(int personalWordId) {
+		personalWordDao.deletePersonalWord(personalWordId);
+	}
+
 }
