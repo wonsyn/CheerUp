@@ -6,4 +6,6 @@ public interface PersonalWordDao {
 	// 내 단어장에 추가
 	void insertPersonalWord(PersonalWordDto personalWordDto);
 	
+	// 내 단어장에서 삭제
+	void deletePersonalWord(int personalWordId);
 }

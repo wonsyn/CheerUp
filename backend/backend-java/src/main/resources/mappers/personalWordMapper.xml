@@ -18,4 +18,9 @@
 		INSERT INTO personal_word(user_id, personal_word, personal_word_exp, personal_fav_word, personal_word_date)
 		VALUES (#{userId}, #{personalWord}, #{personalWordExp}, #{personalFavWord}, now());
 	</insert>
+	
+	<delete id="deletePersonalWord" parameterType="int">
+		DELETE FROM personal_word
+		WHERE personal_word_id = #{personalWordId}
+	</delete>
 </mapper>
