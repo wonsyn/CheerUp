@@ -4,6 +4,18 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.PersonalWordDao">
 
-
-
+	<resultMap type="PersonalWordDto" id="personalWordMap">
+      <id column="personal_word_id" property="personalWordId"/>
+      <result column="user_id" property="userId"/>
+      <result column="personal_word" property="personalWord"/>
+      <result column="personal_word_exp" property="personalWordExp"/>
+      <result column="personal_fav_word" property="personalFavWord"/>
+      <result column="personal_word_date" property="personalWordDate"/>
+	</resultMap>
+	
+	
+	<insert id="insertPersonalWord" parameterType="PersonalWordDto">
+		INSERT INTO personal_word(user_id, personal_word, personal_word_exp, personal_fav_word, personal_word_date)
+		VALUES (#{userId}, #{personalWord}, #{personalWordExp}, #{personalFavWord}, now());
+	</insert>
 </mapper>
