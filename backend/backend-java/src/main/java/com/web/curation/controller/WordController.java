@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.web.curation.model.dto.PersonalWordDto;
 import com.web.curation.model.dto.WordDto;
 import com.web.curation.model.service.PersonalWordService;
@@ -41,6 +44,7 @@ public class WordController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<String> putWord(PersonalWordDto personalWordDto){
+		System.out.println(personalWordDto);
 		personalWordService.createPersonalWord(personalWordDto);
 		return new ResponseEntity<String>("success", HttpStatus.CREATED);
 	}
@@ -59,5 +63,25 @@ public class WordController {
 	@GetMapping("/myword/fav/{userId}")
 	public ResponseEntity<List<PersonalWordDto>> getPersonalFavWordList(@PathVariable int userId){
 		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalFavWordList(userId), HttpStatus.OK);
+	}
+	
+	@PutMapping("/fav/add/{personalWordId}")
+	public ResponseEntity<String> addPersonalFavWord(@PathVariable int personalWordId){
+		personalWordService.addPersonalFavWord(personalWordId);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@PutMapping("/fav/cancel/{personalWordId}")
+	public ResponseEntity<String> calcelPersonalFavWord(@PathVariable int personalWordId){
+		personalWordService.cancelPersonalFavWord(personalWordId);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<String> editPersonalWord(@RequestBody PersonalWordDto personalWordDto){
+		System.out.println(personalWordDto);
+		System.out.println("before service");
+		personalWordService.editPersonalWord(personalWordDto);
+		return new ResponseEntity<String>("success", HttpStatus.CREATED);
 	}
 }

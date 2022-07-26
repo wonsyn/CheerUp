@@ -34,4 +34,30 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 		return personalWordDao.selectPersonalFavWordList(userId);
 	}
 
+	@Override
+	public void addPersonalFavWord(int personalWordId) {
+//		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordId);
+//		System.out.println(dto);
+		personalWordDao.addPersonalFavWord(personalWordId);
+	}
+
+	@Override
+	public void cancelPersonalFavWord(int personalWordId) {
+		personalWordDao.cancelPersonalFavWord(personalWordId);
+	}
+
+	@Override
+	public void editPersonalWord(PersonalWordDto personalWordDto) {
+		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordDto.getPersonalWordId());
+		dto.setPersonalWordId(personalWordDto.getPersonalWordId());
+		dto.setUserId(personalWordDto.getUserId());
+		dto.setPersonalWord(personalWordDto.getPersonalWord());
+		dto.setPersonalWordExp(personalWordDto.getPersonalWordExp());
+		dto.setPersonalFavWord(personalWordDto.getPersonalFavWord());
+		dto.setPersonalWordDate(personalWordDto.getPersonalWordDate());
+		System.out.println("dto : " + dto);
+		personalWordDao.updatePersonalWord(dto);
+		
+	}
+
 }
