@@ -23,4 +23,18 @@
 		DELETE FROM personal_word
 		WHERE personal_word_id = #{personalWordId}
 	</delete>
+	
+	<select id="selectPersonalWordList" resultMap="personalWordMap" parameterType="int">
+		SELECT *
+		FROM personal_word
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="selectPersonalFavWordList" resultMap="personalWordMap" parameterType="int">
+		SELECT *
+		FROM personal_word
+		WHERE user_id = #{userId}
+			AND
+			  personal_fav_word = 1
+	</select>
 </mapper>

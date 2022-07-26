@@ -45,9 +45,19 @@ public class WordController {
 		return new ResponseEntity<String>("success", HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/{personalWordId}")
+	@DeleteMapping("/delete/{personalWordId}")
 	public ResponseEntity<String> deleteWord(@PathVariable int personalWordId){
 		personalWordService.deletePersonalWord(personalWordId);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/myword/{userId}")
+	public ResponseEntity<List<PersonalWordDto>> getPersonalWordList(@PathVariable int userId){
+		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalWordList(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/myword/fav/{userId}")
+	public ResponseEntity<List<PersonalWordDto>> getPersonalFavWordList(@PathVariable int userId){
+		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalFavWordList(userId), HttpStatus.OK);
 	}
 }

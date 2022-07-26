@@ -1,5 +1,7 @@
 package com.web.curation.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,16 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	@Override
 	public void deletePersonalWord(int personalWordId) {
 		personalWordDao.deletePersonalWord(personalWordId);
+	}
+
+	@Override
+	public List<PersonalWordDto> getPersonalWordList(int userId) {
+		return personalWordDao.selectPersonalWordList(userId);
+	}
+
+	@Override
+	public List<PersonalWordDto> getPersonalFavWordList(int userId) {
+		return personalWordDao.selectPersonalFavWordList(userId);
 	}
 
 }
