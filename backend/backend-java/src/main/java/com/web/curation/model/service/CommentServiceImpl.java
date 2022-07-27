@@ -16,4 +16,9 @@ public class CommentServiceImpl implements CommentService{
 	public void writeComment(CommentDto commentDto) {
 		commentDao.createComment(commentDto);
 	}
+
+	@Override
+	public void deleteComment(int commentId) {
+		commentDao.deleteComment(commentId);
+	}
 }

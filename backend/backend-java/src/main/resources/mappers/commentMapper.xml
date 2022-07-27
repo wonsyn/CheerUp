@@ -8,6 +8,11 @@
 		INSERT INTO comment(comment_url, comment_content, id, comment_date)
 		VALUES(#{commentUrl}, #{commentContent}, #{id}, now())
 	</insert>
+	
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM comment
+		WHERE comment_id = #{commentId}
+	</delete>
 
 </mapper>
 

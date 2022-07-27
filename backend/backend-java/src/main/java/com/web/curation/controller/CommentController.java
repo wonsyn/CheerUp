@@ -3,6 +3,8 @@ package com.web.curation.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,13 @@ public class CommentController {
 	public ResponseEntity<String> createComment(@RequestBody CommentDto commentDto) {
 		commentService.writeComment(commentDto);
 		System.out.println(commentDto);
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete/{commentId}")
+	public ResponseEntity<String> deleteComment(@PathVariable int commentId){
+		commentService.deleteComment(commentId);
 		
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
