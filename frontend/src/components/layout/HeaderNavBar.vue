@@ -40,18 +40,8 @@
             </li>
           </ul>
         </div>
-        <div class="nav-item dropdown">
-          <router-link class="nav-link dropdown-toggle dropdown-center" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">알림</router-link>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <div v-for="day in dayBefore" :key="day">
-              <li>{{ day }}</li>
-              <li v-for="a in users" :key="a" class="d-flex">
-                <img src="../../assets/logo.png" alt="profile-img" style="height: 20px" />
-                <router-link class="dropdown-item" to="#">알림 - {{ a }}</router-link>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-            </div>
-          </ul>
+        <div class="nav-item">
+          <notice-tab></notice-tab>
         </div>
         <div class="nav-item"><router-link class="nav-link" to="#">Link</router-link></div>
       </div>
@@ -61,10 +51,13 @@
 
 <script>
 // import { mapGetters } from "vuex";
+import NoticeTab from "@/components/NoticeTab.vue"
 
 export default {
   name: "NavBar",
-  components: {},
+  components: {
+    NoticeTab,
+  },
   data() {
     return {
       users: ["장진세", "장원석", "정제희", "윤원상", "연창모", "BongMyeong-dong", "DeokMyeong-Dong", "CheerUpChUp", "JangDae-Dong", "Ajax", "Algorithm", "Vuejs Vuex", "Java Spring"],
