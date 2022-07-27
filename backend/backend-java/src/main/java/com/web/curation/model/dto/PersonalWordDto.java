@@ -8,7 +8,6 @@ public class PersonalWordDto {
 	private int userId;
 	private String personalWord;
 	private String personalWordExp;
-	private String personalFavWord;
 	private int personalFavWord;
 	private String personalWordDate;
 	public int getPersonalWordId() {
@@ -35,11 +34,9 @@ public class PersonalWordDto {
 	public void setPersonalWordExp(String personalWordExp) {
 		this.personalWordExp = personalWordExp;
 	}
-	public String getPersonalFavWord() {
 	public int getPersonalFavWord() {
 		return personalFavWord;
 	}
-	public void setPersonalFavWord(String personalFavWord) {
 	public void setPersonalFavWord(int personalFavWord) {
 		this.personalFavWord = personalFavWord;
 	}
