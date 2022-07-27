@@ -17,7 +17,7 @@ public interface PersonalWordService {
 	// 개인 단어장 중 즐겨찾기 조회
 	List<PersonalWordDto> getPersonalFavWordList(int userId);
 	
-	// 단어 즐겨찾기 설정
+	// 단어 즐겨찾기 설정 gg
 	void addPersonalFavWord(int personalWordId);
 	
 	// 단어 즐겨찾기 해제
