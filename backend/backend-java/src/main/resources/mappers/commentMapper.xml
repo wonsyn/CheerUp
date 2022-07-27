@@ -3,7 +3,20 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.CommentDao">
-
+	<resultMap type="CommentDto" id="commentMap">
+      <id column="comment_id" property="commentId"/>
+      <result column="comment_url" property="commentUrl"/>
+      <result column="comment_content" property="commentContent"/>
+      <result column="id" property="id"/>
+      <result column="comment_date" property="commentDate"/>
+	</resultMap>
+	
+	<select id="selectCommentByUrl" parameterType="java.lang.String" resultMap="commentMap">
+		SELECT *
+		FROM comment
+		WHERE comment_url = #{commentUrl}
+	</select>
+	
 	<insert id="createComment" parameterType="commentDto">
 		INSERT INTO comment(comment_url, comment_content, id, comment_date)
 		VALUES(#{commentUrl}, #{commentContent}, #{id}, now())
@@ -13,6 +26,6 @@
 		DELETE FROM comment
 		WHERE comment_id = #{commentId}
 	</delete>
-
+	
 </mapper>
 
