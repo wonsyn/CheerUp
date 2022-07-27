@@ -13,6 +13,11 @@
       <result column="personal_word_date" property="personalWordDate"/>
 	</resultMap>
 	
+	<select id="selectPersonalWordById" resultMap="personalWordMap" parameterType = "int">
+		SELECT *
+		FROM personal_word
+		WHERE personal_word_id = #{personalWordId}
+	</select>
 	
 	<insert id="insertPersonalWord" parameterType="PersonalWordDto">
 		INSERT INTO personal_word(user_id, personal_word, personal_word_exp, personal_fav_word, personal_word_date)
@@ -37,4 +42,30 @@
 			AND
 			  personal_fav_word = 1
 	</select>
+	
+	<update id="addPersonalFavWord" parameterType="int">
+		UPDATE personal_word
+		SET
+		personal_fav_word = 1
+		WHERE personal_word_id = #{personalWordId}
+	</update>
+	
+	<update id="cancelPersonalFavWord" parameterType="int">
+		UPDATE personal_word
+		SET
+		personal_fav_word = 0
+		WHERE personal_word_id = #{personalWordId}
+	</update>
+	
+	<update id="updatePersonalWord" parameterType="personalWordDto">
+		UPDATE personal_word
+		SET
+		personal_word_id = #{personalWordId},
+		user_id = #{userId},
+		personal_word = #{personalWord},
+		personal_word_exp = #{personalWordExp},
+		personal_fav_word = #{personalFavWord},
+		personal_word_date = #{personalWordDate}
+		WHERE personal_word_id = #{personalWordId}
+	</update>
 </mapper>
