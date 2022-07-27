@@ -1,11 +1,21 @@
 <template>
   <!-- <nav v-if="isLogin == false"> -->
+  <nav-bar></nav-bar>
   <nav>
     <router-link to="/">Home</router-link> | <router-link to="/login">About</router-link> |
     <router-link to="/signup">SignUp</router-link>
   </nav>
   <router-view />
 </template>
+<script>
+import NavBar from "@/components/layout/HeaderNavBar.vue";
+
+export default {
+  components: {
+    NavBar,
+  },
+};
+</script>
 
 <style>
 #app {
