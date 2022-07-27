@@ -51,7 +51,7 @@
 
 <script>
 // import { mapGetters } from "vuex";
-import NoticeTab from "@/components/NoticeTab.vue"
+import NoticeTab from "@/components/NoticeTab.vue";
 
 export default {
   name: "NavBar",
