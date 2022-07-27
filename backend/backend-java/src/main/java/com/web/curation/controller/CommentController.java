@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,12 @@ public class CommentController {
 	public ResponseEntity<String> deleteComment(@PathVariable int commentId){
 		commentService.deleteComment(commentId);
 		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<String> editComment(@RequestBody CommentDto commentDto){
+		commentService.editComment(commentDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	

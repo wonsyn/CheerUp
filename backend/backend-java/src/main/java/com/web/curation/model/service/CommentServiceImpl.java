@@ -28,4 +28,17 @@ public class CommentServiceImpl implements CommentService{
 	public void deleteComment(int commentId) {
 		commentDao.deleteComment(commentId);
 	}
+
+	@Override
+	public void editComment(CommentDto commentDto) {
+		System.out.println(commentDto.getCommentId());
+		CommentDto dto = commentDao.selectCommentById(commentDto.getCommentId());
+		dto.setCommentId(commentDto.getCommentId());
+		dto.setCommentUrl(commentDto.getCommentUrl());
+		dto.setCommentContent(commentDto.getCommentContent());
+		dto.setId(commentDto.getId());
+		dto.setCommentDate(commentDto.getCommentDate());
+		
+		commentDao.updateComment(dto);
+	}
 }

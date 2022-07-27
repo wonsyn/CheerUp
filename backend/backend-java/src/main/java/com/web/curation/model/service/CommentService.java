@@ -13,5 +13,8 @@ public interface CommentService {
 	
 	// 댓글 삭제
 	void deleteComment(int commentId);
+	
+	// 댓글 수정
+	void editComment(CommentDto commentDto);
 
 }

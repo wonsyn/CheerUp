@@ -11,6 +11,12 @@
       <result column="comment_date" property="commentDate"/>
 	</resultMap>
 	
+	<select id="selectCommentById" parameterType="int" resultMap="commentMap">
+		SELECT *
+		FROM comment
+		WHERE comment_id = #{commentId}
+	</select>
+	
 	<select id="selectCommentByUrl" parameterType="java.lang.String" resultMap="commentMap">
 		SELECT *
 		FROM comment
@@ -26,6 +32,17 @@
 		DELETE FROM comment
 		WHERE comment_id = #{commentId}
 	</delete>
+	
+	<update id="updateComment" parameterType="commentDto">
+		UPDATE comment
+		SET
+		comment_id = #{commentId},
+		comment_url = #{commentUrl},
+		comment_content = #{commentContent},
+		id = #{id},
+		comment_date= #{commentDate}
+		WHERE comment_id = #{commentId}
+	</update>
 	
 </mapper>
 
