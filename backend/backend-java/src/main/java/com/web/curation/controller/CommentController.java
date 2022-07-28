@@ -25,10 +25,11 @@ public class CommentController {
 	private CommentService commentService;
 	
 	// 아직 api가 정해재지 않아서 고유 주소를 인식하는 규칙에 따라서 url바귈수도 => commentUrl을 나중에는 고유 id로 바꿀 예정
-	@GetMapping("/read/{commentUrl}")
-	public ResponseEntity<List<CommentDto>> readCommentByUrl(@PathVariable String commentUrl){
-		System.out.println(commentService.readCommentByUrl(commentUrl));
-		return new ResponseEntity<List<CommentDto>>(commentService.readCommentByUrl(commentUrl), HttpStatus.OK);
+	// commentUrl -> feedId로 변경
+	@GetMapping("/read/{feedId}")
+	public ResponseEntity<List<CommentDto>> readCommentByUrl(@PathVariable int feedId){
+		System.out.println(commentService.readCommentByFeedId(feedId));
+		return new ResponseEntity<List<CommentDto>>(commentService.readCommentByFeedId(feedId), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create")

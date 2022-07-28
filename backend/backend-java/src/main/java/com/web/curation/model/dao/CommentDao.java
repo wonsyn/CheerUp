@@ -5,11 +5,11 @@ import java.util.List;
 import com.web.curation.model.dto.CommentDto;
 
 public interface CommentDao {
-	// comment_id로 조회
+	// feed_id로 조회
 	CommentDto selectCommentById(int commentId);
 	
 	// 해당 url 댓글 조회
-	List<CommentDto> selectCommentByUrl(String commentUrl);
+	List<CommentDto> selectCommentByFeedId(int feedId);
 	
 	// 댓글 작성
 	void createComment(CommentDto commentDto);

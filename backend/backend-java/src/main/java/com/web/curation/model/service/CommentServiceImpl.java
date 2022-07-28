@@ -15,8 +15,8 @@ public class CommentServiceImpl implements CommentService{
 	private CommentDao commentDao;
 	
 	@Override
-	public List<CommentDto> readCommentByUrl(String commentUrl) {
-		return commentDao.selectCommentByUrl(commentUrl);
+	public List<CommentDto> readCommentByFeedId(int feedId) {
+		return commentDao.selectCommentByFeedId(feedId);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService{
 		System.out.println(commentDto.getCommentId());
 		CommentDto dto = commentDao.selectCommentById(commentDto.getCommentId());
 		dto.setCommentId(commentDto.getCommentId());
-		dto.setCommentUrl(commentDto.getCommentUrl());
+		dto.setFeedId(commentDto.getFeedId());
 		dto.setCommentContent(commentDto.getCommentContent());
 		dto.setId(commentDto.getId());
 		dto.setCommentDate(commentDto.getCommentDate());

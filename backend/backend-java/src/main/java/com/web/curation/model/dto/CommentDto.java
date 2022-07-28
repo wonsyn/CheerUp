@@ -5,21 +5,22 @@ import lombok.Data;
 @Data
 public class CommentDto {
 	private int commentId;
-	private String commentUrl;
+	private int feedId;
 	private String commentContent;
 	private String id;
 	private String commentDate;
+	
 	public int getCommentId() {
 		return commentId;
 	}
 	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
-	public String getCommentUrl() {
-		return commentUrl;
+	public int getFeedId() {
+		return feedId;
 	}
-	public void setCommentUrl(String commentUrl) {
-		this.commentUrl = commentUrl;
+	public void setFeedId(int feedId) {
+		this.feedId = feedId;
 	}
 	public String getCommentContent() {
 		return commentContent;
@@ -41,9 +42,10 @@ public class CommentDto {
 	}
 	@Override
 	public String toString() {
-		return "CommentDto [commentId=" + commentId + ", commentUrl=" + commentUrl + ", commentContent="
-				+ commentContent + ", id=" + id + ", commentDate=" + commentDate + "]";
+		return "CommentDto [commentId=" + commentId + ", feedId=" + feedId + ", commentContent=" + commentContent
+				+ ", id=" + id + ", commentDate=" + commentDate + "]";
 	}
+
 	
 	
 	

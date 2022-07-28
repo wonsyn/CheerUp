@@ -5,8 +5,8 @@ import java.util.List;
 import com.web.curation.model.dto.CommentDto;
 
 public interface CommentService {
-	// url별 댓글 조회
-	List<CommentDto> readCommentByUrl(String commentUrl);
+	// feedId로 댓글 조회
+	List<CommentDto> readCommentByFeedId(int feedId);
 	
 	// 댓글 작성
 	void writeComment(CommentDto commentDto);
