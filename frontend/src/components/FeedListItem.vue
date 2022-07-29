@@ -7,7 +7,7 @@
       </div>
       <div class="card-footer d-flex justify-content-between">
         <div>[[ 출처 ]]</div>
-        <div><i class="fa-solid fa-bookmark"></i><i class="fa-light fa-bookmark"></i></div>
+        <div><i class="fas fa-bookmark"></i><i class="fal fa-bookmark"></i></div>
       </div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 <script>
 export default {
   name: "FeedListItem",
+  components: {},
   setup() {},
 };
 </script>
