@@ -4,6 +4,12 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.CommentLikeDao">
 
+	<resultMap type="CommentLikeDto" id="commentLikeMap">
+      <id column="like_id" property="likeId"/>
+      <result column="user_id" property="userId"/>
+      <result column="comment_id" property="commentId"/>
+	</resultMap>
+
 	<insert id="insertLike" parameterType="commentLikeDto">
 		INSERT INTO comment_like (user_id, comment_id)
 		VALUES(#{userId}, #{commentId});
@@ -14,5 +20,12 @@
 		WHERE user_id = #{userId}
 			AND
 			  comment_id = #{commentId}
-	</delete>	
+	</delete>
+	
+	<select id="selectCommentLikeList" resultMap="commentLikeMap" parameterType="int">
+		SELECT like_id, user_id, comment_id
+		FROM comment_like
+		WHERE comment_id = #{commentId}
+		
+	</select>	
 </mapper>
