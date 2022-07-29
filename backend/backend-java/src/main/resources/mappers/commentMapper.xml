@@ -37,7 +37,7 @@
 		UPDATE comment
 		SET
 		comment_id = #{commentId},
-		comment_url = #{commentUrl},
+		feed_id = #{feedId},
 		comment_content = #{commentContent},
 		id = #{id},
 		comment_date= #{commentDate}

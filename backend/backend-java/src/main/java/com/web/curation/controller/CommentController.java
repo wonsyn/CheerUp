@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.CommentDto;
+import com.web.curation.model.dto.CommentLikeDto;
 import com.web.curation.model.service.CommentService;
+import com.web.curation.model.service.CommentLikeService;
 
 @RestController
 @RequestMapping("/comment")
@@ -23,6 +25,9 @@ public class CommentController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private CommentLikeService commentLikeSerivce;
 	
 	// 아직 api가 정해재지 않아서 고유 주소를 인식하는 규칙에 따라서 url바귈수도 => commentUrl을 나중에는 고유 id로 바꿀 예정
 	// commentUrl -> feedId로 변경
@@ -53,5 +58,11 @@ public class CommentController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
+	@PostMapping("/like")
+	public ResponseEntity<String> addLike(@RequestBody CommentLikeDto commentLikeDto){
+		System.out.println(commentLikeDto);
+		commentLikeSerivce.addLike(commentLikeDto);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
 	
 }

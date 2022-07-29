@@ -9,17 +9,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.web.curation.model.dto.CommentLikeDto;
 import com.web.curation.model.dto.PersonalWordDto;
 import com.web.curation.model.dto.WordDto;
+import com.web.curation.model.service.CommentLikeService;
 import com.web.curation.model.service.PersonalWordService;
 import com.web.curation.model.service.WordService;
 
@@ -87,4 +85,5 @@ public class WordController {
 		personalWordService.editPersonalWord(personalWordDto);
 		return new ResponseEntity<String>("success", HttpStatus.CREATED);
 	}
+
 }
