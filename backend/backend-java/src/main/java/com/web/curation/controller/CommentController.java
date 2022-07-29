@@ -65,4 +65,10 @@ public class CommentController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/like")
+	public ResponseEntity<String> cancelLike(@RequestBody CommentLikeDto commentLikeDto){
+		commentLikeSerivce.cancelLike(commentLikeDto);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
 }

@@ -9,5 +9,10 @@
 		VALUES(#{userId}, #{commentId});
 	</insert>
 	
-	
+	<delete id="deleteLike" parameterType="commentLikeDto">
+		DELETE FROM comment_like
+		WHERE user_id = #{userId}
+			AND
+			  comment_id = #{commentId}
+	</delete>	
 </mapper>

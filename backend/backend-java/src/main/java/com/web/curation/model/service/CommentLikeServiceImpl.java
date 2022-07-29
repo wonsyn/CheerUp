@@ -16,6 +16,11 @@ public class CommentLikeServiceImpl implements CommentLikeService{
 	public void addLike(CommentLikeDto likeDto) {
 		likeDao.insertLike(likeDto);
 	}
+
+	@Override
+	public void cancelLike(CommentLikeDto likeDto) {
+		likeDao.deleteLike(likeDto);
+	}
 	
 	
 }
