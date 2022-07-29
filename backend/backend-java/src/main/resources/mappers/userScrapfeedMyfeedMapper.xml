@@ -3,8 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.UserScrapfeedMyfeedDao">
+	<resultMap type="UserScrapfeedMyfeedDto" id="scrapMap">
+      <id column="myfeed_id" property="myfeedId"/>
+      <result column="user_id" property="userId"/>
+      <result column="feed_id" property="feedId"/>
+      <result column="myfeed_date" property="myfeedDate"/>
+      <result column="scrapfeed_type" property="scrapfeedType"/>
+	</resultMap>
+	
 	<insert id="insertScrap" parameterType="userScrapfeedMyfeedDto">
 		INSERT INTO user_feed_myfeed(user_id, feed_id, myfeed_date, board_id, scrapfeed_type)
 		VALUES(#{userId}, #{feedId}, now(), #{boardId}, #{scrapfeedType})
 	</insert>
+	
+	<select id="selectMyScrap" resultMap="scrapMap" parameterType="int">
+		SELECT *
+		FROM user_feed_myfeed
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="selectMyScrapEachBoard" resultMap="scrapMap" parameterType="int">
+		SELECT *
+		FROM user_feed_myfeed
+		WHERE user_id = #{user_id}
+			AND
+			  board_id = #{boardId}
+	</select>
 </mapper>

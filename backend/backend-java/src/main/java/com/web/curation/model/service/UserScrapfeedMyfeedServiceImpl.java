@@ -21,8 +21,12 @@ public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedServic
 
 	@Override
 	public List<UserScrapfeedMyfeedDto> getMyScrap(int user_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return userScrapfeedMyfeedDao.selectMyScrap(user_id);
+	}
+
+	@Override
+	public List<UserScrapfeedMyfeedDto> getMyScrapEachBoard(int userId, int boardId) {
+		return userScrapfeedMyfeedDao.selectMyScrapEachBoard(userId, boardId);
 	}
 
 }

@@ -60,4 +60,15 @@ public class FeedController {
 		userScrapfeedMyfeedService.addScrap(dto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+	
+	@GetMapping("/scrap/{userId}")
+	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeed(@PathVariable int userId){
+		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrap(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/scrap/{userId}/{boardId}")
+	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeedEachBoard(@PathVariable int userId, @PathVariable int boardId){
+		System.out.println(userId);
+		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
+	}
 }

@@ -10,4 +10,7 @@ public interface UserScrapfeedMyfeedDao {
 	
 	// 내가 스크랩한 것 보여주기
 	List<UserScrapfeedMyfeedDto> selectMyScrap(int user_id);
+	
+	// 내가 스크랩한 것 중 보드 별로 보여주기
+	List<UserScrapfeedMyfeedDto> selectMyScrapEachBoard(int user_id, int boardId);
 }
