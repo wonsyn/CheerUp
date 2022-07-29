@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.BoardDto;
+import com.web.curation.model.dto.FeedDto;
 import com.web.curation.model.dto.UserScrapfeedMyfeedDto;
 import com.web.curation.model.service.BoardService;
+import com.web.curation.model.service.FeedService;
 import com.web.curation.model.service.UserScrapfeedMyfeedService;
 
 @RestController
@@ -28,6 +30,9 @@ public class FeedController {
 	
 	@Autowired
 	private UserScrapfeedMyfeedService userScrapfeedMyfeedService;
+	
+	@Autowired
+	private FeedService feedService;
 	
 	@GetMapping("/board/list/{userId}")
 	public ResponseEntity<List<BoardDto>> getBoardByUserId(@PathVariable int userId){
@@ -70,5 +75,11 @@ public class FeedController {
 	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeedEachBoard(@PathVariable int userId, @PathVariable int boardId){
 		System.out.println(userId);
 		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/{feedType}")
+	public ResponseEntity<List<FeedDto>> searchFeed(@PathVariable int feedType){
+		System.out.println(feedType);
+		return new ResponseEntity<List<FeedDto>>(feedService.searchFeed(feedType), HttpStatus.OK);
 	}
 }

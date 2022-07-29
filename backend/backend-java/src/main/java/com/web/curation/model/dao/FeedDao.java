@@ -2,9 +2,10 @@ package com.web.curation.model.dao;
 
 import java.util.List;
 
-import com.web.curation.model.dto.UserScrapfeedMyfeedDto;
+import com.web.curation.model.dto.FeedDto;
 
 public interface FeedDao {
 	
-	
+	// feed 검색
+	List<FeedDto> selectFeed(int feedType);
 }
