@@ -37,7 +37,7 @@ const routes = [
     component: FollowView,
   },
   {
-    path: "/profile",
+    path: "/profile/:username",
     name: "profile",
     component: ProfileView,
   },
@@ -61,10 +61,10 @@ const routes = [
     name: "notfound",
     component: NotFoundView,
   },
-  {
-    path: "*",
-    redirect: "/404",
-  },
+  // {
+  //   path: "*",
+  //   redirect: "/404",
+  // },
 ];
 
 const router = createRouter({
