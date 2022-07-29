@@ -1,7 +1,7 @@
 <template>
-  <nav id="navbar-frame" class="navbar navbar-expand-lg">
+  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/"><img src="../../assets/logo.png" alt="home" style="height: 50px" /></router-link>
+      <router-link class="navbar-brand" to="/"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link active" aria-current="page" to="#">메인</router-link>
+            <router-link class="nav-link" aria-current="page" to="/">메인</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="#">달력</router-link>
@@ -28,22 +28,22 @@
             <router-link class="nav-link" to="#">단어장</router-link>
           </li>
         </ul>
-        <div id="searchuser" class="nav-item dropdown">
-          <form @submit.prevent="autoFillInput(result[0])" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+        <div id="searchuser" class="nav-item dropdown me-3">
+          <form @submit.prevent="autoFillInput(result[0])" class="dropdown-toggle pe-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             <input type="text" v-model="userInput" @input="submitAutoComplete" placeholder="유저 이름" />
           </form>
           <ul v-if="!!userInput == true" id="user-search-box" class="dropdown-menu autocomplete disabled">
             <li class="dropdown-item">결과</li>
             <li class="dropdown-item" @click="searchUserAdd" style="cursor: pointer" v-for="(res, i) in result" :key="i">
-              <img src="../../assets/logo.png" alt="profile-img" style="height: 20px" />
+              <img src="@/assets/logo.png" alt="profile-img" style="height: 20px" />
               <span>{{ res }}</span>
             </li>
           </ul>
         </div>
-        <div class="nav-item">
+        <div class="nav-item me-3">
           <notice-tab></notice-tab>
         </div>
-        <div class="nav-item"><router-link class="nav-link" to="#">Link</router-link></div>
+        <div class="nav-item"><router-link class="nav-link" to="#">유저 프로필</router-link></div>
       </div>
     </div>
   </nav>
