@@ -9,6 +9,7 @@
       <result column="comment_content" property="commentContent"/>
       <result column="id" property="id"/>
       <result column="comment_date" property="commentDate"/>
+      <result column="count_like" property="countLike"/>
 	</resultMap>
 	
 	<select id="selectCommentById" parameterType="int" resultMap="commentMap">
@@ -17,10 +18,12 @@
 		WHERE comment_id = #{commentId}
 	</select>
 	
-	<select id="selectCommentByUrl" parameterType="java.lang.String" resultMap="commentMap">
-		SELECT *
-		FROM comment
-		WHERE comment_url = #{commentUrl}
+	<select id="selectCommentByFeedId" parameterType="java.lang.String" resultMap="commentMap">
+		SELECT c.comment_id, c.feed_id, c.comment_content, c.id, c.comment_date, count(cl.like_id) as count_like
+		FROM comment c LEFT OUTER JOIN comment_like cl
+		ON c.comment_id = cl.comment_id
+		WHERE feed_id = 2
+		GROUP BY c.comment_id;
 	</select>
 	
 	<insert id="createComment" parameterType="commentDto">

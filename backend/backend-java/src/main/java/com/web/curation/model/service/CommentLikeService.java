@@ -11,6 +11,4 @@ public interface CommentLikeService {
 	// 좋아요 취소
 	void cancelLike(CommentLikeDto likeDto);
 	
-	// 댓글 별 좋아요 수 counting
-	List<CommentLikeDto> getCommentLikeByCommentId(int commentId);
 }

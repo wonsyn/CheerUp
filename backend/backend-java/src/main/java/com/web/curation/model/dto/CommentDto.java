@@ -9,6 +9,8 @@ public class CommentDto {
 	private String commentContent;
 	private String id;
 	private String commentDate;
+	private int countLike;
+	
 	
 	public int getCommentId() {
 		return commentId;
@@ -40,15 +42,15 @@ public class CommentDto {
 	public void setCommentDate(String commentDate) {
 		this.commentDate = commentDate;
 	}
+	public int getCountLike() {
+		return countLike;
+	}
+	public void setCountLike(int countLike) {
+		this.countLike = countLike;
+	}
 	@Override
 	public String toString() {
 		return "CommentDto [commentId=" + commentId + ", feedId=" + feedId + ", commentContent=" + commentContent
-				+ ", id=" + id + ", commentDate=" + commentDate + "]";
+				+ ", id=" + id + ", commentDate=" + commentDate + ", countLike=" + countLike + "]";
 	}
-
-	
-	
-	
-	
-
 }
