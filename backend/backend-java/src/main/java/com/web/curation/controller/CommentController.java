@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.CommentDto;
 import com.web.curation.model.dto.CommentLikeDto;
-import com.web.curation.model.service.CommentService;
 import com.web.curation.model.service.CommentLikeService;
+import com.web.curation.model.service.CommentService;
 
 @RestController
 @RequestMapping("/comment")
@@ -27,7 +27,7 @@ public class CommentController {
 	private CommentService commentService;
 	
 	@Autowired
-	private CommentLikeService commentLikeSerivce;
+	private CommentLikeService commentLikeServie;
 	
 	// 아직 api가 정해재지 않아서 고유 주소를 인식하는 규칙에 따라서 url바귈수도 => commentUrl을 나중에는 고유 id로 바꿀 예정
 	// commentUrl -> feedId로 변경
@@ -61,14 +61,22 @@ public class CommentController {
 	@PostMapping("/like")
 	public ResponseEntity<String> addLike(@RequestBody CommentLikeDto commentLikeDto){
 		System.out.println(commentLikeDto);
-		commentLikeSerivce.addLike(commentLikeDto);
+		commentLikeServie.addLike(commentLikeDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/like")
 	public ResponseEntity<String> cancelLike(@RequestBody CommentLikeDto commentLikeDto){
-		commentLikeSerivce.cancelLike(commentLikeDto);
+		commentLikeServie.cancelLike(commentLikeDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	@GetMapping("/like/{commentId}")
+	public ResponseEntity<List<CommentLikeDto>> getCommentLikeByCommentId(@PathVariable int commentId){
+		System.out.println(commentId);
+		System.out.println(commentLikeServie.getCommentLikeByCommentId(commentId));
+		
+		return new ResponseEntity<List<CommentLikeDto>>(commentLikeServie.getCommentLikeByCommentId(commentId), HttpStatus.OK);
 	}
 	
 }
