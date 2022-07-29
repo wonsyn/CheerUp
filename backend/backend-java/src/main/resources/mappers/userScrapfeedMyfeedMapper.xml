@@ -3,7 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.UserScrapfeedMyfeedDao">
-
-
-
+	<insert id="insertScrap" parameterType="userScrapfeedMyfeedDto">
+		INSERT INTO user_feed_myfeed(user_id, feed_id, myfeed_date, board_id, scrapfeed_type)
+		VALUES(#{userId}, #{feedId}, now(), #{boardId}, #{scrapfeedType})
+	</insert>
 </mapper>

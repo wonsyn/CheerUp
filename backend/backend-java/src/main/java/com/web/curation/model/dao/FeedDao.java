@@ -1,5 +1,10 @@
 package com.web.curation.model.dao;
 
-public interface FeedDao {
+import java.util.List;
 
+import com.web.curation.model.dto.UserScrapfeedMyfeedDto;
+
+public interface FeedDao {
+	
+	
 }

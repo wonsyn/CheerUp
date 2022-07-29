@@ -3,7 +3,40 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.BoardDao">
-
+	<resultMap type="BoardDto" id="boardMap">
+      <id column="board_id" property="boardId"/>
+      <result column="user_id" property="userId"/>
+      <result column="board_name" property="boardName"/>
+	</resultMap>
+	
+	<select id="selectBoardByBoardId" resultMap="boardMap" parameterType="int">
+		SELECT *
+		FROM board
+		WHERE board_id = #{boardId}
+	</select>
+	
+	<select id="selectBoardByUserId" resultMap="boardMap" parameterType="int">
+		SELECT *
+		FROM board
+		WHERE user_id = #{userId}
+	</select>
+	
+	<insert id="insertBoard" parameterType="boardDto">
+		INSERT INTO board(user_id, board_name)
+		VALUES (#{userId}, #{boardName})
+	</insert>
+	
+	<update id="updateBoard" parameterType="boardDto">
+		UPDATE board
+		SET
+		board_name = #{boardName}
+		WHERE board_id = #{boardId}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM board
+		WHERE board_id = #{boardId}
+	</delete>
 
 
 </mapper>
