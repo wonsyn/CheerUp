@@ -17,11 +17,11 @@
       </div>
     </div>
     <div id="user-scrap-and-board" class="d-flex justify-content-around">
-      <div id="user-board-tab">
+      <div v-if="onBoardTab == undefined" id="user-board-tab">
         보드
         <user-board-list></user-board-list>
       </div>
-      <div id="user-scrap-tab">
+      <div v-else id="user-scrap-tab">
         스크랩
         <user-scrap-list></user-scrap-list>
       </div>
