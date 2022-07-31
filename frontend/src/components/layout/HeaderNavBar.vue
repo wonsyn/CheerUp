@@ -1,5 +1,5 @@
 <template>
-  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3" style="box-shadow: 0px 2px 7px 1px lightgray">
+  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3 mb-5" style="box-shadow: 0px 2px 7px 1px lightgray">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/" @click="goMain"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
       <button
