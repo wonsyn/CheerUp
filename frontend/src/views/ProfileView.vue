@@ -2,27 +2,34 @@
   <div id="profile-view">
     프로필
     <div id="user-profile" class="d-flex justify-content-around">
+      <div></div>
       <div id="profile-img" class="box">
         <img class="profile" src="@/assets/logo.png" alt="profile-img" />
       </div>
-      <div id="user-info">
-        <div id="username">
-          <span>{{ username }}</span>
+      <div id="user-info" class="my-3">
+        <div id="username" class="my-3">
+          <span class="m-3">{{ username }}</span>
           <span>
-            <button v-if="currentUser.username == username">정보수정</button>
-            <button v-else>팔로우</button>
+            <button class="btn btn-sm btn-outline-dark" v-if="currentUser.username == username">정보수정</button>
+            <button class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
         </div>
         <div id="user-follow"><span>팔로우: 999</span> / <span>팔로워: 999</span></div>
       </div>
+      <div></div>
     </div>
-    <div id="user-scrap-and-board" class="d-flex justify-content-around">
-      <div v-if="onBoardTab == undefined" id="user-board-tab">
-        보드
+    <div id="user-scrap-and-board">
+      <div class="d-flex justify-content-around my-5 py-3 fw-bold" style="box-shadow: 0px 5px 5px 1px lightgray">
+        <div></div>
+        <div @click="clickScrapTab">스크랩</div>
+        |
+        <div @click="clickBoardTab">보드</div>
+        <div></div>
+      </div>
+      <div v-if="onBoardTab == true">
         <user-board-list></user-board-list>
       </div>
-      <div v-else id="user-scrap-tab">
-        스크랩
+      <div v-else>
         <user-scrap-list></user-scrap-list>
       </div>
     </div>
@@ -46,7 +53,16 @@ export default {
         id: 1,
       },
       username: this.$route.params.username,
+      onBoardTab: false,
     };
+  },
+  methods: {
+    clickBoardTab() {
+      this.onBoardTab = true;
+    },
+    clickScrapTab() {
+      this.onBoardTab = false;
+    },
   },
 };
 </script>

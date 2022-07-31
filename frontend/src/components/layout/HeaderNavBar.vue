@@ -43,7 +43,7 @@
         <div class="nav-item me-3">
           <notice-tab></notice-tab>
         </div>
-        <div class="nav-item"><router-link class="nav-link" to="#">유저 프로필</router-link></div>
+        <div class="nav-item"><router-link class="nav-link" :to="{ name: 'profile', params: { username: 'user1' } }">유저 프로필</router-link></div>
       </div>
     </div>
   </nav>

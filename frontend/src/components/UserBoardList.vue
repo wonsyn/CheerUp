@@ -1,16 +1,14 @@
 <template>
   <div class="container">
+    <h3>보드 리스트</h3>
     <div class="row">
       <div class="col">
-        col
         <user-board-list-item></user-board-list-item>
       </div>
       <div class="col">
-        col
         <user-board-list-item></user-board-list-item>
       </div>
       <div class="col">
-        col
         <user-board-list-item></user-board-list-item>
       </div>
     </div>
