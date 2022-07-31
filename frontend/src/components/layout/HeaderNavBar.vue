@@ -1,7 +1,7 @@
 <template>
-  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3">
+  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3" style="box-shadow: 0px 2px 7px 1px lightgray">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
+      <router-link class="navbar-brand" to="/" @click="goMain"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,16 +16,16 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" aria-current="page" to="/">메인</router-link>
+            <router-link id="nav-btn-main" class="nav-link" aria-current="page" to="/">메인</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#">달력</router-link>
+            <router-link class="nav-link" to="#" @click="outMain">달력</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#">일정</router-link>
+            <router-link class="nav-link" to="#" @click="outMain">일정</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#">단어장</router-link>
+            <router-link class="nav-link" to="#" @click="outMain">단어장</router-link>
           </li>
         </ul>
         <div id="searchuser" class="nav-item dropdown me-3">
@@ -63,7 +63,7 @@ export default {
       users: ["장진세", "장원석", "정제희", "윤원상", "연창모", "BongMyeong-dong", "DeokMyeong-Dong", "CheerUpChUp", "JangDae-Dong", "Ajax", "Algorithm", "Vuejs Vuex", "Java Spring"],
       userInput: null,
       result: [],
-      dayBefore: ["오늘", "어제", "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", "1주 전", "2주 전", "3주 전"],
+      dayBefore: ["오늘", "어제", /* "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", */ "1주 전" /* "2주 전", "3주 전"*/],
     };
   },
   computed: {},
@@ -89,6 +89,14 @@ export default {
     },
     autoFillInput() {
       this.userInput = this.result[0];
+    },
+    goMain() {
+      const mainBtn = document.getElementById("nav-btn-main");
+      mainBtn.classList.add("active");
+    },
+    outMain() {
+      const mainBtn = document.getElementById("nav-btn-main");
+      mainBtn.classList.remove("active");
     },
   },
 };

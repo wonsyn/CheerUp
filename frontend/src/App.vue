@@ -1,9 +1,6 @@
 <template>
   <nav-bar></nav-bar>
-  <nav>
-    <router-link to="/">Home</router-link> | <router-link to="/login">About</router-link> |
-    <router-link to="/signup">SignUp</router-link>
-  </nav>
+  <nav><router-link to="/">Home</router-link> | <router-link to="/login">About</router-link> | <router-link to="/signup">SignUp</router-link> | <router-link to="/detail">detail</router-link></nav>
   <router-view />
   <main-footer></main-footer>
 </template>

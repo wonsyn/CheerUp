@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" style="width: 18rem">
+    <div class="card mx-auto" style="width: 18rem">
       <img src="@/assets/logo.png" class="card-img-top" alt="..." />
       <div class="card-body">
         <p class="card-text">[[ 제목 ]]</p>

@@ -12,7 +12,7 @@
         <div class="input-group mb-3 mx-auto" style="width: 30%">
           <input type="password" class="form-control" v-model="credentials.password" placeholder="Password" required />
         </div>
-        <button type="submit" class="btn btn-primary mx-auto mb-2" style="width: 5%; font-size: 10px">로그인</button>
+        <button type="submit" class="btn mx-auto mb-2" style="width: 12%; font-size: 15px; font-weight: bold; color: white; background-color: #00dd99">로그인</button>
       </form>
       <div class="d-flex flex-column">
         <!-- <router-link class="mx-auto mb-1" to="#" style="text-decoration: none; font-size: 10px">아이디/비밀번호 찾기</router-link> -->

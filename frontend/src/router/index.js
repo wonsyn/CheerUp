@@ -9,6 +9,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import ScheduleView from "@/views/ScheduleView.vue";
 import UserEditView from "@/views/UserEditView.vue";
 import VocaView from "@/views/VocaView.vue";
+import FeedDetailView from "@/views/FeedDetailView.vue";
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path: "/404",
     name: "notfound",
     component: NotFoundView,
+  },
+  {
+    path: "/detail",
+    name: "detail",
+    component: FeedDetailView,
   },
   // {
   //   path: "*",

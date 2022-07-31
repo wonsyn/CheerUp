@@ -21,7 +21,7 @@
 import FeedListItem from "@/components/CommentListItem";
 
 export default {
-  name: UserScrapList,
+  name: "UserScrapList",
   components: {
     FeedListItem,
   },
