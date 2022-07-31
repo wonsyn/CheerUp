@@ -1,5 +1,7 @@
 package com.web.curation.model.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 @Data

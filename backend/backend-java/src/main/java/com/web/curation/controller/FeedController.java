@@ -21,6 +21,10 @@ import com.web.curation.model.service.BoardService;
 import com.web.curation.model.service.FeedService;
 import com.web.curation.model.service.UserScrapfeedMyfeedService;
 
+import io.swagger.annotations.Api;
+
+
+@Api(tags = "메인피드/개인피드/보드")
 @RestController
 @RequestMapping("/feed")
 public class FeedController {
