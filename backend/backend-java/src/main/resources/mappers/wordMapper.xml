@@ -4,6 +4,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.WordDao">
 
-
+<resultMap type="WordDto" id="wordMap">
+      <id column="word_id" property="wordId"/>
+      <result column="word" property="word"/>
+      <result column="word_exp" property="wordExp"/>
+</resultMap>
+  
+	<select id="selectWords" resultMap="wordMap">
+		SELECT *
+		FROM word;
+	</select>
+	
+	<select id="selectWordById" resultMap="wordMap">
+		SELECT *
+		FROM word
+		where word_id = ${word_id}
+	</select>
 
 </mapper>
