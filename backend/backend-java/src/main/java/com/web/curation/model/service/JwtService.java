@@ -14,7 +14,7 @@ public interface JwtService {
 //	boolean isUsableRefreshToken(String jwt);
 	
 	public int createRefreshToken(JwtDto tokenDto) throws SQLException;
-//	public int updateRefreshToken(JwtDto tokenDto) throws SQLException;
+	public int updateRefreshToken(JwtDto tokenDto) throws SQLException;
 //	public JwtDto tokenInfo(int userId) throws SQLException;
 //	public<T> String getRefreshToken(String key, T data, String subject, Date peroid);
 //	public String getUserIdByJwt(String jwt);

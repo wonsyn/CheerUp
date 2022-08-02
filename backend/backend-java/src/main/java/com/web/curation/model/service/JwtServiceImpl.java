@@ -165,12 +165,12 @@ public class JwtServiceImpl implements JwtService {
 	public int createRefreshToken(JwtDto tokenDto) throws SQLException {
 		return jwtMapper.createRefreshToken(tokenDto);
 	}
-//	
-//	@Override
-//	public int updateRefreshToken(JwtDto tokenDto) throws SQLException {
-//		return jwtMapper.updateRefreshToken(tokenDto);
-//	}
-//
+	
+	@Override
+	public int updateRefreshToken(JwtDto tokenDto) throws SQLException {
+		return jwtMapper.updateRefreshToken(tokenDto);
+	}
+
 //	@Override
 //	public JwtDto tokenInfo(int userId) throws SQLException {
 //		return jwtMapper.tokenInfo(userId);
