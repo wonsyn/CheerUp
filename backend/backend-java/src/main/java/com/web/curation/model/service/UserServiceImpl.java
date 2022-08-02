@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public int deleteUser(String id) throws SQLException {
+		return userMapper.deleteUser(id);
+	}
+	
+	@Override
 	public int getUserIdById(String id) throws SQLException {
 		return userMapper.getUserIdById(id);
 	}

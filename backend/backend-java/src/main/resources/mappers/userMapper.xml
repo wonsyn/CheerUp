@@ -31,8 +31,11 @@
 		where id=#{id}
 	</update>
 	
-	
-	
+	<!-- 회원 정보 삭제 -->
+	<delete id="deleteUser" parameterType="String">
+		delete from user
+		where id=#{id}
+	</delete>
 	
 	<!-- ID를 이용해 유저 번호 가져오기 -->
 	<select id="getUserIdById" parameterType="String" resultType="int">

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -171,6 +172,23 @@ public class UserController {
 		System.out.println(userDto);
 		
 		if(cnt == 1) {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@DeleteMapping("delete/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable String id, HttpServletRequest request) throws SQLException {
+		
+		int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+		if(userService.isSameLoginUserAndRequestId(loginUser, userService.getUserIdById(id))) return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		int cnt = userService.deleteUser(id);
+		
+		if(cnt == 1) {
+			// 유저 액세스, 리프레시 토큰 유효기간 소멸시켜야됨
+			// 블랙 리스트에 추가??
+			
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
