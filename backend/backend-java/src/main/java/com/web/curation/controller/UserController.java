@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,4 +118,43 @@ public class UserController {
 		}	
 	}
 	
+	@GetMapping("/detail/{id}")
+//	public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("id") String id, HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("id") String id) {
+		logger.debug("id : {}", id);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		
+		try {
+			UserDto userInfo = userService.userInfo(id);
+			// 유저 정보가 있다면
+			if(userInfo != null) {
+				resultMap.put("userInfo", userInfo);
+				resultMap.put("message", SUCCESS);
+			}
+			// 유저 정보가 없다면
+			else {				
+				resultMap.put("message", FAIL);
+			}
+		} catch (Exception e) {
+			logger.error("정보 조회 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		/*
+		// access-token 유효 확인
+		if(jwtService.isUsableAccessToken(request.getHeader("access-token"))) {
+			logger.info("사용 가능한 토큰");
+		} else {
+			
+			// db refresh-token 유효기간 확인 후 재발급 or 로그인
+			
+			logger.error("사용 불가능한 액세스 토큰");
+			resultMap.put("message", FAIL);
+			status = HttpStatus.ACCEPTED;
+		}
+		*/
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
+	}
 }

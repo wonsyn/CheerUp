@@ -16,5 +16,12 @@
 		from user
 		where id = #{id} and password = #{password}
 	</select>
+	
+	<!-- 회원 정보 가져오기 -->
+	<select id="userInfo" parameterType="String" resultType="userDto">
+		select user_id userId, id, password, nickname, email, user_img_url userImgUrl, user_img_name userImgName
+		from user
+		where id = #{id}
+	</select>
 
 </mapper>

@@ -8,4 +8,5 @@ public interface UserService {
 
 	public int registUser(UserDto userDto) throws SQLException;
 	public UserDto login(UserDto userDto) throws SQLException;
+	public UserDto userInfo(String id) throws SQLException;
 }

@@ -25,4 +25,9 @@ public class UserServiceImpl implements UserService {
 			return null;
 		return userMapper.login(userDto);
 	}
+	
+	@Override
+	public UserDto userInfo(String id) throws SQLException {
+		return userMapper.userInfo(id);
+	}
 }
