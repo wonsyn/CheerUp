@@ -193,4 +193,16 @@ public class UserController {
 		}
 		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@PostMapping("/checkPassWord")
+	public ResponseEntity<Void> checkPassword(@RequestBody UserDto userDto){
+		
+	    try {
+			if(!userService.userInfo(userDto.getId()).getPassword().equals(userDto.getPassword())) return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (SQLException e) {
+			logger.debug("패스워드 오류 : {}", e.getMessage());
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }
