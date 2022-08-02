@@ -4,6 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.UserDao">
 
+	<!-- 회원 가입 -->
+	<insert id="registUser" parameterType="userDto">
+		insert into user (user_id, id, password, nickname, email, user_img_url, user_img_name)
+		values (#{userId}, #{id}, #{password}, #{nickname}, #{email}, #{userImgUrl}, #{userImgName})
+	</insert>
 
 
 </mapper>
