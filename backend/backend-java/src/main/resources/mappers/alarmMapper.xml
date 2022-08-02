@@ -34,9 +34,9 @@
 	</select>
 	
 	<!-- 알람 디테일 -->
-	<select id="getAlarmDetail" parameterType="int" resultType="alarmDto">
+<!-- 	<select id="getAlarmDetail" parameterType="int" resultType="alarmDto">
 		select alarm_receiver_id alarmReceiverId 		
 		from alarm
 		where alarm_id = #{alarmId}
-	</select>
+	</select> -->
 </mapper>
