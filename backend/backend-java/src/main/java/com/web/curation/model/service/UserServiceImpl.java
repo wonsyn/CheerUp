@@ -1,6 +1,7 @@
 package com.web.curation.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,12 @@ public class UserServiceImpl implements UserService {
 	public int deleteUser(String id) throws SQLException {
 		return userMapper.deleteUser(id);
 	}
+	
+	@Override
+	public List<UserDto> getUserListById(String id) throws SQLException {
+		return userMapper.getUserListById(id);
+	}
+	
 	
 	@Override
 	public int getUserIdById(String id) throws SQLException {
