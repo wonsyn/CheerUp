@@ -64,4 +64,9 @@ public class AlarmServiceImpl implements AlarmService {
 	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException {
 		return alarmMapper.getAlarmListByDate(alarmDto);
 	}
+	
+	@Override
+	public List<AlarmDto> getCheckedAlarm(int userId) throws SQLException {
+		return alarmMapper.getCheckedAlarm(userId);
+	}
 }

@@ -143,4 +143,10 @@ public class AlarmController {
 		alarm.setEndDate(endDate);
 		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByDate(alarm),HttpStatus.OK); 
 	}
+	
+	@GetMapping("/listCheckedAlarm")
+	public ResponseEntity<List<AlarmDto>> getCheckedAlarm(HttpServletRequest request) throws SQLException{
+
+		return new ResponseEntity<List<AlarmDto>>(alarmService.getCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
+	}
 }
