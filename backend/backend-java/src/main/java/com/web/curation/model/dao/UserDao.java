@@ -14,4 +14,5 @@ public interface UserDao {
 	public int deleteUser(String id) throws SQLException;
 	public int getUserIdById(String id) throws SQLException;
 	public List<UserDto> getUserListById(String id) throws SQLException;
+	public List<UserDto> getUserListByNickName(String nickname) throws SQLException;
 }

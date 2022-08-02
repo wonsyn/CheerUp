@@ -47,6 +47,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserListById(id);
 	}
 	
+	@Override
+	public List<UserDto> getUserListByNickName(String nickname) throws SQLException {
+		return userMapper.getUserListByNickName(nickname);
+	}
 	
 	@Override
 	public int getUserIdById(String id) throws SQLException {

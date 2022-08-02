@@ -213,4 +213,10 @@ public class UserController {
 		System.out.println("id: "+id);
 		return new ResponseEntity<List<UserDto>>( userService.getUserListById(id), HttpStatus.OK);
 	}
+	
+	@GetMapping("/searchByNickName")
+	public ResponseEntity<List<UserDto>> getUserListByNickName(@RequestParam String nickname) throws SQLException{
+		System.out.println("nickname: "+nickname);
+		return new ResponseEntity<List<UserDto>>( userService.getUserListByNickName(nickname), HttpStatus.OK);
+	}
 }
