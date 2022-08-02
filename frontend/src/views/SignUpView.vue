@@ -14,7 +14,7 @@
             <form @submit.prevent="signUp()" class="needs-validation">
               <label for="id" class="form-label">ID</label>
               <div class="input-group mb-3" required>
-                <input v-model="state.id" id="id" type="text" class="form-control" placeholder="ID" aria-label="User ID" aria-describedby="btn_check_dup" required />
+                <input v-model="state.credentials.id" id="id" type="text" class="form-control" placeholder="ID" aria-label="User ID" aria-describedby="btn_check_dup" required />
                 <button class="btn btn-outline-primary" type="button" id="btn_check_dup" @click="checkDup">중복확인</button>
               </div>
               <div id="id-check-valid" class="invalid-feedback">ID는 4자 이상 입력하세요.</div>
@@ -22,25 +22,25 @@
 
               <label for="nickname" class="form-label">Nickname</label>
               <div class="input-group mb-3">
-                <input v-model="state.nickname" id="nickname" type="text" class="form-control" placeholder="Nickname" aria-label="User Nickname" aria-describedby="btn_check_dup" />
+                <input v-model="state.credentials.nickname" id="nickname" type="text" class="form-control" placeholder="Nickname" aria-label="User Nickname" aria-describedby="btn_check_dup" />
                 <button class="btn btn-outline-primary" type="button" id="btn_check_dup">중복확인</button>
               </div>
 
               <label for="password" class="form-label">Password</label>
               <div class="input-group mb-3">
-                <input v-model="state.password" id="password" type="password" class="form-control" placeholder="Password" aria-label="Recipient's username" />
+                <input v-model="state.credentials.password" id="password" type="password" class="form-control" placeholder="Password" aria-label="Recipient's username" />
               </div>
 
               <label for="password_check" class="form-label">Password Check</label>
               <div class="input-group mb-3">
-                <input v-model="state.password_check" id="password_check" type="password" class="form-control" placeholder="Password" aria-label="Recipient's username" />
+                <input v-model="state.credentials.password_check" id="password_check" type="password" class="form-control" placeholder="Password" aria-label="Recipient's username" />
               </div>
 
               <label for="email" class="form-label">Email</label>
               <div class="input-group mb-3">
-                <input v-model="state.email_front" id="email" type="text" class="form-control" placeholder="Email" aria-label="Username" />
+                <input v-model="state.credentials.email_front" id="email" type="text" class="form-control" placeholder="Email" aria-label="Username" />
                 <span class="input-group-text">@</span>
-                <input v-model="state.email_back" type="text" class="form-control" placeholder="도메인 주소" aria-label="도메인" id="email-back" />
+                <input v-model="state.credentials.email_back" type="text" class="form-control" placeholder="도메인 주소" aria-label="도메인" id="email-back" />
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">선택하세요..</button>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><a href="#" @click="autoFillEmail('naver.com')" class="dropdown-item">naver.com</a></li>
@@ -71,12 +71,14 @@ export default {
   name: "SignUp",
   setup() {
     const state = reactive({
-      id: "",
-      nickname: "",
-      password: "",
-      password_check: "",
-      email_front: "",
-      email_back: "",
+      credentials: {
+        id: "",
+        nickname: "",
+        password: "",
+        password_check: "",
+        email_front: "",
+        email_back: "",
+      },
       // validState: computed(() => {
       //   let idCheckValid = document.getElementById("idCheckValid");
       //   let idCheckInvalid = document.getElementById("idCheckInvalid");
