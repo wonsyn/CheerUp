@@ -6,8 +6,8 @@
 
 	<!-- 회원 가입 -->
 	<insert id="registUser" parameterType="userDto">
-		insert into user (user_id, id, password, nickname, email, user_img_url, user_img_name)
-		values (#{userId}, #{id}, #{password}, #{nickname}, #{email}, #{userImgUrl}, #{userImgName})
+		insert into user (id, password, nickname, email, user_img_url, user_img_name)
+		values (#{id}, #{password}, #{nickname}, #{email}, #{userImgUrl}, #{userImgName})
 	</insert>
 
 	<!-- 로그인 -->
