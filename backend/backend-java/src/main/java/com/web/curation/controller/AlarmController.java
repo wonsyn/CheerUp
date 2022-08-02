@@ -154,4 +154,11 @@ public class AlarmController {
 	public ResponseEntity<List<AlarmDto>> getUnCheckedAlarm(HttpServletRequest request) throws SQLException{
 		return new ResponseEntity<List<AlarmDto>>(alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
 	}
+	
+	@PutMapping("/check")
+	public ResponseEntity<Void> checkAlarm(@RequestParam int alarmId, HttpServletRequest request) throws SQLException {
+		
+		if(alarmService.checkAlarm(alarmId) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

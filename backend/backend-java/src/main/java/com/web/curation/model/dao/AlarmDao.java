@@ -28,4 +28,6 @@ public interface AlarmDao {
 	public List<AlarmDto> getUnCheckedAlarm(int userId) throws SQLException;
 	// 알람 번호를 통한 유저 번호 가져오기
 	public int getUserIdByAlarmId(int alarmId) throws SQLException;
+	// 알람 체크 시 상태 변경
+	public int checkAlarm(int alarmId) throws SQLException;
 }

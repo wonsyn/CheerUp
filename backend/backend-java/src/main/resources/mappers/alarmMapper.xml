@@ -103,4 +103,11 @@
 		where user_id = #{userId}
 		and alarm_check_datetime is null
 	</select>
+	
+	<!-- 알람 확인 -->
+	<update id="checkAlarm" parameterType="alarmDto">
+		update alarm
+		set alarm_check_datetime = now()
+		where alarm_id = #{alarmId}
+	</update>
 </mapper>
