@@ -54,4 +54,9 @@ public class AlarmServiceImpl implements AlarmService {
 	public List<AlarmDto> getAlarmListByType(AlarmDto alarmDto) throws SQLException {
 		return alarmMapper.getAlarmListByType(alarmDto);
 	}
+	
+	@Override
+	public List<AlarmDto> getAlarmListByContent(AlarmDto alarmDto) throws SQLException {
+		return alarmMapper.getAlarmListByContent(alarmDto);
+	}
 }

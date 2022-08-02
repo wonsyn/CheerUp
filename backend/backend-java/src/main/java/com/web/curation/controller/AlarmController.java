@@ -125,4 +125,12 @@ public class AlarmController {
 		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByType(alarm),HttpStatus.OK); 
 	}
 	
+	@GetMapping("/listByContent")
+	public ResponseEntity<List<AlarmDto>> getAlarmListByContent(@RequestParam String content, HttpServletRequest request) throws SQLException{
+		
+		AlarmDto alarm = new AlarmDto();
+		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		alarm.setAlarmContent(content);
+		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByContent(alarm),HttpStatus.OK); 
+	}
 }
