@@ -12,10 +12,17 @@ import com.web.curation.model.dto.UserDto;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserDao userDao;
+	private UserDao userMapper;
 	
 	@Override
 	public int registUser(UserDto userDto) throws SQLException {
-		return userDao.registUser(userDto);
+		return userMapper.registUser(userDto);
+	}
+	
+	@Override
+	public UserDto login(UserDto userDto) throws SQLException {
+		if(userDto.getId() == null || userDto.getPassword() == null)
+			return null;
+		return userMapper.login(userDto);
 	}
 }

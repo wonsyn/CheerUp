@@ -10,5 +10,11 @@
 		values (#{userId}, #{id}, #{password}, #{nickname}, #{email}, #{userImgUrl}, #{userImgName})
 	</insert>
 
+	<!-- 로그인 -->
+	<select id="login" parameterType="userDto" resultType="userDto">
+		select user_id userId, id, password, nickname, email, user_img_url userImgUrl, user_img_name userImgName
+		from user
+		where id = #{id} and password = #{password}
+	</select>
 
 </mapper>
