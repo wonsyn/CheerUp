@@ -33,4 +33,9 @@ public class AlarmServiceImpl implements AlarmService {
 	public int getUserIdByAlarmId(int alarmId) throws SQLException {
 		return alarmMapper.getUserIdByAlarmId(alarmId);
 	}
+	
+	@Override
+	public AlarmDto getAlarmDetail(int alarmId) throws SQLException {
+		return alarmMapper.getAlarmDetail(alarmId);
+	}
 }

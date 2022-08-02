@@ -1,6 +1,8 @@
 package com.web.curation.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,5 +72,27 @@ public class AlarmController {
 		System.out.println("delete: "+ id);
 		if(alarmService.deleteAlarm(id) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping("/detail/{id}")
+	public ResponseEntity<Map<String, Object>> getDetailAlarm(@PathVariable int alarmId, HttpServletRequest request) {	 
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		
+		try {
+			AlarmDto result = alarmService.getAlarmDetail(alarmId);
+			if(result != null) {
+				resultMap.put("alarmInfo", result);
+				resultMap.put("message", SUCCESS);				
+			}
+			else {
+				resultMap.put("message", FAIL);								
+			}
+		} catch (Exception e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap,status);
 	}
 }
