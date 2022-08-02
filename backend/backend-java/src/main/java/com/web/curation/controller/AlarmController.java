@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,18 @@ public class AlarmController {
 		
 		if(alarmService.createAlarm(alarmDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<Void> updateAlarm(@RequestBody AlarmDto alarmDto, HttpServletRequest request) throws SQLException {
+		
+		int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+		if(userService.isSameLoginUserAndRequestId(loginUser, alarmDto.getAlarmReceiverId())) return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		alarmDto.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		System.out.println("update: "+ alarmDto);
+		// 수정
+		if(alarmService.updateAlarm(alarmDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

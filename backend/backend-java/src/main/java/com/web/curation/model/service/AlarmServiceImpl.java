@@ -18,4 +18,9 @@ public class AlarmServiceImpl implements AlarmService {
 	public int createAlarm(AlarmDto alarmDto) throws SQLException {
 		return alarmMapper.createAlarm(alarmDto);
 	}
+	
+	@Override
+	public int updateAlarm(AlarmDto alarmDto) throws SQLException {
+		return alarmMapper.updateAlarm(alarmDto);
+	}
 }

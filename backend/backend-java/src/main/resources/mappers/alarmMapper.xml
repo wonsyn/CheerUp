@@ -10,5 +10,13 @@
 				alarm_content, alarm_url, alarm_datetime, alarm_check_datetime)
 		values (0,#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, now(), null)
 	</insert>
+	
+	<!-- 알람 수정 -->
+	<update id="updateAlarm" parameterType="alarmDto">
+		update alarm
+		set alarm_type = #{alarmType} , alarm_content = #{alarmContent}, alarm_url = #{alarmUrl}, 
+			alarm_datetime = #{alarmDateTime}, alarm_check_datetime = null
+		where alarm_id = #{alarmId}
+	</update>
 
 </mapper>
