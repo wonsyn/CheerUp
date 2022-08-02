@@ -18,5 +18,18 @@
 			alarm_datetime = #{alarmDateTime}, alarm_check_datetime = null
 		where alarm_id = #{alarmId}
 	</update>
-
+	
+	<!-- 알람 삭제 -->
+	<delete id="deleteAlarm" parameterType="int">
+		delete from alarm
+		where alarm_id = #{alarmId}
+	</delete>
+	
+	
+	<!-- 알람 ID로 유저 id 가져오기 -->
+	<select id="getAlarmDetail" parameterType="int" resultType="alarmDto">
+		select alarm_receiver_id alarmReceiverId 		
+		from alarm
+		where alarm_id = #{alarmId}
+	</select>
 </mapper>
