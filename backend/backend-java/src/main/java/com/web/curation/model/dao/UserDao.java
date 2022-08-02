@@ -15,4 +15,5 @@ public interface UserDao {
 	public int getUserIdById(String id) throws SQLException;
 	public List<UserDto> getUserListById(String id) throws SQLException;
 	public List<UserDto> getUserListByNickName(String nickname) throws SQLException;
+	public List<UserDto> getUserListByEmail(String email) throws SQLException;
 }

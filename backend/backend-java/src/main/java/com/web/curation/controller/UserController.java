@@ -219,4 +219,10 @@ public class UserController {
 		System.out.println("nickname: "+nickname);
 		return new ResponseEntity<List<UserDto>>( userService.getUserListByNickName(nickname), HttpStatus.OK);
 	}
+	
+	@GetMapping("/searchByEmail")
+	public ResponseEntity<List<UserDto>> getUserListByEmail(@RequestParam String email) throws SQLException{
+		System.out.println("email: "+email);
+		return new ResponseEntity<List<UserDto>>( userService.getUserListByEmail(email), HttpStatus.OK);
+	}
 }

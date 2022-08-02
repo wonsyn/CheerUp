@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public List<UserDto> getUserListByEmail(String email) throws SQLException {
+		return userMapper.getUserListByEmail(email);
+	}
+	
+	@Override
 	public int getUserIdById(String id) throws SQLException {
 		return userMapper.getUserIdById(id);
 	}

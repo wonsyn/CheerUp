@@ -57,4 +57,11 @@
 		from user
 		where nickname like concat('%',#{nickname},'%');
 	</select>
+	
+	<!-- 유저 리스트 가져오기 ( Email ) -->
+	<select id="getUserListByEmail" parameterType="String" resultType="userDto">
+		select user_id userId, id, password, nickname, email, user_img_url userImgUrl, user_img_name userImgName
+		from user
+		where email like concat('%',#{email},'%');
+	</select>
 </mapper>
