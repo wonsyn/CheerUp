@@ -53,19 +53,19 @@ public class JwtServiceImpl implements JwtService {
 		return jwt;
 	}
 	
-//	@Override
-//	public<T> String getRefreshToken(String key, T data, String subject, Date peroid) {
-//		
-//		String jwt = Jwts.builder()
-//				.setHeaderParam("typ", "JWT")
-//				.setHeaderParam("regDate", System.currentTimeMillis())
-//				.setExpiration(peroid)
-//				.setSubject(subject)
-//				.claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey())
-//				.compact();
-//		
-//		return jwt;
-//	}
+	@Override
+	public<T> String getRefreshToken(String key, T data, String subject, Date peroid) {
+		
+		String jwt = Jwts.builder()
+				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("regDate", System.currentTimeMillis())
+				.setExpiration(peroid)
+				.setSubject(subject)
+				.claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact();
+		
+		return jwt;
+	}
 	
 
 	private byte[] generateKey() {
@@ -171,10 +171,10 @@ public class JwtServiceImpl implements JwtService {
 		return jwtMapper.updateRefreshToken(tokenDto);
 	}
 
-//	@Override
-//	public JwtDto tokenInfo(int userId) throws SQLException {
-//		return jwtMapper.tokenInfo(userId);
-//	}
+	@Override
+	public JwtDto tokenInfo(int userId) throws SQLException {
+		return jwtMapper.tokenInfo(userId);
+	}
 
 
 
