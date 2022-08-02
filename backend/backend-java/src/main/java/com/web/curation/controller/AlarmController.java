@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.AlarmDto;
@@ -95,4 +97,15 @@ public class AlarmController {
 		}
 		return new ResponseEntity<>(resultMap,status);
 	}
+	
+	@GetMapping("/listInThisMonth")
+	public ResponseEntity<List<AlarmDto>> getAlarmListInThisMonth(@RequestParam String thisMonth, HttpServletRequest request) throws SQLException{
+		
+		AlarmDto alarm = new AlarmDto();
+		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		alarm.setAlarmDateTime(thisMonth);
+		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListInThisMonth(alarm),HttpStatus.OK); 
+	}
+	
+	
 }

@@ -40,4 +40,13 @@
 		from alarm
 		and alarm_id = #{alarmId}
 	</select>
+	
+	<!-- 이번 달 알람 모두 가져오기 -->
+	<select id="getAlarmListInThisMonth" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where user_id = #{userId}
+		and alarm_datetime between date_format(#{alarmDateTime}, '%Y-%m-01') and date_format(last_day(#{alarmDateTime}), '%Y-%m-%d')
+	</select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.web.curation.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,10 @@ public class AlarmServiceImpl implements AlarmService {
 	@Override
 	public AlarmDto getAlarmDetail(int alarmId) throws SQLException {
 		return alarmMapper.getAlarmDetail(alarmId);
+	}
+	
+	@Override
+	public List<AlarmDto> getAlarmListInThisMonth(AlarmDto alarmDto) throws SQLException {
+		return alarmMapper.getAlarmListInThisMonth(alarmDto);
 	}
 }
