@@ -133,4 +133,14 @@ public class AlarmController {
 		alarm.setAlarmContent(content);
 		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByContent(alarm),HttpStatus.OK); 
 	}
+	
+	@GetMapping("/listByDate")
+	public ResponseEntity<List<AlarmDto>> getAlarmListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) throws SQLException{
+		
+		AlarmDto alarm = new AlarmDto();
+		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		alarm.setAlarmDateTime(startDate);
+		alarm.setEndDate(endDate);
+		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByDate(alarm),HttpStatus.OK); 
+	}
 }

@@ -20,6 +20,8 @@ public interface AlarmService {
 	public List<AlarmDto> getAlarmListByType(AlarmDto alarmDto) throws SQLException;
 	// 알람 내용 기준
 	public List<AlarmDto> getAlarmListByContent(AlarmDto alarmDto) throws SQLException;
+	// 알람 생성 범위 기준
+	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException;
 	// 알람 번호를 통한 유저 번호 가져오기
 	public int getUserIdByAlarmId(int alarmId) throws SQLException;
 }
