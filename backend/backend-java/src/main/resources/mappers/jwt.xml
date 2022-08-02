@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.web.curation.model.dao.JwtMapper">
+<mapper namespace="com.web.curation.model.dao.JwtDao">
 
 	<!-- 토큰 테이블 조회 -->
 	<select id="tokenInfo" parameterType="int" resultType="JwtDto">
