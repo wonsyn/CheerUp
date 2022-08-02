@@ -24,4 +24,20 @@
 		where id = #{id}
 	</select>
 
+	<!-- 회원 정보 수정 -->
+	<update id="updateUser" parameterType="userDto">
+		update user
+		set password=#{password}, nickname=#{nickname}, email=#{email}, user_img_url=#{userImgUrl}, user_img_name=#{userImgName}
+		where id=#{id}
+	</update>
+	
+	
+	
+	
+	<!-- ID를 이용해 유저 번호 가져오기 -->
+	<select id="getUserIdById" parameterType="String" resultType="int">
+		select user_id userId
+		from user
+		where id = #{id}
+	</select>
 </mapper>

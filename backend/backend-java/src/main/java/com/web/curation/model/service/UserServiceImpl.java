@@ -30,4 +30,19 @@ public class UserServiceImpl implements UserService {
 	public UserDto userInfo(String id) throws SQLException {
 		return userMapper.userInfo(id);
 	}
+	
+	@Override
+	public int updateUser(UserDto userDto) throws SQLException {
+		return userMapper.updateUser(userDto);
+	}
+	
+	@Override
+	public int getUserIdById(String id) throws SQLException {
+		return userMapper.getUserIdById(id);
+	}
+	
+	@Override
+	public boolean isSameLoginUserAndRequestId(int userId, int inputId) {
+		return userId == inputId;
+	}
 }

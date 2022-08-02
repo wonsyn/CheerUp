@@ -156,11 +156,12 @@ public class JwtServiceImpl implements JwtService {
 		return value;
 	}
 	*/
-//	@Override
-//	public String getUserIdByJwt(String jwt) {
-//		return (String) Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt).getBody().get("id");
-//	}
-//
+	
+	@Override
+	public String getUserIdByJwt(String jwt) {
+		return (String) Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt).getBody().get("id");
+	}
+
 	@Override
 	public int createRefreshToken(JwtDto tokenDto) throws SQLException {
 		return jwtMapper.createRefreshToken(tokenDto);
