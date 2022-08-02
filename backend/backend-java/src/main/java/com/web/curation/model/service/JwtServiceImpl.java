@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.web.curation.model.dao.JwtDao;
 //import com.web.curation.model.dao.JwtDao;
 import com.web.curation.model.dto.JwtDto;
 
@@ -23,8 +24,8 @@ public class JwtServiceImpl implements JwtService {
 	private static final String SALT = "ssafySecret";
 	private static final int EXPIRE_MINUTES = 60;
 	
-//	@Autowired
-//	JwtDao jwtMapper;
+	@Autowired
+	JwtDao jwtMapper;
 
 	@Override
 	public <T> String createAccessToken(String key, T data, String subject) {
@@ -39,18 +40,18 @@ public class JwtServiceImpl implements JwtService {
 		return jwt;
 	}
 	
-//	@Override
-//	public <T> String createRefreshToken(String key, T data, String subject) {
-//		String jwt = Jwts.builder()
-////				.setHeaderParam("typ", "JWT")
-////				.setHeaderParam("regDate", System.currentTimeMillis())
-//				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 1800 * EXPIRE_MINUTES))
-//				.setSubject(subject)
-//				.claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey())
-//				.compact();
-//		
-//		return jwt;
-//	}
+	@Override
+	public <T> String createRefreshToken(String key, T data, String subject) {
+		String jwt = Jwts.builder()
+//				.setHeaderParam("typ", "JWT")
+//				.setHeaderParam("regDate", System.currentTimeMillis())
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 1800 * EXPIRE_MINUTES))
+				.setSubject(subject)
+				.claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact();
+		
+		return jwt;
+	}
 	
 //	@Override
 //	public<T> String getRefreshToken(String key, T data, String subject, Date peroid) {
@@ -160,10 +161,10 @@ public class JwtServiceImpl implements JwtService {
 //		return (String) Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt).getBody().get("id");
 //	}
 //
-//	@Override
-//	public int createRefreshToken(JwtDto tokenDto) throws SQLException {
-//		return jwtMapper.createRefreshToken(tokenDto);
-//	}
+	@Override
+	public int createRefreshToken(JwtDto tokenDto) throws SQLException {
+		return jwtMapper.createRefreshToken(tokenDto);
+	}
 //	
 //	@Override
 //	public int updateRefreshToken(JwtDto tokenDto) throws SQLException {
