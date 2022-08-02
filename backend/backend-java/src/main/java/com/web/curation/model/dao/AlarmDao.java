@@ -24,6 +24,8 @@ public interface AlarmDao {
 	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException;
 	// 확인 알람
 	public List<AlarmDto> getCheckedAlarm(int userId) throws SQLException;
+	// 미확인 알람
+	public List<AlarmDto> getUnCheckedAlarm(int userId) throws SQLException;
 	// 알람 번호를 통한 유저 번호 가져오기
 	public int getUserIdByAlarmId(int alarmId) throws SQLException;
 }

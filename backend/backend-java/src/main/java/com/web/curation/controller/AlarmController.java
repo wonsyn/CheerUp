@@ -149,4 +149,9 @@ public class AlarmController {
 
 		return new ResponseEntity<List<AlarmDto>>(alarmService.getCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
 	}
+	
+	@GetMapping("/listUnCheckedAlarm")
+	public ResponseEntity<List<AlarmDto>> getUnCheckedAlarm(HttpServletRequest request) throws SQLException{
+		return new ResponseEntity<List<AlarmDto>>(alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
+	}
 }
