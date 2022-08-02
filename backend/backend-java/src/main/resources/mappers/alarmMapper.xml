@@ -27,16 +27,17 @@
 	
 	
 	<!-- 알람 ID로 유저 id 가져오기 -->
-	<select id="getAlarmDetail" parameterType="int" resultType="alarmDto">
+	<select id="getUserIdByAlarmId" parameterType="int" resultType="alarmDto">
 		select alarm_receiver_id alarmReceiverId 		
 		from alarm
 		where alarm_id = #{alarmId}
 	</select>
 	
 	<!-- 알람 디테일 -->
-<!-- 	<select id="getAlarmDetail" parameterType="int" resultType="alarmDto">
-		select alarm_receiver_id alarmReceiverId 		
+	<select id="getAlarmDetail" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
 		from alarm
-		where alarm_id = #{alarmId}
-	</select> -->
+		and alarm_id = #{alarmId}
+	</select>
 </mapper>
