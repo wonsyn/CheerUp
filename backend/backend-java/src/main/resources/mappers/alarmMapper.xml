@@ -58,4 +58,13 @@
 		where user_id = #{userId}
 		and sender_id = #{senderId}
 	</select>
+	
+	<!-- 알람 종류 기준 검색 -->
+	<select id="getAlarmListByType" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where user_id = #{userId}
+		and alarm_type = #{alarmType}
+	</select>
 </mapper>
