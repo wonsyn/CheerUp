@@ -24,4 +24,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleMapper.updateSchedule(scheduleDto);
 	}
 
+	@Override
+	public int deleteSchedule(int scheduleId) throws SQLException {
+		return scheduleMapper.deleteSchedule(scheduleId);
+	}
 }
