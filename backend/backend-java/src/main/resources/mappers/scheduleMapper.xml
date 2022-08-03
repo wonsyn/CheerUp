@@ -50,4 +50,13 @@
 		where user_id = #{userId}
 		and schedule_title like concat('%',#{scheduleTitle},'%')
 	</select>
+	
+	<!-- 일정 검색 ( 회사로 ) -->
+	<select id="getScheduleListByCompany" parameterType="scheduleDto" resultType="scheduleDto">
+		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
+			schedule_date scheduleDate, schedule_memo scheduleMemo, schedule_category scheduleCategory, schedule_status scheduleStatus		
+		from schedule
+		where user_id = #{userId}
+		and schedule_company like concat('%',#{scheduleCompany},'%')
+	</select>
 </mapper>
