@@ -10,5 +10,13 @@
 							 schedule_memo, schedule_category, schedule_status) 
 		values (#{userId}, #{scheduleTitle}, #{scheduleCompany}, now(), #{scheduleMemo}, #{scheduleCategory}, #{scheduleStatus})
 	</insert>
+	
+	<!-- 일정 수정 -->
+	<update id="updateSchedule" parameterType="scheduleDto">
+		update schedule
+		set schedule_title = #{scheduleTitle} , schedule_company = #{scheduleCompany}, schedule_date = #{scheduleDate}, 
+			schedule_memo = #{scheduleMemo}, schedule_category = #{scheduleCategory}, schedule_status = #{scheduleStatus}
+		where schedule_id = #{scheduleId}
+	</update>
 
 </mapper>
