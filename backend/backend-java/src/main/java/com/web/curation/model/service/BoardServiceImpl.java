@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void deleteBoard(int boardId) {
 		boardDao.deleteBoard(boardId);
+	}
+
+	@Override
+	public BoardDto isExistSameBoardName(BoardDto boardDto) throws SQLException {
+		return boardDao.isExistSameBoardName(boardDto);
 	}
 
 }

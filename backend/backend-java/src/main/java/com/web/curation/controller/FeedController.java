@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,11 @@ public class FeedController {
 	@ApiOperation(value="board 생성", 
 			  notes="유저 board 생성")
 	@PostMapping("/board/create")
-	public ResponseEntity<String> createBoard(@RequestBody BoardDto boardDto){
+	public ResponseEntity<String> createBoard(@RequestBody BoardDto boardDto) throws SQLException{
+		
+		// 보드 이름 중복 체크
+		if(boardService.isExistSameBoardName(boardDto) == null) return new ResponseEntity<String>("fail", HttpStatus.OK); 
+		
 		boardService.createBoard(boardDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
@@ -58,8 +63,11 @@ public class FeedController {
 	@ApiOperation(value="board 수정", 
 			  notes="유저 board 이름 수정")
 	@PutMapping("/board/update")
-	public ResponseEntity<String> editBoard(@RequestBody BoardDto boardDto){
+	public ResponseEntity<String> editBoard(@RequestBody BoardDto boardDto) throws SQLException{
 		System.out.println(boardDto);
+		// 보드 이름 중복 체크
+		if(boardService.isExistSameBoardName(boardDto) == null) return new ResponseEntity<String>("fail", HttpStatus.OK); 
+				
 		boardService.editBoard(boardDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
