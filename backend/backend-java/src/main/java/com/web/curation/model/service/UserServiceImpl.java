@@ -29,7 +29,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserDto userInfo(String id) throws SQLException {
-		return userMapper.userInfo(id);
+		return userMapper.getUserInfoById(id);
+	}
+	
+	@Override
+	public UserDto userInfo(int userId) throws SQLException {
+		return userMapper.getUserInfoByUserId(userId);
 	}
 	
 	@Override
@@ -66,4 +71,5 @@ public class UserServiceImpl implements UserService {
 	public boolean isSameLoginUserAndRequestId(int userId, int inputId) {
 		return userId == inputId;
 	}
+
 }
