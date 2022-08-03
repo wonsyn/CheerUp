@@ -57,4 +57,16 @@ public class FollowController {
 		if(result != null)	return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Void> follow(@PathVariable String id, HttpServletRequest request) throws SQLException{
+		String loginId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
+		int userId = userService.getUserIdById(loginId);
+		int followUserId = userService.getUserIdById(id);
+		System.out.println("[사용자,팔로우]: [" + userId +","+followUserId+"]");
+		int result = followService.followUser(new FollowDto(userId, followUserId));
+		
+		if(result != 0)	return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

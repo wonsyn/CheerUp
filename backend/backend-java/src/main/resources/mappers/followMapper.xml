@@ -32,4 +32,10 @@
 		from follow
 		where user_id = #{userId} and follow_user_id = #{followUserId}
 	</select>
+	
+	<!--  팔로우 하기 -->
+	<insert id="followUser" parameterType="followDto">
+		insert into follow (user_id, follow_user_id) values (#{userId}, #{followUserId})
+	</insert>
+	
 </mapper>

@@ -30,4 +30,9 @@ public class FollowServiceImpl implements FollowService {
 	public FollowDto getFollowStatus(FollowDto followDto) throws SQLException {
 		return followMapper.getFollowStatus(followDto);
 	}
+	
+	@Override
+	public int followUser(FollowDto followDto) throws SQLException {
+		return followMapper.followUser(followDto);
+	}
 }
