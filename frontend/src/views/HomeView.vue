@@ -35,10 +35,21 @@
 
 <script>
 import FeedList from "@/components/FeedList.vue";
+import useStore from "@/store/index.js";
+import router from "@/router";
+
+const store = useStore();
+
 export default {
   name: "HomeView",
   components: {
     FeedList,
+  },
+
+  created() {
+    if (!store.modules.userStore.state.isLogin) {
+      router.push({ name: "login" });
+    }
   },
 };
 </script>
