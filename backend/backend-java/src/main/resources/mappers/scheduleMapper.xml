@@ -77,4 +77,13 @@
 		where user_id = #{userId}
 		and schedule_memo like concat('%',#{scheduleMemo},'%') 
 	</select>
+	
+	<!-- 일정 검색 ( 카테고리로 ) -->
+	<select id="getScheduleListByCategory" parameterType="scheduleDto" resultType="scheduleDto">
+		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
+			schedule_date scheduleDate, schedule_memo scheduleMemo, schedule_category scheduleCategory, schedule_status scheduleStatus		
+		from schedule
+		where user_id = #{userId}
+		and schedule_category = #{scheduleCategory}
+	</select>
 </mapper>

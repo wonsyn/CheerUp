@@ -59,4 +59,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<ScheduleDto> getScheduleListByMemo(ScheduleDto scheduleDto) throws SQLException {
 		return scheduleMapper.getScheduleListByMemo(scheduleDto);
 	}
+	
+	@Override
+	public List<ScheduleDto> getScheduleListByCategory(ScheduleDto scheduleDto) throws SQLException {
+		return scheduleMapper.getScheduleListByCategory(scheduleDto);
+	}
 }
