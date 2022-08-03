@@ -25,4 +25,11 @@
 			where follow_user_id = #{followUserId}
 		)
 	</select>
+	
+	<!-- 특정 유저에 대한 나의 팔로우 상태 가져오기 -->
+	<select id="getFollowStatus" parameterType="followDto" resultType="followDto">
+		select follow_id followId, user_id userId, follow_user_id followUserId
+		from follow
+		where user_id = #{userId} and follow_user_id = #{followUserId}
+	</select>
 </mapper>

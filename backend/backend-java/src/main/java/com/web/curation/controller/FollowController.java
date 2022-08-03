@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.model.dto.FollowDto;
 import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.FollowService;
 import com.web.curation.model.service.JwtService;
@@ -34,7 +36,7 @@ public class FollowController {
 	public ResponseEntity<List<UserDto>> getMyFollowList(HttpServletRequest request) throws SQLException{
 		String loginUserId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
 		int userId = userService.getUserIdById(loginUserId);
-		List<UserDto> followList = followService.getMyFollowList(userId);
+		List<UserDto> followList = followService.getMyFollowingList(userId);
 		return new ResponseEntity<List<UserDto>>(followList,HttpStatus.OK);
 	}
 	
@@ -42,7 +44,17 @@ public class FollowController {
 	public ResponseEntity<List<UserDto>> getFollowMeList(HttpServletRequest request) throws SQLException{
 		String loginUserId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
 		int userId = userService.getUserIdById(loginUserId);
-		List<UserDto> followList = followService.getFollowedMeList(userId);
+		List<UserDto> followList = followService.getMyFollowerList(userId);
 		return new ResponseEntity<List<UserDto>>(followList,HttpStatus.OK);
+	}
+	
+	@GetMapping("/status/{id}")
+	public ResponseEntity<Void> getFollowStatus(@PathVariable String id, HttpServletRequest request) throws SQLException{
+		String loginUserId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
+		int userId = userService.getUserIdById(loginUserId);
+		int followerUserId = userService.getUserIdById(id);
+		FollowDto result = followService.getFollowStatus(new FollowDto(userId,followerUserId));
+		if(result != null)	return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

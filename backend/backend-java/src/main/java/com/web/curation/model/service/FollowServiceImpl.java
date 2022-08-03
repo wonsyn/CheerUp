@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.model.dao.FollowDao;
+import com.web.curation.model.dto.FollowDto;
 import com.web.curation.model.dto.UserDto;
 
 @Service
@@ -23,5 +24,10 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public List<UserDto> getMyFollowerList(int userId) throws SQLException {
 		return followMapper.getMyFollowerList(userId);
+	}
+	
+	@Override
+	public FollowDto getFollowStatus(FollowDto followDto) throws SQLException {
+		return followMapper.getFollowStatus(followDto);
 	}
 }
