@@ -154,4 +154,15 @@ public class ScheduleController {
 		
 		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByCategory(schedule), HttpStatus.OK);
 	}
+	
+	@GetMapping("/searchByStatus")
+	public ResponseEntity<List<ScheduleDto>> getScheduleListByStatus(@RequestParam String status, HttpServletRequest request) throws SQLException{
+		ScheduleDto schedule = new ScheduleDto();
+		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		schedule.setScheduleStatus(status);
+		
+		System.out.println("status: "+status);
+		
+		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByStatus(schedule), HttpStatus.OK);
+	}
 }
