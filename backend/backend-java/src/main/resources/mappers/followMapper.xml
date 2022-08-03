@@ -38,4 +38,10 @@
 		insert into follow (user_id, follow_user_id) values (#{userId}, #{followUserId})
 	</insert>
 	
+	<!-- 언팔하기 -->
+	<delete id="unFollowUser" parameterType="followDto">
+		delete from follow
+		where user_id=#{userId} and follow_user_id = #{followUserId}
+	</delete>
+	
 </mapper>

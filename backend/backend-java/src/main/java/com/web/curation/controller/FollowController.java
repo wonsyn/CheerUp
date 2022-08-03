@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +66,17 @@ public class FollowController {
 		int followUserId = userService.getUserIdById(id);
 		System.out.println("[사용자,팔로우]: [" + userId +","+followUserId+"]");
 		int result = followService.followUser(new FollowDto(userId, followUserId));
+		
+		if(result != 0)	return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> unfollow(@PathVariable String id, HttpServletRequest request) throws SQLException{
+		String loginId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
+		int userId = userService.getUserIdById(loginId);
+		int followUserId = userService.getUserIdById(id);
+		int result = followService.unFollowUser(new FollowDto(userId, followUserId));
 		
 		if(result != 0)	return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);

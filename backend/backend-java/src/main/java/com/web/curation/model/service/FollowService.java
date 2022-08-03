@@ -12,4 +12,5 @@ public interface FollowService {
 	public List<UserDto> getMyFollowerList(int userId) throws SQLException;
 	public FollowDto getFollowStatus(FollowDto followDto) throws SQLException;
 	public int followUser(FollowDto followDto) throws SQLException;
+	public int unFollowUser(FollowDto followDto) throws SQLException;
 }
