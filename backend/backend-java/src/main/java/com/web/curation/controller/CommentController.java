@@ -55,7 +55,7 @@ public class CommentController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createComment(@RequestBody CommentDto commentDto) {
 		commentService.writeComment(commentDto);
-		System.out.println(commentDto);
+		System.out.println("댓글 작성 : " + commentDto);
 		
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}

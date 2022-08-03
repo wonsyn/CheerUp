@@ -19,7 +19,9 @@
 	<select id="selectFeed" resultMap="feedMap" parameterType="int">
 		SELECT *
 		FROM feed
-		WHERE feed_type = #{feedType}
+		<if test='feedType != 0'>
+			WHERE feed_type = #{feedType}
+		</if>
 	</select>
 
 
