@@ -1,6 +1,7 @@
 package com.web.curation.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public int deleteSchedule(int scheduleId) throws SQLException {
 		return scheduleMapper.deleteSchedule(scheduleId);
+	}
+	
+	@Override
+	public List<ScheduleDto> getScheduleList(ScheduleDto scheduleDto) throws SQLException {
+		return scheduleMapper.getScheduleList(scheduleDto);
 	}
 }
