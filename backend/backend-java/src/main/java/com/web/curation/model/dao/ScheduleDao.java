@@ -10,5 +10,6 @@ public interface ScheduleDao {
 	public int createSchedule(ScheduleDto scheduleDto) throws SQLException;
 	public int updateSchedule(ScheduleDto scheduleDto) throws SQLException;
 	public int deleteSchedule(int scheduleId) throws SQLException;
+	public ScheduleDto getScheduleDetail(int scheduleId) throws SQLException;
 	public List<ScheduleDto> getScheduleList(ScheduleDto scheduleDto) throws SQLException;
 }

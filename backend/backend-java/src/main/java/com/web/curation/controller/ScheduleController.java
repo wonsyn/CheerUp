@@ -1,7 +1,9 @@
 package com.web.curation.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +28,10 @@ import com.web.curation.model.service.UserService;
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
-
+	
+	private static final String SUCCESS = "success";
+	private static final String FAIL = "fail";
+	
 	@Autowired
 	private ScheduleService scheduleService;
 	
@@ -59,6 +64,28 @@ public class ScheduleController {
 		
 		if(scheduleService.deleteSchedule(id) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping("/detail/{id}")
+	public ResponseEntity<Map<String, Object>> getDetailSchedule(@PathVariable int scheduleId, HttpServletRequest request) {	 
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		
+		try {
+			ScheduleDto result = scheduleService.getScheduleDetail(scheduleId);
+			if(result != null) {
+				resultMap.put("scheduleInfo", result);
+				resultMap.put("message", SUCCESS);				
+			}
+			else {
+				resultMap.put("message", FAIL);								
+			}
+		} catch (Exception e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap,status);
 	}
 	
 	@GetMapping("/list")
