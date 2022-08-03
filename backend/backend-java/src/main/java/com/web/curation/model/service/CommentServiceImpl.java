@@ -21,17 +21,18 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public int writeComment(CommentDto commentDto)  throws SQLException{
+	public int writeComment(CommentDto commentDto){
 		return commentDao.createComment(commentDto);
+//		commentDao.createComment(commentDto);
 	}
 
 	@Override
-	public void deleteComment(int commentId) {
-		commentDao.deleteComment(commentId);
+	public int deleteComment(int commentId) {
+		return commentDao.deleteComment(commentId);
 	}
 
 	@Override
-	public void editComment(CommentDto commentDto) {
+	public int editComment(CommentDto commentDto) {
 		System.out.println(commentDto.getCommentId());
 		CommentDto dto = commentDao.selectCommentById(commentDto.getCommentId());
 		dto.setCommentId(commentDto.getCommentId());
@@ -40,6 +41,6 @@ public class CommentServiceImpl implements CommentService{
 		dto.setId(commentDto.getId());
 		dto.setCommentDate(commentDto.getCommentDate());
 		
-		commentDao.updateComment(dto);
+		return commentDao.updateComment(dto);
 	}
 }

@@ -10,12 +10,12 @@ public interface CommentService {
 	List<CommentDto> readCommentByFeedId(int feedId);
 	
 	// 댓글 작성
-	int writeComment(CommentDto commentDto) throws SQLException; 
+	int writeComment(CommentDto commentDto); 
 	
 	// 댓글 삭제
-	void deleteComment(int commentId);
+	int deleteComment(int commentId);
 	
 	// 댓글 수정
-	void editComment(CommentDto commentDto);
+	int editComment(CommentDto commentDto);
 
 }

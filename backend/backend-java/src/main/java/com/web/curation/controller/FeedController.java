@@ -1,7 +1,9 @@
 package com.web.curation.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,42 +55,95 @@ public class FeedController {
 	@ApiOperation(value="board 생성", 
 			  notes="유저 board 생성")
 	@PostMapping("/board/create")
-	public ResponseEntity<String> createBoard(@RequestBody BoardDto boardDto) throws SQLException{
-		
-		// 보드 이름 중복 체크
-		if(boardService.isExistSameBoardName(boardDto) == null) return new ResponseEntity<String>("fail", HttpStatus.OK); 
-		
-		boardService.createBoard(boardDto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> createBoard(@RequestBody BoardDto boardDto) throws SQLException{
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			BoardDto isSame = boardService.isExistSameBoardName(boardDto);
+			if(isSame != null) { // 중복이면
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			// 중복 아니면
+			int result = boardService.createBoard(boardDto); 
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch(Exception e) {
+			resultMap.put("message", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="board 수정", 
 			  notes="유저 board 이름 수정")
 	@PutMapping("/board/update")
-	public ResponseEntity<String> editBoard(@RequestBody BoardDto boardDto) throws SQLException{
-		System.out.println(boardDto);
-		// 보드 이름 중복 체크
-		if(boardService.isExistSameBoardName(boardDto) == null) return new ResponseEntity<String>("fail", HttpStatus.OK); 
+	public ResponseEntity<Map<String, Object>> editBoard(@RequestBody BoardDto boardDto) {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			BoardDto isSame = boardService.isExistSameBoardName(boardDto);
+			if(isSame != null) { // 중복이면
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			// 중복 아니면
+			int result = boardService.editBoard(boardDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 				
-		boardService.editBoard(boardDto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		}catch(Exception e) {
+			resultMap.put("message", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="board 삭제", 
 			  notes="유저 board 삭제")
 	@DeleteMapping("/board/delete/{boardId}")
-	public ResponseEntity<String> deleteBoard(@PathVariable int boardId){
-		boardService.deleteBoard(boardId);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable int boardId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = boardService.deleteBoard(boardId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+		}catch(Exception e) {
+			resultMap.put("message", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="스크랩하기", 
 			  notes="피드 스크랩하기")
 	@PostMapping("/scrap/create")
-	public ResponseEntity<String> createScrap(@RequestBody UserScrapfeedMyfeedDto dto){
-		System.out.println(dto);
-		userScrapfeedMyfeedService.addScrap(dto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> createScrap(@RequestBody UserScrapfeedMyfeedDto dto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = userScrapfeedMyfeedService.addScrap(dto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="내가 스크랩 한 피드 보기", 

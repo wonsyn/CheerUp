@@ -15,13 +15,13 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	PersonalWordDao personalWordDao;
 
 	@Override
-	public void createPersonalWord(PersonalWordDto personalWordDto) {
-		personalWordDao.insertPersonalWord(personalWordDto);
+	public int createPersonalWord(PersonalWordDto personalWordDto) {
+		return personalWordDao.insertPersonalWord(personalWordDto);
 	}
 
 	@Override
-	public void deletePersonalWord(int personalWordId) {
-		personalWordDao.deletePersonalWord(personalWordId);
+	public int deletePersonalWord(int personalWordId) {
+		return personalWordDao.deletePersonalWord(personalWordId);
 	}
 
 	@Override
@@ -35,19 +35,19 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	}
 
 	@Override
-	public void addPersonalFavWord(int personalWordId) {
+	public int addPersonalFavWord(int personalWordId) {
 //		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordId);
 //		System.out.println(dto);
-		personalWordDao.addPersonalFavWord(personalWordId);
+		return personalWordDao.addPersonalFavWord(personalWordId);
 	}
 
 	@Override
-	public void cancelPersonalFavWord(int personalWordId) {
-		personalWordDao.cancelPersonalFavWord(personalWordId);
+	public int cancelPersonalFavWord(int personalWordId) {
+		return personalWordDao.cancelPersonalFavWord(personalWordId);
 	}
 
 	@Override
-	public void editPersonalWord(PersonalWordDto personalWordDto) {
+	public int editPersonalWord(PersonalWordDto personalWordDto) {
 		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordDto.getPersonalWordId());
 		
 		dto.setPersonalWordId(personalWordDto.getPersonalWordId());
@@ -57,7 +57,7 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 		dto.setPersonalFavWord(personalWordDto.getPersonalFavWord());
 		dto.setPersonalWordDate(personalWordDto.getPersonalWordDate());
 		System.out.println("dto : " + dto);
-		personalWordDao.updatePersonalWord(dto);
+		return personalWordDao.updatePersonalWord(dto);
 		
 	}
 

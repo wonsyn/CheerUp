@@ -57,56 +57,99 @@ public class CommentController {
 	@ApiOperation(value="댓글 작성", 
 			  notes="댓글 작성하는 메서드")
 	@PostMapping("/create")
-	public ResponseEntity<Map<String, Object>> createComment(@RequestBody CommentDto commentDto)  throws SQLException{
+	public ResponseEntity<Map<String, Object>> createComment(@RequestBody CommentDto commentDto){
 		Map<String, Object> resultMap = new HashMap<>();
-		commentService.writeComment(commentDto);
-//		System.out.println("댓글 작성 : " + commentDto);
-		
-		if(commentService.writeComment(commentDto) == 1) {
-			System.out.println("덧글 작성 성공");
-			resultMap.put("message", "success");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-			
-		} else {
-			resultMap.put("message", "fail");
-			System.out.println("덧글 작성 실패");
+		try {
+			int result = commentService.writeComment(commentDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+			}else if(result == 0) {
+				resultMap.put("message", "fail");
+			}
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch(Exception e) {
+			resultMap.put("message", e.getMessage());
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-//		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="댓글 삭제", 
 			  notes="댓글 삭제하는 메서드")
 	@DeleteMapping("/delete/{commentId}")
-	public ResponseEntity<String> deleteComment(@PathVariable int commentId){
-		commentService.deleteComment(commentId);
-		
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable int commentId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = commentService.deleteComment(commentId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="댓글 수정하는 메서드", 
 			  notes="댓글 작성자에게만 수정/삭제 보여주는 기능은 Front와 협의 후 수정 여지 있으면 수정 예정")
 	@PutMapping("/update")
-	public ResponseEntity<String> editComment(@RequestBody CommentDto commentDto){
-		commentService.editComment(commentDto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> editComment(@RequestBody CommentDto commentDto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = commentService.editComment(commentDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="댓글 좋아요 추가", 
 			  notes="댓글 좋아요 추가 / 프론트와 협의 후 수정 여지 있으면 수정 예정")
 	@PostMapping("/like")
-	public ResponseEntity<String> addLike(@RequestBody CommentLikeDto commentLikeDto){
-		System.out.println(commentLikeDto);
-		commentLikeServie.addLike(commentLikeDto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> addLike(@RequestBody CommentLikeDto commentLikeDto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = commentLikeServie.addLike(commentLikeDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="댓글 좋아요 취소", 
 			  notes="댓글 좋아요 취소 / 프론트와 협의 후 수정 여지 있으면 수정 예정")
 	@DeleteMapping("/like")
-	public ResponseEntity<String> cancelLike(@RequestBody CommentLikeDto commentLikeDto){
-		commentLikeServie.cancelLike(commentLikeDto);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> cancelLike(@RequestBody CommentLikeDto commentLikeDto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = commentLikeServie.cancelLike(commentLikeDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
 	}
 }

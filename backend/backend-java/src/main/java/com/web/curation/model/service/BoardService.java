@@ -10,13 +10,13 @@ public interface BoardService {
 	List<BoardDto> getBoardByUserId(int userId);
 	
 	// 보드 추가
-	void createBoard(BoardDto boardDto);
+	int createBoard(BoardDto boardDto);
 	
 	// 보드 수정
-	void editBoard(BoardDto boardDto);
+	int editBoard(BoardDto boardDto);
 	
 	// 보드 삭제
-	void deleteBoard(int boardId);
+	int deleteBoard(int boardId);
 	
 	// 보드 이름 중복 확인
 	BoardDto isExistSameBoardName(BoardDto boardDto) throws SQLException;

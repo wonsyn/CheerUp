@@ -15,8 +15,8 @@ public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedServic
 	private UserScrapfeedMyfeedDao userScrapfeedMyfeedDao;
 	
 	@Override
-	public void addScrap(UserScrapfeedMyfeedDto userScrapfeedMyFeedDto) {
-		userScrapfeedMyfeedDao.insertScrap(userScrapfeedMyFeedDto);
+	public int addScrap(UserScrapfeedMyfeedDto userScrapfeedMyFeedDto) {
+		return userScrapfeedMyfeedDao.insertScrap(userScrapfeedMyFeedDto);
 	}
 
 	@Override

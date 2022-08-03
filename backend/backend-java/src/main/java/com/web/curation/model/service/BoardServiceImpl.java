@@ -21,22 +21,22 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void createBoard(BoardDto boardDto) {
-		boardDao.insertBoard(boardDto);
+	public int createBoard(BoardDto boardDto) {
+		return boardDao.insertBoard(boardDto);
 	}
 
 	@Override
-	public void editBoard(BoardDto boardDto) {
+	public int editBoard(BoardDto boardDto) {
 		BoardDto dto = boardDao.selectBoardByBoardId(boardDto.getBoardId());
 		dto.setBoardId(boardDto.getBoardId());
 		dto.setUserId(boardDto.getUserId());
 		dto.setBoardName(boardDto.getBoardName());
-		boardDao.updateBoard(dto);
+		return boardDao.updateBoard(dto);
 	}
 
 	@Override
-	public void deleteBoard(int boardId) {
-		boardDao.deleteBoard(boardId);
+	public int deleteBoard(int boardId) {
+		return boardDao.deleteBoard(boardId);
 	}
 
 	@Override

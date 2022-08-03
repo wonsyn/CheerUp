@@ -1,6 +1,8 @@
 package com.web.curation.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.model.dto.CommentLikeDto;
 import com.web.curation.model.dto.PersonalWordDto;
 import com.web.curation.model.dto.WordDto;
-import com.web.curation.model.service.CommentLikeService;
 import com.web.curation.model.service.PersonalWordService;
 import com.web.curation.model.service.WordService;
 
@@ -56,18 +56,41 @@ public class WordController {
 	@ApiOperation(value="내 단어장에 추가", 
 			  notes="기본 단어를 내 단어장에 추가 / 그냥 기본 단어 추가뿐만 아니라 수정 후 추가도 이 메서드 사용")
 	@PostMapping("/create")
-	public ResponseEntity<String> putWord(PersonalWordDto personalWordDto){
-		System.out.println(personalWordDto);
-		personalWordService.createPersonalWord(personalWordDto);
-		return new ResponseEntity<String>("success", HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> putWord(PersonalWordDto personalWordDto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = personalWordService.createPersonalWord(personalWordDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="내 단어장에서 삭제", 
 			  notes="개인 단어장 고유 번호로 내 단어장에서 삭제")
 	@DeleteMapping("/delete/{personalWordId}")
-	public ResponseEntity<String> deleteWord(@PathVariable int personalWordId){
-		personalWordService.deletePersonalWord(personalWordId);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> deleteWord(@PathVariable int personalWordId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = personalWordService.deletePersonalWord(personalWordId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="내 단어장 조회", 
@@ -87,27 +110,61 @@ public class WordController {
 	@ApiOperation(value="단어 즐겨찾기 추가", 
 			  notes="내가 추가했던 단어들 중 즐거찾기 추가")
 	@PutMapping("/fav/add/{personalWordId}")
-	public ResponseEntity<String> addPersonalFavWord(@PathVariable int personalWordId){
-		personalWordService.addPersonalFavWord(personalWordId);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> addPersonalFavWord(@PathVariable int personalWordId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = personalWordService.addPersonalFavWord(personalWordId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="단어 즐겨찾기 해제", 
 			  notes="내가 추가했던 단어들 중 즐거찾기 해제")
 	@PutMapping("/fav/cancel/{personalWordId}")
-	public ResponseEntity<String> calcelPersonalFavWord(@PathVariable int personalWordId){
-		personalWordService.cancelPersonalFavWord(personalWordId);
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> cancelPersonalFavWord(@PathVariable int personalWordId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = personalWordService.cancelPersonalFavWord(personalWordId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value="내 단어장 안에서 수정", 
 			  notes="추가할 때 수정하는 것이 아니고 내 개인 단어장에서 단어 수정")
 	@PutMapping("/update")
-	public ResponseEntity<String> editPersonalWord(@RequestBody PersonalWordDto personalWordDto){
-		System.out.println(personalWordDto);
-		System.out.println("before service");
-		personalWordService.editPersonalWord(personalWordDto);
-		return new ResponseEntity<String>("success", HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> editPersonalWord(@RequestBody PersonalWordDto personalWordDto){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = personalWordService.editPersonalWord(personalWordDto);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
