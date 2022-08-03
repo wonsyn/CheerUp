@@ -1,9 +1,13 @@
-import { createStore } from "vuex";
+import userStore from "@/store/modules/User.js";
 
-export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
-});
+const store = {
+  modules: {
+    userStore,
+  },
+};
+
+const useStore = function () {
+  return store;
+};
+
+export default useStore;

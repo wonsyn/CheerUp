@@ -8,7 +8,7 @@
         <!-- <account-error-list v-if="authError"></account-error-list> -->
         <form @submit.prevent="loginCheck" class="d-flex flex-column">
           <div class="input-group mb-3 mx-auto" style="width: 30%">
-            <input type="text" class="form-control" v-model="credentials.username" placeholder="ID" />
+            <input type="text" class="form-control" v-model="credentials.id" placeholder="ID" />
           </div>
           <div class="input-group mb-3 mx-auto" style="width: 30%">
             <input type="password" class="form-control" v-model="credentials.password" placeholder="Password" />
@@ -48,6 +48,11 @@
 // import {mapActions, mapGetters } from 'vuex'
 // import bootstrap from "bootstrap";
 import { Toast } from "bootstrap";
+// import { mapActions, mapGetters } from "vuex";
+import useStore from "@/store/index.js";
+import router from "@/router";
+
+const store = useStore();
 
 export default {
   name: "LoginView",
@@ -57,7 +62,7 @@ export default {
   data() {
     return {
       credentials: {
-        username: "",
+        id: "",
         password: "",
       },
     };
@@ -65,21 +70,24 @@ export default {
   computed: {
     // ...mapGetters(['에러']),
     checkInfo() {
-      if (this.credentials.username.length == 0 || this.credentials.password.length == 0) {
+      if (this.credentials.id.length == 0 || this.credentials.password.length == 0) {
         return false;
       }
       return true;
     },
   },
   methods: {
-    login() {
-      // const msg = `ID: ${this.credentials.username} / Password: ${this.credentials.password}`;
-      // confirm(msg);
-      this.toast("로그인 성공");
+    async login() {
+      await store.modules.userStore.actions.login(this.credentials);
     },
-    loginCheck() {
+    async loginCheck() {
       if (this.checkInfo) {
-        this.login();
+        await this.login(this.credentials);
+        if (store.modules.userStore.state.isLogin) {
+          router.push({ name: "home" });
+        } else {
+          this.toast("아이디 비밀번호가 올바르지 않습니다.", "로그인 실패", "");
+        }
       } else {
         this.toast("아이디 비밀번호를 올바르게 입력해 주세요.", "로그인 실패", "");
       }
