@@ -14,4 +14,5 @@ public interface ScheduleDao {
 	public List<ScheduleDto> getScheduleList(ScheduleDto scheduleDto) throws SQLException;
 	public List<ScheduleDto> getScheduleListByTitle(ScheduleDto scheduleDto) throws SQLException;
 	public List<ScheduleDto> getScheduleListByCompany(ScheduleDto scheduleDto) throws SQLException;
+	public List<ScheduleDto> getScheduleListByDate(ScheduleDto scheduleDto) throws SQLException;
 }

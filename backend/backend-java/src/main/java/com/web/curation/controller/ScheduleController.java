@@ -118,4 +118,17 @@ public class ScheduleController {
 		
 		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByCompany(schedule), HttpStatus.OK);
 	}
+	
+	@GetMapping("/searchByDate")
+	public ResponseEntity<List<ScheduleDto>> getScheduleListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) throws SQLException{
+		ScheduleDto schedule = new ScheduleDto();
+		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		schedule.setStartDate(startDate);
+		schedule.setEndDate(endDate);
+		
+		System.out.println("[start,end]: "+ startDate +"," + endDate+"]");
+		
+		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByDate(schedule), HttpStatus.OK);
+
+	}
 }
