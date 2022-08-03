@@ -16,7 +16,12 @@ public class FollowServiceImpl implements FollowService {
 	FollowDao followMapper;
 	
 	@Override
-	public List<UserDto> getMyFollowList(int userId) throws SQLException {
-		return followMapper.getMyFollowList(userId);
+	public List<UserDto> getMyFollowingList(int userId) throws SQLException {
+		return followMapper.getMyFollowingList(userId);
+	}
+
+	@Override
+	public List<UserDto> getMyFollowerList(int userId) throws SQLException {
+		return followMapper.getMyFollowerList(userId);
 	}
 }

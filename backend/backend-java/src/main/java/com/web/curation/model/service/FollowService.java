@@ -7,5 +7,6 @@ import com.web.curation.model.dto.UserDto;
 
 public interface FollowService {
 
-	public List<UserDto> getMyFollowList(int userId) throws SQLException;
+	public List<UserDto> getMyFollowingList(int userId) throws SQLException;
+	public List<UserDto> getMyFollowerList(int userId) throws SQLException;
 }

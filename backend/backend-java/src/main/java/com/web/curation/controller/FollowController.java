@@ -18,7 +18,7 @@ import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.UserService;
 
 @RestController
-@RequestMapping("follow")
+@RequestMapping("/follow")
 public class FollowController {
 
 	@Autowired
@@ -30,11 +30,19 @@ public class FollowController {
 	@Autowired 
 	FollowService followService;
 	
-	@GetMapping("/list")
+	@GetMapping("/followingList")
 	public ResponseEntity<List<UserDto>> getMyFollowList(HttpServletRequest request) throws SQLException{
 		String loginUserId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
 		int userId = userService.getUserIdById(loginUserId);
 		List<UserDto> followList = followService.getMyFollowList(userId);
+		return new ResponseEntity<List<UserDto>>(followList,HttpStatus.OK);
+	}
+	
+	@GetMapping("/followerList")
+	public ResponseEntity<List<UserDto>> getFollowMeList(HttpServletRequest request) throws SQLException{
+		String loginUserId = jwtService.getUserIdByJwt(request.getHeader("access-token"));
+		int userId = userService.getUserIdById(loginUserId);
+		List<UserDto> followList = followService.getFollowedMeList(userId);
 		return new ResponseEntity<List<UserDto>>(followList,HttpStatus.OK);
 	}
 }

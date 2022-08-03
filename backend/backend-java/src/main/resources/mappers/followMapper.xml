@@ -5,7 +5,7 @@
 <mapper namespace="com.web.curation.model.dao.FollowDao">
 
 	<!-- 나의 팔로우 리스트 가져오기 ( 사용자 id ) -->
-	<select id="getMyFollowList" parameterType="int" resultType="userDto">
+	<select id="getMyFollowingList" parameterType="int" resultType="userDto">
 		select user_id userId, id, nickname, user_img_name userImgName, user_img_url userImgUrl
 		from user
 		where user_id in (
@@ -15,4 +15,14 @@
 		)
 	</select>
 
+	<!-- 나의 팔로잉 리스트 가져오기 -->
+	<select id="getMyFollowerList" parameterType="int" resultType="userDto">
+		select user_id userId, id, nickname, user_img_name userImgName, user_img_url userImgUrl
+		from user
+		where user_id in (
+			select user_id
+			from follow
+			where follow_user_id = #{followUserId}
+		)
+	</select>
 </mapper>
