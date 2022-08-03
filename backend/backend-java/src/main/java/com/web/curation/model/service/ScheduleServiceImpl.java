@@ -69,4 +69,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<ScheduleDto> getScheduleListByStatus(ScheduleDto scheduleDto) throws SQLException {
 		return scheduleMapper.getScheduleListByStatus(scheduleDto);
 	}
+	
+	@Override
+	public List<ScheduleDto> getScheduleListByConditions(ScheduleDto scheduleDto) throws SQLException {
+		return scheduleMapper.getScheduleListByConditions(scheduleDto);
+	}
 }

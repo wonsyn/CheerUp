@@ -165,4 +165,12 @@ public class ScheduleController {
 		
 		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByStatus(schedule), HttpStatus.OK);
 	}
+	
+	@PostMapping("/search")
+	public ResponseEntity<List<ScheduleDto>> getScheduleListByConditions(@RequestBody ScheduleDto conditions, HttpServletRequest request) throws SQLException{
+		conditions.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		System.out.println("conditions: "+conditions);
+		
+		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByConditions(conditions), HttpStatus.OK);
+	}
 }
