@@ -27,8 +27,8 @@
 	</select>
 	
 	<insert id="createComment" parameterType="commentDto">
-		INSERT INTO comment(comment_url, comment_content, id, comment_date)
-		VALUES(#{commentUrl}, #{commentContent}, #{id}, now())
+		INSERT INTO comment(feed_id, comment_content, id, comment_date)
+		VALUES(#{feedId}, #{commentContent}, #{id}, now())
 	</insert>
 	
 	<delete id="deleteComment" parameterType="int">

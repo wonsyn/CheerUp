@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public void writeComment(CommentDto commentDto) {
-		commentDao.createComment(commentDto);
+	public int writeComment(CommentDto commentDto)  throws SQLException{
+		return commentDao.createComment(commentDto);
 	}
 
 	@Override

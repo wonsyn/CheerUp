@@ -1,10 +1,14 @@
 package com.web.curation.controller;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +24,10 @@ import com.web.curation.model.service.CommentLikeService;
 import com.web.curation.model.service.CommentService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 @Api(tags = "댓글")
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -53,11 +57,23 @@ public class CommentController {
 	@ApiOperation(value="댓글 작성", 
 			  notes="댓글 작성하는 메서드")
 	@PostMapping("/create")
-	public ResponseEntity<String> createComment(@RequestBody CommentDto commentDto) {
+	public ResponseEntity<Map<String, Object>> createComment(@RequestBody CommentDto commentDto)  throws SQLException{
+		Map<String, Object> resultMap = new HashMap<>();
 		commentService.writeComment(commentDto);
-		System.out.println("댓글 작성 : " + commentDto);
+//		System.out.println("댓글 작성 : " + commentDto);
 		
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		if(commentService.writeComment(commentDto) == 1) {
+			System.out.println("덧글 작성 성공");
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			
+		} else {
+			resultMap.put("message", "fail");
+			System.out.println("덧글 작성 실패");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+//		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="댓글 삭제", 

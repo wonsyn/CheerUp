@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.web.curation.model.dto.CommentDto;
@@ -9,7 +10,7 @@ public interface CommentService {
 	List<CommentDto> readCommentByFeedId(int feedId);
 	
 	// 댓글 작성
-	void writeComment(CommentDto commentDto);
+	int writeComment(CommentDto commentDto) throws SQLException; 
 	
 	// 댓글 삭제
 	void deleteComment(int commentId);
