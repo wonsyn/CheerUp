@@ -4,6 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.ScheduleDao">
 
-
+	<!-- 일정 생성 하기 -->
+	<insert id="createSchedule" parameterType="scheduleDto">
+		insert into schedule (user_id, schedule_title, schedule_company, schedule_date,
+							 schedule_memo, schedule_category, schedule_status) 
+		values (#{userId}, #{scheduleTitle}, #{scheduleCompany}, now(), #{scheduleMemo}, #{scheduleCategory}, #{scheduleStatus})
+	</insert>
 
 </mapper>
