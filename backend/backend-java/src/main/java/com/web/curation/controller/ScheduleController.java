@@ -96,4 +96,15 @@ public class ScheduleController {
 		schedule.setScheduleDate(scheduleDate);
 		return new ResponseEntity<List<ScheduleDto>>(scheduleService.getScheduleList(schedule),HttpStatus.OK); 
 	}
+	
+	@GetMapping("/searchByTitle")
+	public ResponseEntity<List<ScheduleDto>> getScheduleListByTitle(@RequestParam String title, HttpServletRequest request) throws SQLException{
+		ScheduleDto schedule = new ScheduleDto();
+		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		schedule.setScheduleTitle(title);
+		
+		System.out.println("title: "+ title);
+		
+		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByTitle(schedule), HttpStatus.OK);
+	}
 }

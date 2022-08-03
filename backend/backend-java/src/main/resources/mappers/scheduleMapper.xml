@@ -41,4 +41,13 @@
 		where user_id = #{userId}
 		and schedule_date between date_format(#{scheduleDate}, '%Y-%m-01') and date_format(last_day(#{scheduleDate}), '%Y-%m-%d')
 	</select>
+	
+	<!-- 일정 검색 ( 제목으로 ) -->
+	<select id="getScheduleListByTitle" parameterType="scheduleDto" resultType="scheduleDto">
+		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
+			schedule_date scheduleDate, schedule_memo scheduleMemo, schedule_category scheduleCategory, schedule_status scheduleStatus		
+		from schedule
+		where user_id = #{userId}
+		and schedule_title like concat('%',#{scheduleTitle},'%')
+	</select>
 </mapper>
