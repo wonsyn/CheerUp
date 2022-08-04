@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.FollowDto;
@@ -46,16 +47,16 @@ public class FollowController {
 	FollowService followService;
 	
 	@ApiOperation(value="내가 팔로우하고 있는 유저 리스트", 
-			  notes="{followList : 리스트}")
+			  notes="return {followList : 리스트}")
 	@GetMapping("/followingList")
-	public ResponseEntity<Map<String, Object>> getMyFollowList(HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getMyFollowList(@RequestParam String id, HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			resultMap.put("message", SUCCESS);
-			resultMap.put("followList", followService.getMyFollowingList(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))))); 
+			resultMap.put("followList", followService.getMyFollowingList(userService.getUserIdById(id))); 
 		} catch (SQLException e) {
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;	
@@ -64,16 +65,16 @@ public class FollowController {
 	}
 	
 	@ApiOperation(value="나를 팔로우하고 있는 유저 리스트", 
-			  notes="{followList : 리스트}")
+			  notes="return {followList : 리스트}")
 	@GetMapping("/followerList")
-	public ResponseEntity<Map<String, Object>> getFollowMeList(HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getFollowMeList(@RequestParam String id, HttpServletRequest request) {
 				
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			resultMap.put("message", SUCCESS);
-			resultMap.put("followList", followService.getMyFollowerList(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))))); 
+			resultMap.put("followList", followService.getMyFollowerList(userService.getUserIdById(id))); 
 		} catch (SQLException e) {
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
