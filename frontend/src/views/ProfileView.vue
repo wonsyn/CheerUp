@@ -4,13 +4,14 @@
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
-        <img class="profile" src="@/assets/logo.png" alt="profile-img" />
+        <img class="profile" :src="profile.userImgUrl" :alt="profile.userImgName" />
       </div>
       <div id="user-info" class="my-3">
         <div id="username" class="my-3">
-          <span class="m-3">{{ username }}</span>
+          <span class="m-3">{{ profile.nickname }}</span>
           <span>
             <button class="btn btn-sm btn-outline-dark" v-if="currentUser.username == username">정보수정</button>
+            <button class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
         </div>
@@ -58,6 +59,10 @@ export default {
       },
       username: this.$route.params.username,
       onBoardTab: false,
+      profile: {},
+      isFollowing: false,
+      followers: null,
+      followings: null,
     };
   },
   methods: {
@@ -71,20 +76,8 @@ export default {
   async created() {
     console.log("created");
     await userStore.actions.getProfile(this.username);
+    this.profile = userStore.getters.profile();
     console.log(this.profile);
-  },
-  computed: {
-    profile() {
-      console.log("computed");
-      return userStore.getters.profile();
-    },
-  },
-  watch: {
-    profile(value) {
-      console.log(value);
-      console.log("watch");
-      this.profile = userStore.getters.profile();
-    },
   },
 };
 </script>
