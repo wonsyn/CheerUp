@@ -129,7 +129,7 @@ public class UserController {
 				resultMap.put("message", SUCCESS);
 			}
 			else {
-				resultMap.put("message", FAIL);
+				resultMap.put("message", "(UserController 132)");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -158,7 +158,7 @@ public class UserController {
 			}
 			// 유저 정보가 없다면
 			else {				
-				resultMap.put("message", FAIL);
+				resultMap.put("message", "(UserController 161)");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
@@ -196,7 +196,7 @@ public class UserController {
 			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
 			if(!userService.isSameLoginUserAndRequestId(loginUser, userDto.getUserId())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR; 
-				resultMap.put("message", FAIL);			
+				resultMap.put("message", "(UserController 199)");			
 			}
 			else {
 				if(userService.updateUser(userDto) == 1) {
@@ -205,7 +205,7 @@ public class UserController {
 				}
 				else {
 					status = HttpStatus.INTERNAL_SERVER_ERROR; 
-					resultMap.put("message", FAIL);			
+					resultMap.put("message", "(UserController 208)");			
 				}
 				
 			}
@@ -232,7 +232,7 @@ public class UserController {
 			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
 			if(userService.isSameLoginUserAndRequestId(loginUser, userService.getUserIdById(id))) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", FAIL);
+				resultMap.put("message", "(UserController 235)");
 			}
 			else {
 				if(userService.deleteUser(id) == 1) {
@@ -242,7 +242,7 @@ public class UserController {
 				}
 				else {
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
-					resultMap.put("message", FAIL);
+					resultMap.put("message", "(UserController 245)");
 				}				
 			}
 		} catch (SQLException e) {
@@ -263,7 +263,7 @@ public class UserController {
 	    try {
 			if(!userService.userInfo(userDto.getId()).getPassword().equals(userDto.getPassword())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", FAIL);
+				resultMap.put("message", "(UserController 266)");
 			} else {
 				resultMap.put("message", SUCCESS);
 			}
@@ -287,7 +287,7 @@ public class UserController {
 	    	
 			if(userService.getUserIdById(id) != 0) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", FAIL);
+				resultMap.put("message", "(UserController 290)");
 			} else {
 				resultMap.put("message", SUCCESS);
 			}
