@@ -1,20 +1,23 @@
 <template>
   <div id="profile-view">
-    프로필
+    프로필 {{ profile }}
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
-        <img class="profile" src="@/assets/logo.png" alt="profile-img" />
+        <img class="profile" :src="profile.userImgUrl" :alt="profile.userImgName" />
       </div>
       <div id="user-info" class="my-3">
         <div id="username" class="my-3">
-          <span class="m-3">{{ username }}</span>
+          <span class="m-3">{{ profile.nickname }}</span>
           <span>
             <button class="btn btn-sm btn-outline-dark" v-if="currentUser.username == username">정보수정</button>
-            <button class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
+            <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
+            <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
         </div>
-        <div id="user-follow"><span>팔로우: 999</span> / <span>팔로워: 999</span></div>
+        <div id="user-follow">
+          <span>팔로우: {{ followings.length }}</span> / <span>팔로워: {{ followers.length }}</span>
+        </div>
       </div>
       <div></div>
     </div>
@@ -39,6 +42,10 @@
 <script>
 import UserBoardList from "@/components/UserBoardList.vue";
 import UserScrapList from "@/components/UserScrapList.vue";
+import useStore from "@/store";
+
+const store = useStore();
+const userStore = store.modules.userStore;
 
 export default {
   name: "ProfileView",
@@ -49,11 +56,15 @@ export default {
   data() {
     return {
       currentUser: {
-        username: "user1",
+        username: "user44",
         id: 1,
       },
       username: this.$route.params.username,
       onBoardTab: false,
+      profile: {},
+      isFollowing: false,
+      followers: 0,
+      followings: 0,
     };
   },
   methods: {
@@ -63,6 +74,22 @@ export default {
     clickScrapTab() {
       this.onBoardTab = false;
     },
+    follow() {
+      userStore.actions.follow(this.profile.id);
+    },
+    unfollow() {
+      userStore.actions.unfollow(this.profile.id);
+    },
+  },
+  async created() {
+    console.log("created");
+    await userStore.actions.getProfile(this.username);
+    this.profile = userStore.getters.profile();
+    console.log(this.profile);
+    await userStore.actions.getFollowerList(this.profile.id);
+    this.followers = userStore.getters.followerList();
+    await userStore.actions.getFollowingList(this.profile.id);
+    this.followings = userStore.getters.followingList();
   },
 };
 </script>

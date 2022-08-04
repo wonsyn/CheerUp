@@ -1,12 +1,25 @@
-import { login, signup } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
   currentUser: {},
   token: localStorage.getItem("token") || "",
+  profile: {},
+  followerList: {},
+  followingList: {},
 };
 
-const getters = {};
+const getters = {
+  profile() {
+    return state.profile;
+  },
+  followerList() {
+    return state.followerList;
+  },
+  followingList() {
+    return state.followingList;
+  },
+};
 
 const mutations = {
   SET_IS_LOGIN: (isLogin) => {
@@ -17,6 +30,15 @@ const mutations = {
   },
   SET_CURRENT_USER: (user) => {
     state.currentUser = user;
+  },
+  SET_PROFILE: (user) => {
+    state.profile = user;
+  },
+  SET_FOLLOWER_LIST: (followerList) => {
+    state.followerList = followerList;
+  },
+  SET_FOLLOWING_LIST: (followingList) => {
+    state.followingList = followingList;
   },
 };
 
@@ -70,6 +92,77 @@ const actions = {
   },
   fetchCurrentUser(user) {
     mutations.SET_CURRENT_USER(user);
+  },
+  async getProfile(id) {
+    await getUser(
+      id,
+      ({ data }) => {
+        console.log(data);
+        if (data["message"] === "success") {
+          console.log(data.userDetail);
+          mutations.SET_PROFILE(data.userDetail);
+        } else {
+          console.log("else");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async follow(id) {
+    await follow(
+      id,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async unfollow(id) {
+    await unfollow(
+      id,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async getFollowerList(id) {
+    await getFollowerList(
+      id,
+      ({ data }) => {
+        if (data["message"] === "success") {
+          console.log(data);
+          mutations.SET_FOLLOWER_LIST(data.followerList);
+        } else {
+          console.log("failed");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async getFollowingList(id) {
+    await getFollowingList(
+      id,
+      ({ data }) => {
+        if (data["message"] === "success") {
+          console.log(data);
+          mutations.SET_FOLLOWING_LIST(data.followingList);
+        } else {
+          console.log("failed");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   },
 };
 
