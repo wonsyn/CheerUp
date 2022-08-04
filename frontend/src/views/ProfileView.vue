@@ -39,6 +39,10 @@
 <script>
 import UserBoardList from "@/components/UserBoardList.vue";
 import UserScrapList from "@/components/UserScrapList.vue";
+import useStore from "@/store";
+
+const store = useStore();
+const userStore = store.modules.userStore;
 
 export default {
   name: "ProfileView",
@@ -49,10 +53,11 @@ export default {
   data() {
     return {
       currentUser: {
-        username: "user1",
+        username: "user44",
         id: 1,
       },
       username: this.$route.params.username,
+      profile: userStore.state.profile,
       onBoardTab: false,
     };
   },
@@ -63,6 +68,9 @@ export default {
     clickScrapTab() {
       this.onBoardTab = false;
     },
+  },
+  created() {
+    userStore.actions.getProfile(this.username);
   },
 };
 </script>

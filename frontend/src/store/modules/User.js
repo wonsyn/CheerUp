@@ -1,12 +1,17 @@
-import { login, signup } from "@/api/Feature/User.js";
+import { getUser, login, signup } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
   currentUser: {},
   token: localStorage.getItem("token") || "",
+  profile: {},
 };
 
-const getters = {};
+const getters = {
+  profile() {
+    return state.profile;
+  },
+};
 
 const mutations = {
   SET_IS_LOGIN: (isLogin) => {
@@ -17,6 +22,9 @@ const mutations = {
   },
   SET_CURRENT_USER: (user) => {
     state.currentUser = user;
+  },
+  SET_PROFILE: (user) => {
+    state.profile = user;
   },
 };
 
@@ -70,6 +78,23 @@ const actions = {
   },
   fetchCurrentUser(user) {
     mutations.SET_CURRENT_USER(user);
+  },
+  async getProfile(id) {
+    await getUser(
+      id,
+      ({ data }) => {
+        console.log(data);
+        if (data["message"] === "success") {
+          console.log(data.userDetail);
+          mutations.SET_PROFILE(data.userDetail);
+        } else {
+          console.log("else");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   },
 };
 
