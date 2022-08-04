@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="my-3">
     <div class="card mx-auto" style="width: 18rem">
-      <img src="@/assets/logo.png" class="card-img-top" alt="..." />
+      <img :src="feedImgUrl" class="card-img-top" alt="..." />
       <div class="card-body">
-        <p class="card-text">[[ 제목 ]]</p>
+        <p class="card-text">{{ feedTitle }}</p>
       </div>
       <div class="card-footer d-flex justify-content-between">
-        <div>[[ 출처 ]]</div>
+        <div>{{ feedSource }}</div>
         <div><i class="fas fa-bookmark"></i><i class="fal fa-bookmark"></i></div>
       </div>
     </div>
@@ -16,6 +16,19 @@
 <script>
 export default {
   name: "FeedListItem",
+  props: {
+    feedAuthor: String,
+    feedCategory: String,
+    feedContent: String,
+    feedDate: Date,
+    feedId: Number,
+    feedImgName: String,
+    feedImgUrl: String,
+    feedSource: String,
+    feedTitle: String,
+    feedType: Number,
+    feedUrl: String,
+  },
   components: {},
   setup() {},
 };

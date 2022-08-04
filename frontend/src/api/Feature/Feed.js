@@ -1,11 +1,13 @@
-import { apiInstance } from "./index.js";
+import { apiInstance } from "../index.js";
 
 const api = apiInstance();
 
-/* example
-function getGugun(param, success, fail) {
-  api.get(`/address/gugun`, { params: param }).then(success).catch(fail);
+async function getFeed(type, success, fail) {
+  const access_token = sessionStorage.getItem("access-token");
+  await api
+    .get(`/feed/${type}`, { headers: { Authorization: access_token } })
+    .then(success)
+    .catch(fail);
 }
-*/
 
-export /* getGugun */ {};
+export { getFeed };
