@@ -9,4 +9,6 @@ public interface FeedService {
 	// feed 검색
 	// ㅇㅇㅇㅇㅇㅇㅇ
 	List<FeedDto> searchFeed(HashMap<String, String> params);
+	
+	FeedDto readFeedById(int feedId);
 }
