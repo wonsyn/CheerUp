@@ -194,7 +194,7 @@ public class UserController {
 		int loginUser;
 		try {
 			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
-			if(userService.isSameLoginUserAndRequestId(loginUser, userDto.getUserId())) {
+			if(!userService.isSameLoginUserAndRequestId(loginUser, userDto.getUserId())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR; 
 				resultMap.put("message", FAIL);			
 			}

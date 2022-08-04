@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,11 @@ import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
+@Api(tags = "알람")
 @RestController
 @RequestMapping("/alarm")
 public class AlarmController {
@@ -41,41 +47,112 @@ public class AlarmController {
 	@Autowired
 	private AlarmService alarmService;
 	
+	@ApiOperation(value="알람 생성", 
+			  notes="1. 누군가 나를 팔로우 했을 때\n2. 내가 팔로우한 사람이 기사를 스크랩 했을 때")
 	@PostMapping("/create")
-	public ResponseEntity<Void> createAlarm(@RequestBody AlarmDto alarmDto, HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> createAlarm(@RequestBody AlarmDto alarmDto, HttpServletRequest request) {
 		
-		alarmDto.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		System.out.println("create: "+ alarmDto);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		if(alarmService.createAlarm(alarmDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR); 
+		try {
+			// 로그인 세션 정보 가져오기
+			alarmDto.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			// 알람 생성 성공
+			if(alarmService.createAlarm(alarmDto) == 1) {
+				resultMap.put("message", SUCCESS);	
+			}
+			// 알람 생성 실패
+			else {
+				resultMap.put("message", "(AlarmController Line 67)");
+				status = HttpStatus.INTERNAL_SERVER_ERROR;				
+			}			
+		} 
+		// 서버 에러
+		catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);	
 	}
 	
+	@ApiOperation(value="알람 수정", 
+			  notes="기존의 알람 내용이 변경될 때 발생")
 	@PutMapping("/update")
-	public ResponseEntity<Void> updateAlarm(@RequestBody AlarmDto alarmDto, HttpServletRequest request) throws SQLException {
+	public ResponseEntity<Map<String, Object>> updateAlarm(@RequestBody AlarmDto alarmDto, HttpServletRequest request) {
 		
-		int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
-		if(userService.isSameLoginUserAndRequestId(loginUser, alarmDto.getAlarmReceiverId())) return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		alarmDto.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		System.out.println("update: "+ alarmDto);
-		// 수정
-		if(alarmService.updateAlarm(alarmDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		int loginUser;
+		try {
+			// 로그인 세션 정보 가져오기
+			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			// 요청 id == 로그인 세션 ?
+			if(userService.isSameLoginUserAndRequestId(loginUser, alarmDto.getAlarmReceiverId())) {
+				// 수정 성공
+				if(alarmService.updateAlarm(alarmDto) == 1) {
+					resultMap.put("message", SUCCESS);
+					resultMap.put("userDetail", userService.userInfo(loginUser));
+				}
+				// 수정 실패
+				else {
+					resultMap.put("message", "(AlarmController Line 100");
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+			}
+			// 요청id != 로그인 세션
+			else {
+				resultMap.put("message", "(AlarmController Line 106)");				
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
 	}
 	
+	@ApiOperation(value="알람 삭제", 
+			  notes="1. 일정 기간이 지난 확인 알람 삭제\n2. 사용자가 체크해 알람 삭제")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Void> deleteAlarm(@PathVariable int id, HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> deleteAlarm(@PathVariable int id, HttpServletRequest request) {
 		
-		int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
-		int owner = alarmService.getUserIdByAlarmId(id);
-		if(userService.isSameLoginUserAndRequestId(loginUser, owner)) return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		System.out.println("delete: "+ id);
-		if(alarmService.deleteAlarm(id) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		int loginUser;
+		try {
+			// 로그인 세션 정보 가져오기
+			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			// @pathvariable의 알람 id를 이용해 user_id 가져오기
+			int owner = alarmService.getUserIdByAlarmId(id);
+			// 요청 id == 로그인 세션
+			if(userService.isSameLoginUserAndRequestId(loginUser, owner)) {
+				// 삭제 성공
+				if(alarmService.deleteAlarm(id) == 1) {
+					resultMap.put("message", SUCCESS);
+				}
+				// 삭제 실패
+				else {
+					resultMap.put("message", "(AlarmController Line 138");
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+			}
+			// 요청 id != 로그인 세션
+			else {
+				resultMap.put("message", "(AlarmController Line 144)");
+				status = HttpStatus.INTERNAL_SERVER_ERROR;				
+			}
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;				
+		}
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
 	}
 	
+	@ApiOperation(value="알람 세부 내용 조회", 
+			  notes="알람을 클릭 했을 때 알람 세부 내용 출력")
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<Map<String, Object>> getDetailAlarm(@PathVariable int alarmId, HttpServletRequest request) {	 
 		
@@ -85,11 +162,12 @@ public class AlarmController {
 		try {
 			AlarmDto result = alarmService.getAlarmDetail(alarmId);
 			if(result != null) {
-				resultMap.put("alarmInfo", result);
+				resultMap.put("alarmDetail", result);
 				resultMap.put("message", SUCCESS);				
 			}
 			else {
-				resultMap.put("message", FAIL);								
+				resultMap.put("message", "(AlarmController Line 169)");								
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
 			resultMap.put("message", e.getMessage());
@@ -98,67 +176,174 @@ public class AlarmController {
 		return new ResponseEntity<>(resultMap,status);
 	}
 	
+	@ApiOperation(value="이번 달 알람 조회", 
+			  notes="현재 년,월에 있는 알람 리스트 출력")
 	@GetMapping("/listInThisMonth")
-	public ResponseEntity<List<AlarmDto>> getAlarmListInThisMonth(@RequestParam String thisMonth, HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> getAlarmListInThisMonth(@RequestParam String thisMonth, HttpServletRequest request) {
 		
-		AlarmDto alarm = new AlarmDto();
-		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		alarm.setAlarmDateTime(thisMonth);
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListInThisMonth(alarm),HttpStatus.OK); 
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			AlarmDto alarm = new AlarmDto();
+			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			alarm.setAlarmDateTime(thisMonth);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmList", alarmService.getAlarmListInThisMonth(alarm)); 
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value="보낸 사람 기준 알람 리스트 조회", 
+			  notes="알람을 보낸 사람 기준으로 알람 리스트를 조회")
 	@GetMapping("/listBySenderId")
-	public ResponseEntity<List<AlarmDto>> getAlarmListBySenderId(@RequestParam int senderId, HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> getAlarmListBySenderId(@RequestParam int senderId, HttpServletRequest request) {
 		
-		AlarmDto alarm = new AlarmDto();
-		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		alarm.setAlarmSenderId(senderId);
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListBySenderId(alarm),HttpStatus.OK); 
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			AlarmDto alarm = new AlarmDto();
+			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			alarm.setAlarmSenderId(senderId);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmList", alarmService.getAlarmListBySenderId(alarm));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value="알람 타입 기준 알람 리스트 조회", 
+			  notes="알람 타입에 따른 알람 리스트 조회")
 	@GetMapping("/listByType")
-	public ResponseEntity<List<AlarmDto>> getAlarmListByType(@RequestParam String type, HttpServletRequest request) throws SQLException{
-		
-		AlarmDto alarm = new AlarmDto();
-		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		alarm.setAlarmType(type);
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByType(alarm),HttpStatus.OK); 
-	}
-	
-	@GetMapping("/listByContent")
-	public ResponseEntity<List<AlarmDto>> getAlarmListByContent(@RequestParam String content, HttpServletRequest request) throws SQLException{
-		
-		AlarmDto alarm = new AlarmDto();
-		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		alarm.setAlarmContent(content);
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByContent(alarm),HttpStatus.OK); 
-	}
-	
-	@GetMapping("/listByDate")
-	public ResponseEntity<List<AlarmDto>> getAlarmListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) throws SQLException{
-		
-		AlarmDto alarm = new AlarmDto();
-		alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		alarm.setAlarmDateTime(startDate);
-		alarm.setEndDate(endDate);
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getAlarmListByDate(alarm),HttpStatus.OK); 
-	}
-	
-	@GetMapping("/listCheckedAlarm")
-	public ResponseEntity<List<AlarmDto>> getCheckedAlarm(HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> getAlarmListByType(@RequestParam String type, HttpServletRequest request) {
 
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
-	}
-	
-	@GetMapping("/listUnCheckedAlarm")
-	public ResponseEntity<List<AlarmDto>> getUnCheckedAlarm(HttpServletRequest request) throws SQLException{
-		return new ResponseEntity<List<AlarmDto>>(alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))),HttpStatus.OK); 
-	}
-	
-	@PutMapping("/check")
-	public ResponseEntity<Void> checkAlarm(@RequestParam int alarmId, HttpServletRequest request) throws SQLException {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		if(alarmService.checkAlarm(alarmId) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		try {
+			AlarmDto alarm = new AlarmDto();
+			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			alarm.setAlarmType(type);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmList", alarmService.getAlarmListByType(alarm));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status); 
+	}
+	
+	@ApiOperation(value="알람 내용 기준 알람 리스트 조회", 
+			  notes="알람 내용에 따른 알람 리스트 조회")
+	@GetMapping("/listByContent")
+	public ResponseEntity<Map<String, Object>> getAlarmListByContent(@RequestParam String content, HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			AlarmDto alarm = new AlarmDto();
+			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			alarm.setAlarmContent(content);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmList", alarmService.getAlarmListByContent(alarm));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status); 
+	}
+	
+	@ApiOperation(value="선택 날짜 기준 알람 리스트 조회", 
+			  notes="사용자가 선택한 시작~ 끝 날짜 사이에 존재하는 알람 리스트 조회")
+	@GetMapping("/listByDate")
+	public ResponseEntity<Map<String, Object>> getAlarmListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			AlarmDto alarm = new AlarmDto();
+			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			alarm.setAlarmDateTime(startDate);
+			alarm.setEndDate(endDate);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmList", alarmService.getAlarmListByDate(alarm));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} 
+		return new ResponseEntity<>(resultMap, status); 
+	}
+	
+	@ApiOperation(value="확인한 알람 리스트 조회", 
+			  notes="사용자가 확인한 알람 리스트 조회")
+	@GetMapping("/listCheckedAlarm")
+	public ResponseEntity<Map<String, Object>> getCheckedAlarm(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alaramList", alarmService.getCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} 
+		return new ResponseEntity<>(resultMap, status); 
+	}
+	
+	@ApiOperation(value="미확인 알람 리스트 조회", 
+			  notes="사용자가 아직 확인하지 못한 알람 리스트 조회")
+	@GetMapping("/listUnCheckedAlarm")
+	public ResponseEntity<Map<String, Object>> getUnCheckedAlarm(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} 
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
+	@ApiOperation(value="알람 체크", 
+			  notes="미확인 알람을 확인 알람으로 바꾸는 기능")
+	@PutMapping("/check")
+	public ResponseEntity<Map<String, Object>> checkAlarm(@RequestParam int alarmId, HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			if(alarmService.checkAlarm(alarmId) == 1)  {
+				resultMap.put("message", SUCCESS);
+				resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+			}
+			else {
+				resultMap.put("message", "(AlarmController Line 340)");
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 }
