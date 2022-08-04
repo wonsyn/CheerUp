@@ -35,6 +35,11 @@
 			  feed_category = #{industry}
 		</if>
 	</select>
-
+	
+	<select id="selectFeedById" resultMap="feedMap" parameterType="int">
+		SELECT *
+		FROM feed
+		WHERE feed_id = #{feedId}
+	</select>
 
 </mapper>

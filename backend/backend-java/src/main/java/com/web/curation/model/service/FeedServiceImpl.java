@@ -19,6 +19,11 @@ public class FeedServiceImpl implements FeedService{
 	public List<FeedDto> searchFeed(HashMap<String, String> params) {
 		return feedDao.selectFeed(params);
 	}
+
+	@Override
+	public FeedDto readFeedById(int feedId) {
+		return feedDao.selectFeedById(feedId);
+	}
 	
 	
 

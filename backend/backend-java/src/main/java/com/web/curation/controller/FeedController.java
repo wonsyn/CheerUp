@@ -177,4 +177,12 @@ public class FeedController {
 		
 		return new ResponseEntity<List<FeedDto>>(feedService.searchFeed(params), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value="피드 상세", 
+			  notes="feedId로 피드 상세페이지 조회")
+	@GetMapping("/detail/{feedId}")
+	public ResponseEntity<FeedDto> feedDetail(@PathVariable int feedId){
+		System.out.println(feedId);
+		return new ResponseEntity<FeedDto>(feedService.readFeedById(feedId), HttpStatus.OK);
+	}
 }
