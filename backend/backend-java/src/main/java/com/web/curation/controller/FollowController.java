@@ -110,7 +110,7 @@ public class FollowController {
 	
 	@ApiOperation(value="팔로우하기", 
 			  notes="{followList : 리스트}\n나의 프로필에서 팔로우 시 리스트 생성 가능\n상대 프로필에서 팔로우 시 기능 추가 필요}")
-	@PostMapping("/{id}")
+	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> follow(@RequestBody UserDto userDto, HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -118,11 +118,12 @@ public class FollowController {
 		
 		try {
 			int followUserId = userService.getUserIdById(userDto.getId());
-			int result = followService.followUser(new FollowDto(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))), followUserId));
+			int loginUserId = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			int result = followService.followUser(new FollowDto(loginUserId, followUserId));
 			
 			if(result == 1) {
 				resultMap.put("message", SUCCESS);
-				resultMap.put("followList", followService.getMyFollowingList(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+				resultMap.put("followList", followService.getMyFollowingList(loginUserId));
 			}
 			else {
 				resultMap.put("message", FAIL);
@@ -145,11 +146,12 @@ public class FollowController {
 		
 		try {
 			int followUserId = userService.getUserIdById(id);
-			int result = followService.unFollowUser(new FollowDto(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))), followUserId));
+			int loginUserId = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			int result = followService.unFollowUser(new FollowDto(loginUserId, followUserId));
 			
 			if(result == 1) {
 				resultMap.put("message", SUCCESS);
-				resultMap.put("followList", followService.getMyFollowingList(followUserId));
+				resultMap.put("followList", followService.getMyFollowingList(loginUserId));
 			}
 			else {
 				resultMap.put("message", FAIL);
