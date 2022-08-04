@@ -16,11 +16,23 @@
       <result column="feed_img_name" property="feedImgName"/>
       <result column="feed_img_url" property="feedImgUrl"/>
 	</resultMap>
-	<select id="selectFeed" resultMap="feedMap" parameterType="int">
+	<select id="selectFeed" resultMap="feedMap" parameterType="java.util.HashMap">
+
 		SELECT *
-		FROM feed
-		<if test='feedType != 0'>
-			WHERE feed_type = #{feedType}
+		FROM feed		
+		
+		<if test='type != 0 and industry == 0'>
+		WHERE feed_type = #{type}
+		</if>
+		
+		<if test='type == 0 and industry != 0'>
+		WHERE feed_category = #{industry}
+		</if>
+		
+		<if test='type != 0 and industry != 0'>
+		WHERE feed_type = #{type}
+			AND
+			  feed_category = #{industry}
 		</if>
 	</select>
 
