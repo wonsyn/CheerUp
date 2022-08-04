@@ -9,7 +9,7 @@
             <option value="2">정보글</option>
           </select>
           <select id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
-            <option selected value="0">산업군</option>
+            <option selected value="0">산업군(전체)</option>
             <option value="1">금융</option>
             <option value="2">게임</option>
             <option value="3">보안</option>
@@ -17,7 +17,7 @@
             <option value="5">모바일</option>
           </select>
           <div class="col text-end me-3">
-            <button type="button" class="btn" style="background-color: #00dd99">검색</button>
+            <button @click="searchFeed" type="button" class="btn" style="background-color: #00dd99">검색</button>
           </div>
           <div class="text-start pt-3 align-middle">
             <div class="form-check form-switch">
@@ -55,30 +55,22 @@ export default {
     if (!userStore.state.isLogin) {
       router.push({ name: "login" });
     } else {
-      await feedStore.actions.getFeed(0);
+      await feedStore.actions.getFeed(0, 0);
       this.feedList = feedStore.getters.getFeedList();
     }
   },
   methods: {
-    // forceRender() {
-    //   this.listKey += 1;
-    // },
-  },
-  computed: {
-    compFeedList() {
-      console.log("HomeView.vue computed start");
+    async searchFeed() {
+      const selectType = document.getElementById("select_feed_type");
+      const selectCategory = document.getElementById("select_feed_category");
 
-      return feedStore.getters.getFeedList();
-    },
-  },
-  watch: {
-    compFeedList(val) {
-      console.log("HomeView.vue watch start");
-      console.log(feedStore.getters.getFeedList());
+      let type = selectType.options[selectType.selectedIndex].value;
+      let category = selectCategory.options[selectCategory.selectedIndex].value;
+
+      console.log(" " + type + category);
+
+      await feedStore.actions.getFeed(type, category);
       this.feedList = feedStore.getters.getFeedList();
-
-      console.log(val);
-      console.log("HomeView.vue watch end");
     },
   },
 };

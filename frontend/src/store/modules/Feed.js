@@ -13,22 +13,20 @@ const getters = {
 const mutations = {
   SET_FEEDLIST(feedList) {
     state.feedList = feedList;
-    console.log(state.feedList);
   },
 };
 
 const actions = {
-  async getFeed(type) {
+  async getFeed(type, category) {
+    const params = {
+      type: type,
+      industry: category,
+    };
     await getFeed(
-      type,
+      params,
       ({ data }) => {
         console.log(data);
         mutations.SET_FEEDLIST(data);
-        // if (data["message"] === "success") {
-        //   mutations.SET_FEEDLIST(data["feedList"]);
-        //   console.log(data["feedList"]);
-        // }
-        // return data;
       },
       (error) => {
         console.log(error);
