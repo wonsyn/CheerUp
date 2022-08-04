@@ -125,7 +125,7 @@ public class FollowController {
 				resultMap.put("followList", followService.getMyFollowingList(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
 			}
 			else {
-				resultMap.put("message", "(FollowController Line 122)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -152,7 +152,7 @@ public class FollowController {
 				resultMap.put("followList", followService.getMyFollowingList(followUserId));
 			}
 			else {
-				resultMap.put("message", "(FollowController Line 149)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
