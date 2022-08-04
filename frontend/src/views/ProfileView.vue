@@ -74,11 +74,13 @@ export default {
     clickScrapTab() {
       this.onBoardTab = false;
     },
-    follow() {
-      userStore.actions.follow(this.profile.id);
+    async follow() {
+      await userStore.actions.follow(this.profile.id);
+      this.isFollowing = userStore.getters.isFollowing();
     },
-    unfollow() {
-      userStore.actions.unfollow(this.profile.id);
+    async unfollow() {
+      await userStore.actions.unfollow(this.profile.id);
+      this.isFollowing = userStore.getters.isFollowing();
     },
   },
   async created() {
