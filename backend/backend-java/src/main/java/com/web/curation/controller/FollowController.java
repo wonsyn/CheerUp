@@ -47,7 +47,7 @@ public class FollowController {
 	FollowService followService;
 	
 	@ApiOperation(value="내가 팔로우하고 있는 유저 리스트", 
-			  notes="return {followList : 리스트}")
+			  notes="return {followList : 리스트}\n파라미터 id")
 	@GetMapping("/followingList")
 	public ResponseEntity<Map<String, Object>> getMyFollowList(@RequestParam String id, HttpServletRequest request) {
 		

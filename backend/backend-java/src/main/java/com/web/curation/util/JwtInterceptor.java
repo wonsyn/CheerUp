@@ -54,7 +54,7 @@ public class JwtInterceptor implements HandlerInterceptor{
     }
     */
 	
-public static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
+	public static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 	
 	private static final String HEADER_AUTH = "auth-token";
 	private static final String SALT = "ssafySecret";
@@ -68,6 +68,8 @@ public static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
+		System.out.println("prehandle");
 		
 		request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
@@ -225,7 +227,11 @@ public static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class
 //		return true;
 
 	}
-	return true;
+	response.getWriter().write("{\"message\" : \"fail\"}");
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setStatus(401);		
+	return false;
 	
 //	@Override
 //	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
