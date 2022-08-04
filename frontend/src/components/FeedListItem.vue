@@ -31,21 +31,7 @@ export default {
   },
   components: {},
   setup() {},
-  methods: {
-    calcImgSize() {
-      // var maxWidth = 382;
-      // var maxHeight = 192;
-
-      const img = new Image();
-      img.src = this.feedImgUrl;
-      console.log(img.width);
-      console.log(img.height);
-
-      img.width = 200;
-
-      return img;
-    },
-  },
+  methods: {},
 };
 </script>
 
