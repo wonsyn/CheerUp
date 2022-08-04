@@ -1,9 +1,12 @@
 package com.web.curation.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -184,5 +187,44 @@ public class FeedController {
 	public ResponseEntity<FeedDto> feedDetail(@PathVariable int feedId){
 		System.out.println(feedId);
 		return new ResponseEntity<FeedDto>(feedService.readFeedById(feedId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="뉴스 기사 랜덤 추천", 
+			  notes="지금 보고 있는 뉴스 기사와 같은 산업군의 기사 3개 랜덤 추천 -> 중복 제거, 해당 기사와 같은 feedId 추천 안함 => 변수 넣을 때 그냥 feedId만 넣으면 알아서 같은 산업군 찾아줌")
+	@GetMapping("/recomm/{feedId}")
+	public ResponseEntity<List<FeedDto>> feedRecommend(@PathVariable int feedId){
+		FeedDto feed = feedService.readFeedById(feedId);
+		String feedCategory = feed.getFeedCategory();
+		HashMap<String, String> params = new HashMap<>();
+		params.put("type", "1");
+		params.put("industry", feedCategory);
+		
+		// 해당 피드와 같은 산업군의 기사 리스트
+		List<FeedDto> list = feedService.searchFeed(params);
+		
+		// 랜덤
+		System.out.println("list size : " + list.size());
+		int[] ran = new int[3];
+		Random r = new Random();
+		for(int i=0; i<3; i++) {
+			ran[i] = r.nextInt(list.size());
+			for(int j=0; j<i; j++) {
+				if(ran[i] == ran[j] || list.get(ran[i]).getFeedId() == feedId) {
+					i--;
+				}
+			}
+		}
+		System.out.println(Arrays.toString(ran));
+		
+		// 랜덤 3개 담은 list
+		List<FeedDto> recommList = new ArrayList<>();
+		for(int i=0; i<3; i++) {
+			recommList.add(list.get(ran[i]));
+		}
+		
+//		for(int i=0; i<recommList.size(); i++) {
+//			System.out.println(recommList.get(i));
+//		}
+		return new ResponseEntity<List<FeedDto>>(recommList, HttpStatus.OK);
 	}
 }
