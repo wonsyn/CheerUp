@@ -109,4 +109,11 @@
 		and schedule_category = #{scheduleCategory}
 		and schedule_status = #{scheduleStatus}
 	</select>
+	
+	<!-- 알람 ID로 유저 id 가져오기 -->
+	<select id="getUserIdByScheduleId" parameterType="int" resultType="scheduleDto">
+		select user_id userId 		
+		from schedule
+		where schedule_id = #{scheduleId}
+	</select>
 </mapper>

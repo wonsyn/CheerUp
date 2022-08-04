@@ -84,26 +84,25 @@ public class AlarmController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
-		int loginUser;
 		try {
 			// 로그인 세션 정보 가져오기
-			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
 			// 요청 id == 로그인 세션 ?
 			if(userService.isSameLoginUserAndRequestId(loginUser, alarmDto.getAlarmReceiverId())) {
 				// 수정 성공
 				if(alarmService.updateAlarm(alarmDto) == 1) {
 					resultMap.put("message", SUCCESS);
-					resultMap.put("userDetail", userService.userInfo(loginUser));
+					resultMap.put("alarmDetail", alarmService.getAlarmDetail(alarmDto.getAlarmId()));
 				}
 				// 수정 실패
 				else {
-					resultMap.put("message", "(AlarmController Line 100");
+					resultMap.put("message", "(AlarmController Line 99");
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청id != 로그인 세션
 			else {
-				resultMap.put("message", "(AlarmController Line 106)");				
+				resultMap.put("message", "(AlarmController Line 105)");				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -135,13 +134,13 @@ public class AlarmController {
 				}
 				// 삭제 실패
 				else {
-					resultMap.put("message", "(AlarmController Line 138");
+					resultMap.put("message", "(AlarmController Line 137");
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청 id != 로그인 세션
 			else {
-				resultMap.put("message", "(AlarmController Line 144)");
+				resultMap.put("message", "(AlarmController Line 143)");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;				
 			}
 		} catch (SQLException e) {
@@ -157,7 +156,7 @@ public class AlarmController {
 	public ResponseEntity<Map<String, Object>> getDetailAlarm(@PathVariable int alarmId, HttpServletRequest request) {	 
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.ACCEPTED;
+		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			AlarmDto result = alarmService.getAlarmDetail(alarmId);
@@ -166,7 +165,7 @@ public class AlarmController {
 				resultMap.put("message", SUCCESS);				
 			}
 			else {
-				resultMap.put("message", "(AlarmController Line 169)");								
+				resultMap.put("message", "(AlarmController Line 168)");								
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
@@ -337,7 +336,7 @@ public class AlarmController {
 				resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
 			}
 			else {
-				resultMap.put("message", "(AlarmController Line 340)");
+				resultMap.put("message", "(AlarmController Line 339)");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {

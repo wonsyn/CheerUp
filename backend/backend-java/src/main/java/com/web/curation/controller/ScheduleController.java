@@ -2,7 +2,6 @@ package com.web.curation.controller;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +24,8 @@ import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.ScheduleService;
 import com.web.curation.model.service.UserService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -41,45 +42,122 @@ public class ScheduleController {
 	@Autowired
 	private UserService userService;
 	
+	@ApiOperation(value = "개인 일정 생성", 
+			notes = "return { 'message' : success,에러메세지' ")
 	@PostMapping("/create")
-	public ResponseEntity<Void> createSchedule(@RequestBody ScheduleDto scheduleDto, HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> createSchedule(@RequestBody ScheduleDto scheduleDto, HttpServletRequest request) {
 		
-		scheduleDto.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		System.out.println(scheduleDto);
-		if(scheduleService.createSchedule(scheduleDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			scheduleDto.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			if(scheduleService.createSchedule(scheduleDto) == 1) {
+				resultMap.put("message", SUCCESS);
+			}
+			else {
+				resultMap.put("message", "(ScheduleController Line 57)");
+				status = HttpStatus.INTERNAL_SERVER_ERROR;		
+			}
+		} 
+		catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 수정", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 } ")
 	@PutMapping("/update")
-	public ResponseEntity<Void> updateSchedule(@RequestBody ScheduleDto scheduleDto, HttpServletRequest request) throws SQLException {
+	public ResponseEntity<Map<String, Object>> updateSchedule(@RequestBody ScheduleDto scheduleDto, HttpServletRequest request) {
 		
-		scheduleDto.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			scheduleDto.setUserId(loginUser);
+			// 로그인 세션 정보 가져오기
+			// 요청 id == 로그인 세션 ?
+			if(userService.isSameLoginUserAndRequestId(loginUser, scheduleDto.getUserId())) {
+				// 수정 성공
+				if(scheduleService.updateSchedule(scheduleDto) == 1) {
+					resultMap.put("message", SUCCESS);
+					resultMap.put("scheduleDetail", scheduleService.getScheduleDetail(scheduleDto.getScheduleId()));
+				}
+				// 수정 실패
+				else {
+					resultMap.put("message", "(ScheduleController Line 100");
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+			}
+			// 요청id != 로그인 세션
+			else {
+				resultMap.put("message", "(ScheduleController Line 106)");				
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		// 수정
-		if(scheduleService.updateSchedule(scheduleDto) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
 	}
 	
+	////////////////////////////////////////////////////
+	@ApiOperation(value = "개인 일정 삭제", 
+			notes = "return { 'message' : success,에러메세지}")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Void> deleteBoard(@PathVariable int id) throws SQLException{
+	public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable int id, HttpServletRequest request) {
 		
-		if(scheduleService.deleteSchedule(id) == 1) return new ResponseEntity<Void>(HttpStatus.OK);
-		return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			int dbId = scheduleService.getUserIdByScheduleId(id);
+			int loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+			
+			if(userService.isSameLoginUserAndRequestId(loginUser, dbId)) {
+				// 삭제 성공
+				if(scheduleService.deleteSchedule(id) == 1) {
+					resultMap.put("message", SUCCESS);
+				}
+				// 삭제 실패
+				else {
+					resultMap.put("message", "(ScheduleController Line 128");
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+			}
+			// 요청 id != 로그인 세션
+			else {
+				resultMap.put("message", "(ScheduleController Line 134)");
+				status = HttpStatus.INTERNAL_SERVER_ERROR;				
+			}
+			
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;	
+		}
+		return new ResponseEntity<Map<String,Object>>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 상세 정보", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleDetail' : 리스트 }")
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<Map<String, Object>> getDetailSchedule(@PathVariable int scheduleId, HttpServletRequest request) {	 
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.ACCEPTED;
+		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			ScheduleDto result = scheduleService.getScheduleDetail(scheduleId);
 			if(result != null) {
-				resultMap.put("scheduleInfo", result);
+				resultMap.put("scheduleDetail", result);
 				resultMap.put("message", SUCCESS);				
 			}
 			else {
-				resultMap.put("message", FAIL);								
+				resultMap.put("message", "(ScheduleController Line 160)");								
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
 			resultMap.put("message", e.getMessage());
@@ -88,89 +166,178 @@ public class ScheduleController {
 		return new ResponseEntity<>(resultMap,status);
 	}
 	
+	@ApiOperation(value = "이번 달 개인 일정 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/list")
-	public ResponseEntity<List<ScheduleDto>> getScheduleList(@RequestParam String scheduleDate,HttpServletRequest request) throws SQLException{
+	public ResponseEntity<Map<String, Object>> getScheduleList(@RequestParam String scheduleDate,HttpServletRequest request) {
 		
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleDate(scheduleDate);
-		return new ResponseEntity<List<ScheduleDto>>(scheduleService.getScheduleList(schedule),HttpStatus.OK); 
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleDate(scheduleDate);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleList(schedule));			
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status); 
 	}
 	
+	@ApiOperation(value = "개인 일정 제목으로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByTitle")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByTitle(@RequestParam String title, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleTitle(title);
+	public ResponseEntity<Map<String, Object>> getScheduleListByTitle(@RequestParam String title, HttpServletRequest request) {
 		
-		System.out.println("title: "+ title);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByTitle(schedule), HttpStatus.OK);
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleTitle(title);
+		
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByTitle(schedule));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 회사명으로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByCompany")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByCompany(@RequestParam String company, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleCompany(company);
+	public ResponseEntity<Map<String, Object>> getScheduleListByCompany(@RequestParam String company, HttpServletRequest request) {
 		
-		System.out.println("company: "+company);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByCompany(schedule), HttpStatus.OK);
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleCompany(company);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByCompany(schedule));	
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}	
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 날짜로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByDate")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setStartDate(startDate);
-		schedule.setEndDate(endDate);
+	public ResponseEntity<Map<String, Object>> getScheduleListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) {
 		
-		System.out.println("[start,end]: "+ startDate +"," + endDate+"]");
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByDate(schedule), HttpStatus.OK);
-
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setStartDate(startDate);
+			schedule.setEndDate(endDate);
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByDate(schedule));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 메모 내용으로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByMemo")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByMemo(@RequestParam String memo, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleMemo(memo);
+	public ResponseEntity<Map<String, Object>> getScheduleListByMemo(@RequestParam String memo, HttpServletRequest request) {
 		
-		System.out.println("memo: "+memo);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByMemo(schedule), HttpStatus.OK);
-		
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleMemo(memo);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByMemo(schedule));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 분류(서류,인성,1차,2차,코테,....)로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByCategory")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByCategory(@RequestParam String category, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleCategory(category);
+	public ResponseEntity<Map<String, Object>> getScheduleListByCategory(@RequestParam String category, HttpServletRequest request) {
 		
-		System.out.println("category: "+category);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByCategory(schedule), HttpStatus.OK);
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleCategory(category);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByCategory(schedule));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);		
 	}
 	
+	@ApiOperation(value = "개인 일정 상태(합,불합)로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@GetMapping("/searchByStatus")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByStatus(@RequestParam String status, HttpServletRequest request) throws SQLException{
-		ScheduleDto schedule = new ScheduleDto();
-		schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		schedule.setScheduleStatus(status);
+	public ResponseEntity<Map<String, Object>> getScheduleListByStatus(@RequestParam String scheduleStatus, HttpServletRequest request) {
 		
-		System.out.println("status: "+status);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByStatus(schedule), HttpStatus.OK);
+		try {
+			ScheduleDto schedule = new ScheduleDto();
+			schedule.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			schedule.setScheduleStatus(scheduleStatus);
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByStatus(schedule));	
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}		
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
+	@ApiOperation(value = "개인 일정 다중 조건(회사명 + 분류 + 상태, ...)으로 조회", 
+			notes = "return { 'message' : success,에러메세지, 'scheduleList' : 리스트 }")
 	@PostMapping("/search")
-	public ResponseEntity<List<ScheduleDto>> getScheduleListByConditions(@RequestBody ScheduleDto conditions, HttpServletRequest request) throws SQLException{
-		conditions.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-		System.out.println("conditions: "+conditions);
+	public ResponseEntity<Map<String, Object>> getScheduleListByConditions(@RequestBody ScheduleDto conditions, HttpServletRequest request) {
 		
-		return new ResponseEntity<List<ScheduleDto>>( scheduleService.getScheduleListByConditions(conditions), HttpStatus.OK);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			conditions.setUserId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
+			
+			resultMap.put("message", SUCCESS);
+			resultMap.put("scheduleList", scheduleService.getScheduleListByConditions(conditions));	
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
 	}
 }

@@ -31,7 +31,8 @@ public class JwtController {
 	@GetMapping("/requestNewAccessToken")
 	public ResponseEntity<Map<String, Object>> requestNewAccessToken(HttpServletRequest request){
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.ACCEPTED;
+		HttpStatus status = HttpStatus.OK;
+//		HttpStatus status = HttpStatus.ACCEPTED;
 		
 //		String id =  jwtService.getUserIdByJwt(request.getHeader("refresh-token"));		
 //		String accessToken = jwtService.createAccessToken("id", id, "access-token");

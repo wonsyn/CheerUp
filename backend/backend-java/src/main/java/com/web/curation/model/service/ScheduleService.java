@@ -19,4 +19,5 @@ public interface ScheduleService {
 	public List<ScheduleDto> getScheduleListByCategory(ScheduleDto scheduleDto) throws SQLException;
 	public List<ScheduleDto> getScheduleListByStatus(ScheduleDto scheduleDto) throws SQLException;
 	public List<ScheduleDto> getScheduleListByConditions(ScheduleDto scheduleDto) throws SQLException;
+	public int getUserIdByScheduleId(int scheduleId) throws SQLException;
 }
