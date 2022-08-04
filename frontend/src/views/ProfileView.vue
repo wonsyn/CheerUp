@@ -68,17 +68,22 @@ export default {
       this.onBoardTab = false;
     },
   },
-  created() {
-    userStore.actions.getProfile(this.username);
+  async created() {
+    console.log("created");
+    await userStore.actions.getProfile(this.username);
+    console.log(this.profile);
   },
   computed: {
     profile() {
+      console.log("computed");
       return userStore.getters.profile();
     },
   },
   watch: {
     profile(value) {
-      this.profile = value;
+      console.log(value);
+      console.log("watch");
+      this.profile = userStore.getters.profile();
     },
   },
 };
