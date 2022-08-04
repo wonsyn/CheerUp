@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -51,8 +52,9 @@ public class UserController {
 	
 	
 	@ApiOperation(value = "로그인", 
-			notes = "FE 입력 정보와 DB 정보 비교 후 일치할 시 Header에 access-token, refresh-token 전달\n"
-					+ "access-token : value\nrefresh-token : value")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/login"
+					+ "\n http method : post, 입력 데이터 : json {유저 정보}"
+					+ "\n return 예시) json { 'access-token' : '토큰정보', 'refresh-token' : '토큰정보'}")
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto){
 		Map<String, Object> resultMap = new HashMap<>();
@@ -114,8 +116,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "회원가입", 
-			notes = "입력 받은 UserDto 값 중 id 컬럼의 중복 값 확인 후 중복되지 않는다면 성공, 중복 값이 있다면 실패\n"
-					+ "message\nsuccess : 성공\nfail : 실패 \n에러메세지: DB 에러")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/signup"
+					+ "\n http method : post, 입력 데이터 : json { 유저 정보}"
+					+ "\n return 예시) json { 'message' : 'success, fail'}")
 	@PostMapping("/signup")
 	public ResponseEntity<Map<String, Object>> registUser(@RequestBody UserDto userDto) {
 		logger.debug("입력 회원 정보 : {}" ,userDto);
@@ -149,8 +152,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "개인 상세 정보 조회", 
-			notes = "사용자의 String id 값을 받아 대조되는 정보를 리턴한다.\n"
-					+ "message\nsuccess: userDetail 값을 리턴\nfail: 매칭되는 id 없음\n에러메세지: 서버에러")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/detail/aaa"
+					+ "\n aaa는 유저 아이디, http method : get"
+					+ "\n return 예시) json { 'userDetail' : '유저 정보'}")
 	@GetMapping("/detail/{id}")
 //	public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("id") String id, HttpServletRequest request) {
 	public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("id") String id) {
@@ -193,7 +197,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "유저 정보 수정", 
-			notes = "수정할 정보를 입력받아 정보 수정\nmessage\nsuccess: 수정 성공, userDetail에 수정된 값 적용 후 리턴\nfail: 로그인한 유저 정보와 다를 떄 or 수정 실패\n에러메세지: 서버에러")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/update"
+					+ "\n http method : put, 입력 데이터 : {json : 수정 유저 정보}"
+					+ "\n return 예시) json { 'userDetail' : '유저 정보'}")
 	@PutMapping("/update")
 	public ResponseEntity<Map<String,Object>> updateUser(@RequestBody UserDto userDto, HttpServletRequest request)  {
 		
@@ -227,9 +233,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "회원 탈퇴", 
-			notes = "현재 로그인 정보와 삭제를 원하는 정보가 다를 시 실패, 같다면 성공\n"
-					+ "message\nsuccess: 회원 탈퇴\nfail: 회원 탈퇴 실패\n에러메세지: 서버에러"
-					+ "message\nsuccess : 성공\nfail : 실패 \n에러메세지: DB 에러")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/delete/{id}"
+					+ "\n http method : delete, 입력 데이터 : pathvariable : 유저id(String)"
+					+ "\n return 예시) json { 'message' : 'success, fail'}")
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Map<String,Object>> deleteUser(@PathVariable String id, HttpServletRequest request) {
 		
@@ -262,15 +268,18 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "패스워드 확인(개인 정보 수정, 탈퇴 시 이용)", 
-			notes = "입력 받은 password 값 중복 체크")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/checkPassWord"
+					+ "\n http method : post, 입력 데이터 : json { 'password' : 유저 비밀번호}"
+					+ "\n return 예시) json { 'message' : 'success, fail'}")
 	@PostMapping("/checkPassWord")
-	public ResponseEntity<Map<String,Object>> checkPassword(@RequestBody UserDto userDto){
+	public ResponseEntity<Map<String,Object>> checkPassword(@RequestBody UserDto userDto, HttpServletRequest request){
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 	    try {
-			if(!userService.userInfo(userDto.getId()).getPassword().equals(userDto.getPassword())) {
+	    	System.out.println(userService.userInfo(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))).getPassword());
+			if(!userService.userInfo(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))).getPassword().equals(userDto.getPassword())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				resultMap.put("message", FAIL);
 			} else {
@@ -285,7 +294,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "아이디 중복 확인(개인 정보 등록, 수정 시 이용)", 
-			notes = "입력 받은 id 값 중복 체크")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/checkId?id=d"
+					+ "\n http method : get"
+					+ "\n return 예시) json { 'message' : 'success, fail'}")
 	@GetMapping("/checkId")
 	public ResponseEntity<Map<String,Object>> checkId(@RequestParam String id){
 		
@@ -293,8 +304,7 @@ public class UserController {
 		HttpStatus status = HttpStatus.OK;
 		
 	    try {
-	    	
-			if(userService.getUserIdById(id) != 0) {
+			if(userService.userInfo(id) != null) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				resultMap.put("message", FAIL);
 			} else {
@@ -309,7 +319,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "회원 ID(String) 값으로 회원 리스트 검색", 
-			notes = "message\nsuccess: userList : list값 반환\nfail: 에러메세지 반환")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/searchById?id=d"
+					+ "\n http method : get"
+					+ "\n return 예시) json { 'userList' : 유저리스트}")
 	@GetMapping("/searchById")
 	public ResponseEntity<Map<String, Object>> getUserListById(@RequestParam String id) {
 		System.out.println("id: "+id);
@@ -327,7 +339,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "회원 닉네임(String) 값으로 회원 리스트 검색", 
-			notes = "message\nsuccess: userList : list값 반환\nfail: 에러메세지 반환")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/searchByNickName?nickname=d"
+					+ "\n http method : get"
+					+ "\n return 예시) json { 'userList' : 유저리스트}")
 	@GetMapping("/searchByNickName")
 	public ResponseEntity<Map<String, Object>> getUserListByNickName(@RequestParam String nickname) {
 		System.out.println("nickname: "+nickname);
@@ -345,7 +359,9 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "회원 이메일(String) 값으로 회원 리스트 검색", 
-			notes = "message\nsuccess: userList : list값 반환\nfail: 에러메세지 반환")
+			notes = "경로 예시) http://localhost:8080/cheerup/user/searchByEmail?email=d"
+					+ "\n http method : get"
+					+ "\n return 예시) json { 'userList' : 유저리스트}")
 	@GetMapping("/searchByEmail")
 	public ResponseEntity<Map<String, Object>> getUserListByEmail(@RequestParam String email) {
 		System.out.println("email: "+email);
