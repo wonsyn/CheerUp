@@ -85,8 +85,7 @@ const actions = {
           console.log(data);
           console.log(user);
         } else {
-          console.log(data);
-          console.log(user);
+          console.log("signup failed");
           mutations.SET_IS_LOGIN(false);
         }
       },
