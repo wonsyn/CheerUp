@@ -64,7 +64,7 @@ public class AlarmController {
 			}
 			// 알람 생성 실패
 			else {
-				resultMap.put("message", "(AlarmController Line 67)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;				
 			}			
 		} 
@@ -96,13 +96,13 @@ public class AlarmController {
 				}
 				// 수정 실패
 				else {
-					resultMap.put("message", "(AlarmController Line 99");
+					resultMap.put("message", FAIL);
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청id != 로그인 세션
 			else {
-				resultMap.put("message", "(AlarmController Line 105)");				
+				resultMap.put("message", FAIL);				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -134,13 +134,13 @@ public class AlarmController {
 				}
 				// 삭제 실패
 				else {
-					resultMap.put("message", "(AlarmController Line 137");
+					resultMap.put("message", FAIL);
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청 id != 로그인 세션
 			else {
-				resultMap.put("message", "(AlarmController Line 143)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;				
 			}
 		} catch (SQLException e) {
@@ -165,7 +165,7 @@ public class AlarmController {
 				resultMap.put("message", SUCCESS);				
 			}
 			else {
-				resultMap.put("message", "(AlarmController Line 168)");								
+				resultMap.put("message", FAIL);								
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
@@ -336,7 +336,7 @@ public class AlarmController {
 				resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
 			}
 			else {
-				resultMap.put("message", "(AlarmController Line 339)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {

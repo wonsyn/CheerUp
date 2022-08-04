@@ -123,13 +123,22 @@ public class UserController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
-		// 중복 아이디 검사
 		try {
-			if(userService.registUser(userDto) == 1) {
-				resultMap.put("message", SUCCESS);
+			// 중복 아이디 검사
+			if(userService.userInfo(userDto.getId()) == null) {
+				// 회원 등록
+				if(userService.registUser(userDto) == 1) {
+					resultMap.put("message", SUCCESS);
+				}
+				// 회원 등록 실패
+				else {
+					resultMap.put("message", FAIL);
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
 			}
+			// 중복 아이디 존재
 			else {
-				resultMap.put("message", "(UserController 132)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -158,7 +167,7 @@ public class UserController {
 			}
 			// 유저 정보가 없다면
 			else {				
-				resultMap.put("message", "(UserController 161)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
@@ -196,7 +205,7 @@ public class UserController {
 			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
 			if(!userService.isSameLoginUserAndRequestId(loginUser, userDto.getUserId())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR; 
-				resultMap.put("message", "(UserController 199)");			
+				resultMap.put("message", FAIL);			
 			}
 			else {
 				if(userService.updateUser(userDto) == 1) {
@@ -205,7 +214,7 @@ public class UserController {
 				}
 				else {
 					status = HttpStatus.INTERNAL_SERVER_ERROR; 
-					resultMap.put("message", "(UserController 208)");			
+					resultMap.put("message", FAIL);			
 				}
 				
 			}
@@ -232,7 +241,7 @@ public class UserController {
 			loginUser = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
 			if(userService.isSameLoginUserAndRequestId(loginUser, userService.getUserIdById(id))) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", "(UserController 235)");
+				resultMap.put("message", FAIL);
 			}
 			else {
 				if(userService.deleteUser(id) == 1) {
@@ -242,7 +251,7 @@ public class UserController {
 				}
 				else {
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
-					resultMap.put("message", "(UserController 245)");
+					resultMap.put("message", FAIL);
 				}				
 			}
 		} catch (SQLException e) {
@@ -263,7 +272,7 @@ public class UserController {
 	    try {
 			if(!userService.userInfo(userDto.getId()).getPassword().equals(userDto.getPassword())) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", "(UserController 266)");
+				resultMap.put("message", FAIL);
 			} else {
 				resultMap.put("message", SUCCESS);
 			}
@@ -287,7 +296,7 @@ public class UserController {
 	    	
 			if(userService.getUserIdById(id) != 0) {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				resultMap.put("message", "(UserController 290)");
+				resultMap.put("message", FAIL);
 			} else {
 				resultMap.put("message", SUCCESS);
 			}

@@ -60,7 +60,7 @@ public class ScheduleController {
 				resultMap.put("message", SUCCESS);
 			}
 			else {
-				resultMap.put("message", "(ScheduleController Line 57)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;		
 			}
 		} 
@@ -92,13 +92,13 @@ public class ScheduleController {
 				}
 				// 수정 실패
 				else {
-					resultMap.put("message", "(ScheduleController Line 100");
+					resultMap.put("message", FAIL);
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청id != 로그인 세션
 			else {
-				resultMap.put("message", "(ScheduleController Line 106)");				
+				resultMap.put("message", FAIL);				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (SQLException e) {
@@ -128,13 +128,13 @@ public class ScheduleController {
 				}
 				// 삭제 실패
 				else {
-					resultMap.put("message", "(ScheduleController Line 128");
+					resultMap.put("message", FAIL);
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			}
 			// 요청 id != 로그인 세션
 			else {
-				resultMap.put("message", "(ScheduleController Line 134)");
+				resultMap.put("message", FAIL);
 				status = HttpStatus.INTERNAL_SERVER_ERROR;				
 			}
 			
@@ -160,7 +160,7 @@ public class ScheduleController {
 				resultMap.put("message", SUCCESS);				
 			}
 			else {
-				resultMap.put("message", "(ScheduleController Line 160)");								
+				resultMap.put("message", FAIL);								
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} catch (Exception e) {
