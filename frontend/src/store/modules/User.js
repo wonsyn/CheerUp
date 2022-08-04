@@ -1,4 +1,4 @@
-import { getUser, login, signup } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
@@ -90,6 +90,28 @@ const actions = {
         } else {
           console.log("else");
         }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async follow(id) {
+    await follow(
+      id,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async unfollow(id) {
+    await unfollow(
+      id,
+      ({ data }) => {
+        console.log(data);
       },
       (error) => {
         console.log(error);

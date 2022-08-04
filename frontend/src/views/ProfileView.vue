@@ -1,6 +1,6 @@
 <template>
   <div id="profile-view">
-    프로필
+    프로필 {{ profile }}
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
@@ -57,7 +57,6 @@ export default {
         id: 1,
       },
       username: this.$route.params.username,
-      profile: userStore.state.profile,
       onBoardTab: false,
     };
   },
@@ -71,6 +70,16 @@ export default {
   },
   created() {
     userStore.actions.getProfile(this.username);
+  },
+  computed: {
+    profile() {
+      return userStore.getters.profile();
+    },
+  },
+  watch: {
+    profile(value) {
+      this.profile = value;
+    },
   },
 };
 </script>
