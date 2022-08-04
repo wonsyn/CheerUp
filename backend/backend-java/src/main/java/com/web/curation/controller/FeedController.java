@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.BoardDto;
@@ -161,11 +162,19 @@ public class FeedController {
 		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
 	}
 	
-	@ApiOperation(value="피드 타입 별로 조회", 
-			  notes="main 피드의 타입(뉴스, 정보글 등)별로 피드 정렬")
-	@GetMapping("/{feedType}")
-	public ResponseEntity<List<FeedDto>> searchFeed(@PathVariable int feedType){
-		System.out.println(feedType);
-		return new ResponseEntity<List<FeedDto>>(feedService.searchFeed(feedType), HttpStatus.OK);
+	@ApiOperation(value="피드 타입 및 산업군 별로 조회", 
+			  notes="main 피드의 cheerup/feed/main?type='타입코드'&industry='산업코드' -> 전체 조회 시 parameter 안 줘도 됨")
+	@GetMapping("/main")
+	public ResponseEntity<List<FeedDto>> searchFeed(
+			@RequestParam(defaultValue = "0") String type,
+			@RequestParam(defaultValue = "0") String industry){
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("type", type);
+		params.put("industry", industry);
+		System.out.println(type);
+		System.out.println(industry);
+		
+		return new ResponseEntity<List<FeedDto>>(feedService.searchFeed(params), HttpStatus.OK);
 	}
 }
