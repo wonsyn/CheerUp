@@ -17,6 +17,11 @@ public class UserDto {
 		super();
 	}
 	
+	public UserDto(String password) {
+		super();
+		this.password = password;
+	}
+
 	public UserDto(String id, String nickname, String email, String userImgUrl, String userImgName) {
 		super();
 		this.id = id;
