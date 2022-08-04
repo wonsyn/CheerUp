@@ -33,25 +33,25 @@ async function unfollow(id, success, fail) {
     .catch(fail);
 }
 async function getFollowerList(params, success, fail) {
-  // const access_token = sessionStorage.getItem("access-token");
+  const access_token = sessionStorage.getItem("access-token");
   await api
     .get(`/follow/followerlist`, {
       params: {
         id: params.id,
       },
-      // headers: { Authorization: access_token },
+      headers: { Authorization: access_token },
     })
     .then(success)
     .catch(fail);
 }
 async function getFollowingList(params, success, fail) {
-  // const access_token = sessionStorage.getItem("access-token");
+  const access_token = sessionStorage.getItem("access-token");
   await api
     .get(`/follow/followinglist`, {
       params: {
         id: params.id,
       },
-      // headers: { Authorization: access_token },
+      headers: { Authorization: access_token },
     })
     .then(success)
     .catch(fail);
