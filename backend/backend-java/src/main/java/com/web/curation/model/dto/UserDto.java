@@ -16,7 +16,7 @@ public class UserDto {
 	public UserDto() {
 		super();
 	}
-
+	
 	public UserDto(String id, String nickname, String email, String userImgUrl, String userImgName) {
 		super();
 		this.id = id;
@@ -47,6 +47,7 @@ public class UserDto {
 		this.userImgUrl = userImgUrl;
 		this.userImgName = userImgName;
 	}
+	
 	public int getUserId() {
 		return userId;
 	}
