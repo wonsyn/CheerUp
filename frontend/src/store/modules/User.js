@@ -1,8 +1,8 @@
-import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
-  currentUser: {},
+  currentUser: "",
   token: sessionStorage.getItem("token") || "",
   profile: {},
   followerList: {},
@@ -22,6 +22,9 @@ const getters = {
   },
   isFollowing() {
     return state.isFollowing;
+  },
+  currentUser() {
+    return state.currentUser;
   },
 };
 
@@ -61,6 +64,9 @@ const actions = {
           mutations.SET_IS_LOGIN(true);
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
+          console.log(user);
+          sessionStorage.setItem("current_user", user.id);
+          mutations.SET_CURRENT_USER(user);
         } else {
           mutations.SET_IS_LOGIN(false);
         }
@@ -97,8 +103,10 @@ const actions = {
     localStorage.setItem("token", "");
     mutations.SET_TOKEN("");
   },
-  fetchCurrentUser(user) {
-    mutations.SET_CURRENT_USER(user);
+  fetchCurrentUser() {
+    const currentUser = sessionStorage.getItem("current_user");
+    console.log("current user", currentUser);
+    mutations.SET_CURRENT_USER(currentUser);
   },
   async getProfile(id) {
     await getUser(
@@ -172,6 +180,23 @@ const actions = {
         if (data["message"] === "success") {
           console.log(data);
           mutations.SET_FOLLOWING_LIST(data.followingList);
+        } else {
+          console.log("failed");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async isFollowing(id) {
+    await isFollowing(
+      id,
+      ({ data }) => {
+        if (data["message"] === "success") {
+          console.log("is following");
+          console.log(data);
+          mutations.SET_IS_FOLLOWING(data.isFollowing);
         } else {
           console.log("failed");
         }
