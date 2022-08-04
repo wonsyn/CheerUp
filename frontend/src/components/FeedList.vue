@@ -54,6 +54,9 @@ export default {
   watch: {
     feedList() {
       console.log("FeedList.vue watch start");
+      this.list1.length = 0;
+      this.list2.length = 0;
+      this.list3.length = 0;
       for (let i = 0; i < this.feedList.length; i++) {
         if (i % 3 == 0) {
           this.list1.push(this.feedList[i]);
@@ -64,7 +67,6 @@ export default {
         }
         console.log(this.feedList[i]);
       }
-      this.$forceUpdate();
       console.log("FeedList.vue watch end");
     },
   },
