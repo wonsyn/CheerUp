@@ -1,7 +1,9 @@
-import { login } from "@/api/Feature/User.js";
+import { login, signup } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
+  currentUser: {},
+  token: localStorage.getItem("token") || "",
 };
 
 const getters = {};
@@ -9,6 +11,12 @@ const getters = {};
 const mutations = {
   SET_IS_LOGIN: (isLogin) => {
     state.isLogin = isLogin;
+  },
+  SET_TOKEN: (token) => {
+    state.token = token;
+  },
+  SET_CURRENT_USER: (user) => {
+    state.currentUser = user;
   },
 };
 
@@ -32,6 +40,36 @@ const actions = {
         console.log(error);
       },
     );
+  },
+  async signup(user) {
+    await signup(
+      user,
+      ({ data }) => {
+        console.log(data);
+        if (data["message"] === "success") {
+          console.log(data);
+          console.log(user);
+        } else {
+          console.log(data);
+          console.log(user);
+          mutations.SET_IS_LOGIN(false);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  saveToken(token) {
+    localStorage.setItem("token", token);
+    mutations.SET_TOKEN(token);
+  },
+  removeToken() {
+    localStorage.setItem("token", "");
+    mutations.SET_TOKEN("");
+  },
+  fetchCurrentUser(user) {
+    mutations.SET_CURRENT_USER(user);
   },
 };
 
