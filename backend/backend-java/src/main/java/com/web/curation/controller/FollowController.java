@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.FollowDto;
+import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.FollowService;
 import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.UserService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
+@Api(tags = "팔로우")
 @RestController
 @RequestMapping("/follow")
 public class FollowController {
@@ -104,14 +109,14 @@ public class FollowController {
 	
 	@ApiOperation(value="팔로우하기", 
 			  notes="{followList : 리스트}\n나의 프로필에서 팔로우 시 리스트 생성 가능\n상대 프로필에서 팔로우 시 기능 추가 필요}")
-	@GetMapping("/{id}")
-	public ResponseEntity<Map<String, Object>> follow(@PathVariable String id, HttpServletRequest request) {
+	@PostMapping("/{id}")
+	public ResponseEntity<Map<String, Object>> follow(@RequestBody UserDto userDto, HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			int followUserId = userService.getUserIdById(id);
+			int followUserId = userService.getUserIdById(userDto.getId());
 			int result = followService.followUser(new FollowDto(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))), followUserId));
 			
 			if(result == 1) {
