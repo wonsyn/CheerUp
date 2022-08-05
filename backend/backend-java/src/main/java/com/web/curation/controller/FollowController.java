@@ -49,7 +49,7 @@ public class FollowController {
 	@ApiOperation(value="내가 팔로우하고 있는 유저 리스트", 
 			  notes="경로 예시) http://localhost:8080/cheerup/follow/followingList?id=tes77"
 			  		+ "\n return 예시) json {followList : 리스트}")
-	@GetMapping("/followingList")
+	@GetMapping("/followinglist")
 	public ResponseEntity<Map<String, Object>> getMyFollowList(@RequestParam String id, HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -68,7 +68,7 @@ public class FollowController {
 	@ApiOperation(value="나를 팔로우하고 있는 유저 리스트", 
 			  notes="경로 예시) http://localhost:8080/cheerup/follow/followerList?id=aaa"
 			  		+ "\nreturn 예시) json {followList : 리스트}")
-	@GetMapping("/followerList")
+	@GetMapping("/followerlist")
 	public ResponseEntity<Map<String, Object>> getFollowMeList(@RequestParam String id, HttpServletRequest request) {
 				
 		Map<String, Object> resultMap = new HashMap<>();
