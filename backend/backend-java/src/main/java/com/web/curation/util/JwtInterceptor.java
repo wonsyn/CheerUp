@@ -23,8 +23,10 @@ import com.web.curation.model.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.swagger.models.HttpMethod;
 
 //import com.web.curation.ssafit.util.JWTUtil;
+
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor{
@@ -70,6 +72,10 @@ public class JwtInterceptor implements HandlerInterceptor{
 			throws Exception {
 		
 		System.out.println("prehandle");
+//		System.out.println(request.getMethod().equals("OPTIONS"));
+		if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
 		
 		request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
