@@ -63,10 +63,11 @@ public class CommentController {
 			int result = commentService.writeComment(commentDto);
 			if(result == 1) {
 				resultMap.put("message", "success");
-			}else if(result == 0) {
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}else {
 				resultMap.put("message", "fail");
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		}catch(Exception e) {
 			resultMap.put("message", e.getMessage());
 			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
