@@ -1,11 +1,27 @@
-import { apiInstance } from "./index.js";
+import { apiInstance } from "@/api/index.js";
 
 const api = apiInstance();
+const access_token = sessionStorage.getItem("access-token");
 
-/* example
-function getGugun(param, success, fail) {
-  api.get(`/address/gugun`, { params: param }).then(success).catch(fail);
+async function writeComment(comment, success, fail) {
+  await api
+    .post(`/comment/create`, JSON.stringify(comment), { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
 }
-*/
 
-export /* getGugun */ {};
+async function listComment(feedId, success, fail) {
+  await api
+    .get(`/comment/read/${feedId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+async function editComment(body, success, fail) {
+  await api
+    .put(`/comment/update`, JSON.stringify(body), { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+export { writeComment, listComment, editComment };

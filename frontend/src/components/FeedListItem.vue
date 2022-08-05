@@ -35,7 +35,8 @@ export default {
   setup() {},
   methods: {
     moveDetail() {
-      router.push({ name: "detail" });
+      console.log(this.feedId);
+      router.push({ name: "detail", params: { feedId: this.feedId } });
     },
   },
 };
