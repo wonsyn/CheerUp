@@ -154,6 +154,8 @@ public class CommentController {
 		}		
 	}
 	
+	@ApiOperation(value="댓글 좋아요 체크", 
+			  notes="userId와 commentId로 좋아요 여부 체크 -> 이미 좋아요 되어있으면 not null이므로 좋아요 중복 방지")	
 	@GetMapping("/like/chk/{commentId}/{userId}")
 	public ResponseEntity<Map<String, Object>> chkLike(@PathVariable int commentId, @PathVariable int userId){
 		Map<String, Object> resultMap = new HashMap<>();
