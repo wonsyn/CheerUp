@@ -10,9 +10,30 @@
         <div id="username" class="my-3">
           <span class="m-3">{{ profile.nickname }}</span>
           <span>
-            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username">정보수정</button>
+            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">정보수정</button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">정보 수정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form @submit.prevent="passwordCheck">
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">비밀번호 입력:</label>
+                        <input v-model="password" type="password" class="form-control" id="recipient-name" />
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary">확인</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </span>
         </div>
         <div id="user-follow">
@@ -43,6 +64,7 @@
 import UserBoardList from "@/components/UserBoardList.vue";
 import UserScrapList from "@/components/UserScrapList.vue";
 import useStore from "@/store";
+import router from "@/router";
 
 const store = useStore();
 const userStore = store.modules.userStore;
@@ -55,6 +77,7 @@ export default {
   },
   data() {
     return {
+      password: "",
       currentUser: "",
       username: this.$route.params.username,
       onBoardTab: false,
@@ -80,6 +103,14 @@ export default {
       await userStore.actions.unfollow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
       this.followers--;
+    },
+    passwordCheck() {
+      if (this.profile.username === this.currentUser && this.profile.password === this.password) {
+        router.push("useredit");
+      } else {
+        alert("비밀번호 오류");
+        console.log("ser");
+      }
     },
   },
   async created() {
