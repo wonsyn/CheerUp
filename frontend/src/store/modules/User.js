@@ -54,6 +54,7 @@ const actions = {
           mutations.SET_IS_LOGIN(true);
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
+          sessionStorage.setItem("user_id", user.id);
         } else {
           mutations.SET_IS_LOGIN(false);
         }
