@@ -1,5 +1,5 @@
 <template>
-  <div class="my-3">
+  <div class="my-3" @click="moveDetail">
     <div class="card mx-auto" style="width: 24rem">
       <img :src="feedImgUrl" class="card-img-top" alt="thumbnail" style="width: 100%; max-height: 12rem; object-fit: cover" />
       <div class="card-body">
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "FeedListItem",
   props: {
@@ -31,7 +33,12 @@ export default {
   },
   components: {},
   setup() {},
-  methods: {},
+  methods: {
+    moveDetail() {
+      console.log(this.feedId);
+      router.push({ name: "detail", params: { feedId: this.feedId } });
+    },
+  },
 };
 </script>
 

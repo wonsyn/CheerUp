@@ -18,28 +18,55 @@
       </div>
     </div>
     <div class="d-flex">
-      <button id="vocalist_add_btn" class="btn ms-3 mt-2" @click="openVocaAddWindow" style="font-size: 13px; font-weight: bold; background-color: #00dd99; color: white">단어 추가하기</button>
+      <button id="vocalist_add_btn" class="btn ms-3 mt-2" @click="openVocaAddWindow" style="font-size: 13px; font-weight: bold; background-color: #00dd99; color: white">내 단어장에 추가</button>
     </div>
     <hr />
     <div class="text-start ps-3" style="font-size: 13px; font-weight: bold">댓글</div>
-    <comment-list-item></comment-list-item>
-    <div>댓글 작성란</div>
+    <comment-list-item v-for="comment in commentList" :key="comment.commentId" v-bind="comment"></comment-list-item>
+
+    <div class="d-flex justify-content-start px-3 pt-3">
+      <img class="me-2" :src="loginUserInfo.userImgUrl" alt="profile" style="width: 20px; height: 20px" />
+      <span class="me-2" style="font-weight: bold">{{ loginUserId }}</span>
+      <input type="text" class="px-2 me-3" id="input_comment_create" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
+      <button @click="addComment" class="btn" style="background-color: #00dd99; color: white; font-weight: bold; width: 7%">작성</button>
+    </div>
     <hr />
     <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">~~~님이 좋아할 만한 기사들</div>
-    <feed-list></feed-list>
+    <!-- <feed-list></feed-list> -->
   </div>
 </template>
 
 <script>
 import CommentListItem from "@/components/CommentListItem.vue";
 import VocaListItem from "@/components/VocaListItem.vue";
-import FeedList from "@/components/FeedList.vue";
+import useStore from "@/store";
+// import FeedList from "@/components/FeedList.vue";
+
+const userStore = useStore().modules.userStore;
+const commentStore = useStore().modules.commentStore;
 
 export default {
   components: {
     CommentListItem,
     VocaListItem,
-    FeedList,
+    // FeedList,
+  },
+  props: {
+    feedId: Number,
+  },
+  data() {
+    return {
+      loginUserId: sessionStorage.getItem("current_user"),
+      loginUserInfo: Object,
+      commentList: Object,
+    };
+  },
+  async created() {
+    await userStore.actions.getProfile(this.loginUserId);
+    this.loginUserInfo = userStore.getters.profile();
+    await commentStore.actions.listComment(this.feedId);
+    this.commentList = commentStore.getters.getCommentList();
+    console.log(this.commentList);
   },
   methods: {
     openVocaAddWindow() {
@@ -66,6 +93,13 @@ export default {
 
       console.log("Name: " + vocaName);
       console.log("Desc: " + vocaDesc);
+    },
+    async addComment() {
+      const comment_input = document.getElementById("input_comment_create");
+      const userId = sessionStorage.getItem("user_id");
+      const feedId = this.feedId;
+
+      await commentStore.actions.writeComment(feedId, comment_input.value, userId);
     },
   },
 };
