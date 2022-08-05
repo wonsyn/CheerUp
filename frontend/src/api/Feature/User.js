@@ -10,7 +10,10 @@ async function signup(user, success, fail) {
   await api.post(`/user/signup`, JSON.stringify(user)).then(success).catch(fail);
 }
 async function getUser(id, success, fail) {
-  await api.get(`/user/detail/${id}`, id).then(success).catch(fail);
+  await api
+    .get(`/user/detail/${id}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
 }
 async function isFollowing(id, success, fail) {
   await api
