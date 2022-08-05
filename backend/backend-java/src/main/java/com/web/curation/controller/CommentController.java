@@ -153,4 +153,24 @@ public class CommentController {
 			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
+	
+	@GetMapping("/like/chk/{commentId}/{userId}")
+	public ResponseEntity<Map<String, Object>> chkLike(@PathVariable int commentId, @PathVariable int userId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			boolean flag = false;
+			CommentLikeDto likeDto = commentLikeServie.chkCommentLike(commentId, userId);
+			System.out.println(likeDto);
+			if(likeDto != null) {
+				flag = true;
+			}
+			System.out.println(flag);
+			resultMap.put("message", flag);
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			System.out.println(e.getMessage());
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

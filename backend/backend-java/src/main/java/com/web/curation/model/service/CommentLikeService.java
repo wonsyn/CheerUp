@@ -11,4 +11,6 @@ public interface CommentLikeService {
 	// 좋아요 취소
 	int cancelLike(CommentLikeDto likeDto);
 	
+	// 좋아요 체크
+	CommentLikeDto chkCommentLike(int commentId, int userId);
 }

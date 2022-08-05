@@ -23,4 +23,9 @@ public class CommentLikeServiceImpl implements CommentLikeService{
 	public int cancelLike(CommentLikeDto likeDto) {
 		return likeDao.deleteLike(likeDto);
 	}
+
+	@Override
+	public CommentLikeDto chkCommentLike(int commentId, int userId) {
+		return likeDao.chkCommentLike(commentId, userId);
+	}
 }
