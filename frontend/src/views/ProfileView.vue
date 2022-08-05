@@ -1,7 +1,6 @@
 <template>
   <div id="profile-view">
-    프로필 {{ profile }}
-    {{ currentUser }}
+    프로필
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
@@ -75,10 +74,12 @@ export default {
     async follow() {
       await userStore.actions.follow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
+      this.followers++;
     },
     async unfollow() {
       await userStore.actions.unfollow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
+      this.followers--;
     },
   },
   async created() {
@@ -92,9 +93,9 @@ export default {
     await userStore.actions.isFollowing(this.username);
     this.isFollowing = userStore.getters.isFollowing();
     await userStore.actions.getFollowerList(this.profile.id);
-    this.followers = userStore.getters.followerList();
+    this.followers = userStore.getters.followerList()?.length;
     await userStore.actions.getFollowingList(this.profile.id);
-    this.followings = userStore.getters.followingList();
+    this.followings = userStore.getters.followingList()?.length;
   },
 };
 </script>

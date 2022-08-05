@@ -162,7 +162,7 @@ const actions = {
       ({ data }) => {
         if (data["message"] === "success") {
           console.log(data);
-          mutations.SET_FOLLOWER_LIST(data.followerList);
+          mutations.SET_FOLLOWER_LIST(data.followList);
         } else {
           console.log("failed");
         }
@@ -178,7 +178,7 @@ const actions = {
       ({ data }) => {
         if (data["message"] === "success") {
           console.log(data);
-          mutations.SET_FOLLOWING_LIST(data.followingList);
+          mutations.SET_FOLLOWING_LIST(data.followList);
         } else {
           console.log("failed");
         }
@@ -195,7 +195,7 @@ const actions = {
         if (data["message"] === "success") {
           console.log("is following");
           console.log(data);
-          mutations.SET_IS_FOLLOWING(data.isFollowing);
+          mutations.SET_IS_FOLLOWING(data.follow);
         } else {
           console.log("failed");
         }

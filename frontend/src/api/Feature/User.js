@@ -33,21 +33,15 @@ async function unfollow(id, success, fail) {
     .then(success)
     .catch(fail);
 }
-async function getFollowerList(id, success, fail) {
+async function getFollowerList(params, success, fail) {
   await api
-    .get(
-      `/follow/followerlist`,
-      {
-        id: id,
-      },
-      { headers: { "access-token": access_token } },
-    )
+    .get(`/follow/followerlist`, { params: { id: params }, headers: { "access-token": access_token } })
     .then(success)
     .catch(fail);
 }
 async function getFollowingList(params, success, fail) {
   await api
-    .get(`/follow/followinglist`, { params: { id: params.id } }, { headers: { "access-token": access_token } })
+    .get(`/follow/followinglist`, { params: { id: params }, headers: { "access-token": access_token } })
     .then(success)
     .catch(fail);
 }
