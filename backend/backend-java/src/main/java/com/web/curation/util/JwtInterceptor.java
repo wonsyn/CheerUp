@@ -77,6 +77,7 @@ public class JwtInterceptor implements HandlerInterceptor{
             return true;
         }
 		
+		
 		request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
 		
