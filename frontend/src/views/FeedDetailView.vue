@@ -18,28 +18,46 @@
       </div>
     </div>
     <div class="d-flex">
-      <button id="vocalist_add_btn" class="btn ms-3 mt-2" @click="openVocaAddWindow" style="font-size: 13px; font-weight: bold; background-color: #00dd99; color: white">단어 추가하기</button>
+      <button id="vocalist_add_btn" class="btn ms-3 mt-2" @click="openVocaAddWindow" style="font-size: 13px; font-weight: bold; background-color: #00dd99; color: white">내 단어장에 추가</button>
     </div>
     <hr />
     <div class="text-start ps-3" style="font-size: 13px; font-weight: bold">댓글</div>
     <comment-list-item></comment-list-item>
-    <div>댓글 작성란</div>
+
+    <div class="d-flex justify-content-start px-3 pt-3">
+      <img class="me-2" :src="loginUserInfo.userImgUrl" alt="profile" style="width: 20px; height: 20px" />
+      <span class="me-2" style="font-weight: bold">{{ loginUserId }}</span>
+      <input type="text" id="input_comment_create" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
+    </div>
     <hr />
     <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">~~~님이 좋아할 만한 기사들</div>
-    <feed-list></feed-list>
+    <!-- <feed-list></feed-list> -->
   </div>
 </template>
 
 <script>
 import CommentListItem from "@/components/CommentListItem.vue";
 import VocaListItem from "@/components/VocaListItem.vue";
-import FeedList from "@/components/FeedList.vue";
+import useStore from "@/store";
+// import FeedList from "@/components/FeedList.vue";
+
+const userStore = useStore().modules.userStore;
 
 export default {
   components: {
     CommentListItem,
     VocaListItem,
-    FeedList,
+    // FeedList,
+  },
+  data() {
+    return {
+      loginUserId: sessionStorage.getItem("user_id"),
+      loginUserInfo: Object,
+    };
+  },
+  async created() {
+    await userStore.actions.getProfile(this.loginUserId);
+    this.loginUserInfo = userStore.getters.profile();
   },
   methods: {
     openVocaAddWindow() {
