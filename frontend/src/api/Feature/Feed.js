@@ -1,4 +1,4 @@
-import { apiInstance } from "../index.js";
+import { apiInstance } from "@/api/index.js";
 
 const api = apiInstance();
 const access_token = sessionStorage.getItem("access-token");
