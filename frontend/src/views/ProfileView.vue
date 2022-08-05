@@ -1,6 +1,6 @@
 <template>
   <div id="profile-view">
-    프로필 {{ profile }}
+    프로필
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
@@ -10,13 +10,13 @@
         <div id="username" class="my-3">
           <span class="m-3">{{ profile.nickname }}</span>
           <span>
-            <button class="btn btn-sm btn-outline-dark" v-if="currentUser.username == username">정보수정</button>
+            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username">정보수정</button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
         </div>
         <div id="user-follow">
-          <span>팔로우: {{ followings.length }}</span> / <span>팔로워: {{ followers.length }}</span>
+          <span>팔로우: {{ followings }}</span> / <span>팔로워: {{ followers }}</span>
         </div>
       </div>
       <div></div>
@@ -55,10 +55,7 @@ export default {
   },
   data() {
     return {
-      currentUser: {
-        username: "user44",
-        id: 1,
-      },
+      currentUser: "",
       username: this.$route.params.username,
       onBoardTab: false,
       profile: {},
@@ -77,21 +74,28 @@ export default {
     async follow() {
       await userStore.actions.follow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
+      this.followers++;
     },
     async unfollow() {
       await userStore.actions.unfollow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
+      this.followers--;
     },
   },
   async created() {
     console.log("created");
+    await userStore.actions.fetchCurrentUser();
+    this.currentUser = userStore.getters.currentUser();
+    console.log(this.currentUser);
     await userStore.actions.getProfile(this.username);
     this.profile = userStore.getters.profile();
     console.log(this.profile);
+    await userStore.actions.isFollowing(this.username);
+    this.isFollowing = userStore.getters.isFollowing();
     await userStore.actions.getFollowerList(this.profile.id);
-    this.followers = userStore.getters.followerList();
+    this.followers = userStore.getters.followerList()?.length;
     await userStore.actions.getFollowingList(this.profile.id);
-    this.followings = userStore.getters.followingList();
+    this.followings = userStore.getters.followingList()?.length;
   },
 };
 </script>
