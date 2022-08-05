@@ -47,7 +47,8 @@ public class FollowController {
 	FollowService followService;
 	
 	@ApiOperation(value="내가 팔로우하고 있는 유저 리스트", 
-			  notes="return {followList : 리스트}")
+			  notes="경로 예시) http://localhost:8080/cheerup/follow/followingList?id=tes77"
+			  		+ "\n return 예시) json {followList : 리스트}")
 	@GetMapping("/followingList")
 	public ResponseEntity<Map<String, Object>> getMyFollowList(@RequestParam String id, HttpServletRequest request) {
 		
@@ -65,7 +66,8 @@ public class FollowController {
 	}
 	
 	@ApiOperation(value="나를 팔로우하고 있는 유저 리스트", 
-			  notes="return {followList : 리스트}")
+			  notes="경로 예시) http://localhost:8080/cheerup/follow/followerList?id=aaa"
+			  		+ "\nreturn 예시) json {followList : 리스트}")
 	@GetMapping("/followerList")
 	public ResponseEntity<Map<String, Object>> getFollowMeList(@RequestParam String id, HttpServletRequest request) {
 				
@@ -83,7 +85,9 @@ public class FollowController {
 	}
 	
 	@ApiOperation(value="특정 유저에 대한 나의 팔로우 상태 조회", 
-			  notes="{follow : true,false}")
+			  notes="경로 예시) http://localhost:8080/cheerup/follow/status/aaa"
+			  		+ "\nhttp method : get"
+			  		+ "\nreturn 예시) json {follow : true,false}")
 	@GetMapping("/status/{id}")
 	public ResponseEntity<Map<String, Object>> getFollowStatus(@PathVariable String id, HttpServletRequest request){
 		
@@ -109,7 +113,10 @@ public class FollowController {
 	}
 	
 	@ApiOperation(value="팔로우하기", 
-			  notes="{followList : 리스트}\n나의 프로필에서 팔로우 시 리스트 생성 가능\n상대 프로필에서 팔로우 시 기능 추가 필요}")
+			  notes="경로 예시) http://localhost:8080/cheerup/follow"
+			  		+ "\n데이터 예시) json { 'id' : '유저id' }"
+			  		+ "\nhttp method : post"
+			  		+ "\n return 예시) json {followList : 팔로우리스트}")
 	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> follow(@RequestBody UserDto userDto, HttpServletRequest request) {
 		
@@ -137,7 +144,9 @@ public class FollowController {
 	}
 	
 	@ApiOperation(value="언팔로우 하기", 
-			  notes="{followList : 리스트}\n나의 프로필에서 언팔로우 시 리스트 생성 가능\n상대 프로필에서 언팔로우 시 기능 추가 필요")
+			  notes="경로 예시) http://localhost:8080/cheerup/follow/delete/{id}"
+			  		+ "\n http method : delete"
+			  		+ "\n return 예시) json {followList : 팔로우리스트}")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Map<String, Object>> unfollow(@PathVariable String id, HttpServletRequest request) {
 		

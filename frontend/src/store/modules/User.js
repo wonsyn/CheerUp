@@ -3,10 +3,11 @@ import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowing
 const state = {
   isLogin: false,
   currentUser: {},
-  token: localStorage.getItem("token") || "",
+  token: sessionStorage.getItem("token") || "",
   profile: {},
   followerList: {},
   followingList: {},
+  isFollowing: false,
 };
 
 const getters = {
@@ -18,6 +19,9 @@ const getters = {
   },
   followingList() {
     return state.followingList;
+  },
+  isFollowing() {
+    return state.isFollowing;
   },
 };
 
@@ -39,6 +43,9 @@ const mutations = {
   },
   SET_FOLLOWING_LIST: (followingList) => {
     state.followingList = followingList;
+  },
+  SET_IS_FOLLOWING: (isFollowing) => {
+    state.isFollowing = isFollowing;
   },
 };
 
@@ -116,6 +123,11 @@ const actions = {
       id,
       ({ data }) => {
         console.log(data);
+        if (data["message"] === "success") {
+          mutations.SET_IS_FOLLOWING(true);
+        } else {
+          console.log("failed");
+        }
       },
       (error) => {
         console.log(error);
@@ -127,6 +139,11 @@ const actions = {
       id,
       ({ data }) => {
         console.log(data);
+        if (data["message"] === "success") {
+          mutations.SET_IS_FOLLOWING(false);
+        } else {
+          console.log("failed");
+        }
       },
       (error) => {
         console.log(error);
