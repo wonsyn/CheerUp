@@ -25,8 +25,8 @@
     <comment-list-item v-for="comment in commentList" :key="comment.commentId" v-bind="comment"></comment-list-item>
 
     <div class="d-flex justify-content-start px-3 pt-3">
-      <img class="me-2" :src="loginUserInfo.userImgUrl" alt="profile" style="width: 20px; height: 20px" />
-      <span class="me-2" style="font-weight: bold">{{ loginUserId }}</span>
+      <img class="me-2 mt-1 align-middle" :src="loginUserInfo.userImgUrl" alt="profile" style="width: 20px; height: 20px" />
+      <span class="me-3 mt-1 align-middle" style="font-weight: bold">{{ loginUserId }}</span>
       <input type="text" class="px-2 me-3" id="input_comment_create" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
       <button @click="addComment" class="btn" style="background-color: #00dd99; color: white; font-weight: bold; width: 7%">작성</button>
     </div>
@@ -96,10 +96,14 @@ export default {
     },
     async addComment() {
       const comment_input = document.getElementById("input_comment_create");
-      const userId = sessionStorage.getItem("user_id");
+      const userId = sessionStorage.getItem("current_user");
       const feedId = this.feedId;
 
       await commentStore.actions.writeComment(feedId, comment_input.value, userId);
+
+      await commentStore.actions.listComment(this.feedId);
+      this.commentList = commentStore.getters.getCommentList();
+      comment_input.value = "";
     },
   },
 };
