@@ -24,4 +24,32 @@ async function editComment(body, success, fail) {
     .catch(fail);
 }
 
-export { writeComment, listComment, editComment };
+async function deleteComment(commentId, success, fail) {
+  await api
+    .delete(`/comment/delete/${commentId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+async function addLike(body, success, fail) {
+  await api
+    .post(`/comment/like`, body, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+async function deleteLike(body, success, fail) {
+  await api
+    .delete(`/comment/like`, body, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+async function checkLike(params, success, fail) {
+  await api
+    .get(`/comment/like/chk/${params.commentId}/${params.userId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+export { writeComment, listComment, editComment, deleteComment, addLike, deleteLike, checkLike };

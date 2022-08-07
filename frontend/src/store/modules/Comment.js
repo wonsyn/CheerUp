@@ -1,4 +1,4 @@
-import { writeComment, listComment, editComment } from "@/api/Feature/Comment.js";
+import { writeComment, listComment, editComment, deleteComment, addLike, deleteLike, checkLike } from "@/api/Feature/Comment.js";
 
 const state = {
   commentList: [],
@@ -50,12 +50,72 @@ const actions = {
   async editComment(commentId, content) {
     const body = {
       commentContent: content,
-      id: commentId,
+      commentId: commentId,
     };
     await editComment(
       body,
       ({ data }) => {
         console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async deleteComment(commentId) {
+    await deleteComment(
+      commentId,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async addLike(commentId, userId) {
+    const body = {
+      commentId: commentId,
+      userId: userId,
+    };
+    await addLike(
+      body,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async deleteLike(commentId, userId) {
+    const body = {
+      commentId: commentId,
+      userId: userId,
+    };
+    await deleteLike(
+      body,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async checkLike(commentId, userId) {
+    const params = {
+      commentId: commentId,
+      userId: userId,
+    };
+    await checkLike(
+      params,
+      ({ data }) => {
+        return data.message;
       },
       (error) => {
         console.log(error);
