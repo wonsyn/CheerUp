@@ -4,7 +4,7 @@
       <img class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
       <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
       <div class="ms-2 align-self-center" style="font-size: 13px">{{ content }}</div>
-      <div class="pe-3 me-auto d-flex" @click="like">
+      <div class="pe-3 me-auto d-flex" @click="updateLike">
         <img v-if="!like" class="ms-3 align-self-center" src="@/assets/heart_fill.png" alt="like" style="width: 17px; height=17px" />
         <img v-else class="ms-3 align-self-center" src="@/assets/heart_outline.png" alt="like" style="width: 17px; height=17px" />
         <div class="ms-1 align-self-center" style="font-size: 10px">{{ countLike }}</div>
