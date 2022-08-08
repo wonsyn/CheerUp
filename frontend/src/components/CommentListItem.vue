@@ -5,9 +5,9 @@
       <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
       <div class="ms-2 align-self-center" style="font-size: 13px">{{ content }}</div>
       <div class="pe-3 me-auto d-flex" @click="updateLike">
-        <img v-if="!like" class="ms-3 align-self-center" src="@/assets/heart_fill.png" alt="like" style="width: 17px; height=17px" />
+        <img v-if="like" class="ms-3 align-self-center" src="@/assets/heart_fill.png" alt="like" style="width: 17px; height=17px" />
         <img v-else class="ms-3 align-self-center" src="@/assets/heart_outline.png" alt="like" style="width: 17px; height=17px" />
-        <div class="ms-1 align-self-center" style="font-size: 10px">{{ countLike }}</div>
+        <div class="ms-1 align-self-center" style="font-size: 10px">{{ likeNum }}</div>
       </div>
       <div :id="'btn' + commentId" class="d-none">
         <button :id="'btn_comment_edit' + commentId" class="btn me-1 align-middle" @click="openCommentEditWindow" style="background-color: #eae784; height: 25px; font-size: 10px">수정</button>
@@ -53,20 +53,26 @@ export default {
   data() {
     return {
       content: this.commentContent,
-      like: Boolean,
+      likeNum: this.countLike,
+      like: false,
     };
   },
   async created() {
-    this.like = commentStore.actions.checkLike(this.commentId, sessionStorage.getItem("current_user"));
+    await commentStore.actions.checkLike(this.commentId, sessionStorage.getItem("current_user_num"));
+    this.like = commentStore.getters.getLikeState();
+    console.log("created");
+    console.log(this.like);
   },
   methods: {
     updateLike() {
       if (this.like) {
-        commentStore.actions.deleteLike(this.commentId, sessionStorage.getItem("current_user")); // like == true 인 경우
+        commentStore.actions.deleteLike(this.commentId, sessionStorage.getItem("current_user_num")); // like == true 인 경우
         this.like = false;
+        this.likeNum = this.likeNum - 1;
       } else {
-        commentStore.actions.addLike(this.commentId, sessionStorage.getItem("current_user")); // like == false 인 경우
+        commentStore.actions.addLike(this.commentId, sessionStorage.getItem("current_user_num")); // like == false 인 경우
         this.like = true;
+        this.likeNum = this.likeNum + 1;
       }
     },
 

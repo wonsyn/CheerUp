@@ -2,17 +2,24 @@ import { writeComment, listComment, editComment, deleteComment, addLike, deleteL
 
 const state = {
   commentList: [],
+  likeState: Boolean,
 };
 
 const getters = {
   getCommentList() {
     return state.commentList;
   },
+  getLikeState() {
+    return state.likeState;
+  },
 };
 
 const mutations = {
   SET_COMMENT_LIST(list) {
     state.commentList = list;
+  },
+  SET_LIKE_STATE(data) {
+    state.likeState = data;
   },
 };
 
@@ -115,7 +122,11 @@ const actions = {
     await checkLike(
       params,
       ({ data }) => {
-        return data.message;
+        if (data.message == false) {
+          mutations.SET_LIKE_STATE(false);
+        } else {
+          mutations.SET_LIKE_STATE(true);
+        }
       },
       (error) => {
         console.log(error);
