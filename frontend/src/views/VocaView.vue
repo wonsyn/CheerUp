@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="d-flex">
-        <div class="me-auto"></div>
+        <div class="me-auto mt-3"></div>
         <form class="me-1" @submit.prevent="searchVoca" style="width: 30%">
           <input type="text" v-model="searchWord" placeholder="검색할 단어를 입력하세요." style="width: 100%; border: 0px solid black; border-bottom: 1px solid black" />
         </form>
