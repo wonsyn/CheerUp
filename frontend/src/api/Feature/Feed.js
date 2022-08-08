@@ -15,5 +15,17 @@ async function getFeed(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+async function createBoard(params, success, fail) {
+  await api
+    .post(`/feed/board/create`, JSON.stringify(params), { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+async function getBoard(userId, success, fail) {
+  await api
+    .get(`/feed/board/list/${userId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
 
-export { getFeed };
+export { getFeed, createBoard, getBoard };
