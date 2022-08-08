@@ -9,10 +9,10 @@
     </div>
     <div class="row py-3">
       <div class="col">
-        <voca-list-item v-for="voca in list1" :key="voca.personalWordId" v-bind="voca"></voca-list-item>
+        <voca-list-item v-for="voca in list1" :key="voca.personalWordId" v-bind="voca" @refresh-list="refreshList"></voca-list-item>
       </div>
       <div class="col">
-        <voca-list-item v-for="voca in list2" :key="voca.personalWordId" v-bind="voca"></voca-list-item>
+        <voca-list-item v-for="voca in list2" :key="voca.personalWordId" v-bind="voca" @refresh-list="refreshList"></voca-list-item>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
     };
   },
   async created() {
-    await wordStore.actions.getMyWordList(1);
+    await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
     this.myVocaList = wordStore.getters.getMyWordList();
 
     for (let i = 0; i < this.myVocaList.length; i++) {
@@ -50,6 +50,19 @@ export default {
   },
   methods: {
     searchVoca() {},
+
+    async refreshList() {
+      await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
+      this.myVocaList = wordStore.getters.getMyWordList();
+
+      for (let i = 0; i < this.myVocaList.length; i++) {
+        if (i % 2 == 0) {
+          this.list1.push(this.myVocaList[i]);
+        } else {
+          this.list2.push(this.myVocaList[i]);
+        }
+      }
+    },
   },
 };
 </script>
