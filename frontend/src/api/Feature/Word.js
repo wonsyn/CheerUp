@@ -17,4 +17,8 @@ async function updateMyWord(body, success, fail) {
   api.put(`word/update`, body, { headers: headers }).then(success).catch(fail);
 }
 
-export { getMyWordList, getDBWordList, updateMyWord };
+async function deleteMyWord(wordId, success, fail) {
+  api.delete(`word/delete/${wordId}`, { headers: headers }).then(success).catch(fail);
+}
+
+export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord };

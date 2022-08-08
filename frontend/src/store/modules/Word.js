@@ -1,4 +1,4 @@
-import { getMyWordList, updateMyWord } from "@/api/Feature/Word";
+import { getMyWordList, updateMyWord, deleteMyWord } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
@@ -36,6 +36,18 @@ const actions = {
     };
     await updateMyWord(
       word,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async deleteMyWord(wordId) {
+    await deleteMyWord(
+      wordId,
       ({ data }) => {
         console.log(data);
       },

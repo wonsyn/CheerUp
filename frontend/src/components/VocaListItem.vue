@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isDeleted">
     <div v-if="!isEdit" class="py-3 px-5 my-3" style="background-color: rgb(245, 245, 245); border-radius: 10px">
       <div class="d-flex">
         <span class="ps-2" style="font-weight: bold; font-size: 20px">{{ personalWord }}</span>
@@ -12,7 +12,7 @@
         <img class="me-2" @click="openWordEditWindow" src="@/assets/edit.png" alt="edit" style="width: 4%; height: 4%" />
         <img v-if="isFav" class="me-2" src="@/assets/star_filled.png" alt="fav" style="width: 4%; height: 4%" />
         <img v-else class="me-2" src="@/assets/star_outline.png" alt="fav" style="width: 4%; height: 4%" />
-        <img src="@/assets/delete.png" alt="delete" style="width: 4%; height: 4%" />
+        <img src="@/assets/delete.png" @click="deleteWord" alt="delete" style="width: 4%; height: 4%" />
       </div>
     </div>
     <div v-else class="py-3 px-5 my-3" style="background-color: rgb(245, 245, 245); border-radius: 10px">
@@ -54,6 +54,7 @@ export default {
     return {
       isFav: false,
       isEdit: false,
+      isDeleted: false,
       wordExp: this.personalWordExp,
       originalExp: String,
     };
@@ -73,6 +74,13 @@ export default {
     cancelWordEdit() {
       this.wordExp = this.originalExp;
       this.closeWordEditWindow();
+    },
+    async deleteWord() {
+      if (confirm("단어를 삭제하시겠습니까?")) {
+        await wordStore.actions.deleteMyWord(this.personalWordId);
+        this.isDeleted = true;
+        this.$emit("refresh");
+      }
     },
   },
 };
