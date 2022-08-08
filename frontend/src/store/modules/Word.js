@@ -1,19 +1,27 @@
-import { getMyWordList, updateMyWord } from "@/api/Feature/Word";
+import { getMyWordList /*updateMyWord */ } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
 };
 
-const getters = {};
+const getters = {
+  getMyWordList() {
+    return state.myWordList;
+  },
+};
 
-const mutations = {};
+const mutations = {
+  SET_MY_WORDLIST(data) {
+    state.myWordList = data;
+  },
+};
 
 const actions = {
   async getMyWordList(userId) {
-    getMyWordList(
+    await getMyWordList(
       userId,
       ({ data }) => {
-        mutations.SET_MY_WORD_LIST(data);
+        mutations.SET_MY_WORDLIST(data);
       },
       (error) => {
         console.log(error);
