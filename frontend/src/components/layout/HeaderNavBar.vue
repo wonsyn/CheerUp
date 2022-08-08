@@ -25,7 +25,7 @@
             <router-link class="nav-link" to="#" @click="outMain">일정</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#" @click="outMain">단어장</router-link>
+            <router-link class="nav-link" to="/voca" @click="outMain">단어장</router-link>
           </li>
         </ul>
         <div id="searchuser" class="nav-item dropdown me-3">
