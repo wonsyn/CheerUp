@@ -10,6 +10,7 @@ import ScheduleView from "@/views/ScheduleView.vue";
 import UserEditView from "@/views/UserEditView.vue";
 import VocaView from "@/views/VocaView.vue";
 import FeedDetailView from "@/views/FeedDetailView.vue";
+import AuthorizationView from "@/views/AuthorizationView";
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     path: "/detail",
     name: "detail",
     component: FeedDetailView,
+  },
+  {
+    path: "/auth",
+    name: "userauth",
+    component: AuthorizationView,
   },
   // {
   //   path: "*",

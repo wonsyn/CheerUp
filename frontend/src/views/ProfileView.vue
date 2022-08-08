@@ -10,30 +10,9 @@
         <div id="username" class="my-3">
           <span class="m-3">{{ profile.nickname }}</span>
           <span>
-            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">정보수정</button>
+            <button @click="isModalViewed = true" class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">정보 수정</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form @submit.prevent="passwordCheck">
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">비밀번호 입력:</label>
-                        <input v-model="password" type="password" class="form-control" id="recipient-name" />
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary">확인</button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </span>
         </div>
         <div id="user-follow">
@@ -85,6 +64,7 @@ export default {
       isFollowing: false,
       followers: 0,
       followings: 0,
+      isModalViewed: false,
     };
   },
   methods: {
@@ -105,11 +85,13 @@ export default {
       this.followers--;
     },
     passwordCheck() {
-      if (this.profile.username === this.currentUser && this.profile.password === this.password) {
+      if (this.profile.id === this.currentUser && this.profile.password === this.password) {
+        console.log("success");
         router.push("useredit");
+        this.password = "";
       } else {
-        alert("비밀번호 오류");
-        console.log("ser");
+        this.password = "";
+        console.log("failed");
       }
     },
   },
@@ -128,6 +110,7 @@ export default {
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
   },
+  conputed: {},
 };
 </script>
 
