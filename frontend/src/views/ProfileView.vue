@@ -10,7 +10,7 @@
         <div id="username" class="my-3">
           <span class="m-3">{{ profile.nickname }}</span>
           <span>
-            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username">정보수정</button>
+            <button @click="isModalViewed = true" class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
@@ -43,6 +43,7 @@
 import UserBoardList from "@/components/UserBoardList.vue";
 import UserScrapList from "@/components/UserScrapList.vue";
 import useStore from "@/store";
+import router from "@/router";
 
 const store = useStore();
 const userStore = store.modules.userStore;
@@ -55,6 +56,7 @@ export default {
   },
   data() {
     return {
+      password: "",
       currentUser: "",
       username: this.$route.params.username,
       onBoardTab: false,
@@ -62,6 +64,7 @@ export default {
       isFollowing: false,
       followers: 0,
       followings: 0,
+      isModalViewed: false,
     };
   },
   methods: {
@@ -81,6 +84,16 @@ export default {
       this.isFollowing = userStore.getters.isFollowing();
       this.followers--;
     },
+    passwordCheck() {
+      if (this.profile.id === this.currentUser && this.profile.password === this.password) {
+        console.log("success");
+        router.push("useredit");
+        this.password = "";
+      } else {
+        this.password = "";
+        console.log("failed");
+      }
+    },
   },
   async created() {
     console.log("created");
@@ -97,6 +110,7 @@ export default {
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
   },
+  conputed: {},
 };
 </script>
 
