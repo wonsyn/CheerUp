@@ -1,11 +1,20 @@
 import { apiInstance } from "./index.js";
 
 const api = apiInstance();
+const headers = {
+  "access-token": sessionStorage.getItem("access-token"),
+};
 
-/* example
-function getGugun(param, success, fail) {
-  api.get(`/address/gugun`, { params: param }).then(success).catch(fail);
+async function getMyWordList(userId, success, fail) {
+  api.get(`/word/myword/${userId}`, { headers: headers }).then(success).catch(fail);
 }
-*/
 
-export /* getGugun */ {};
+async function getDBWordList(success, fail) {
+  api.get(`/word/listtest`, { headers: headers }.then(success).catch(fail));
+}
+
+async function updateMyWord(body, success, fail) {
+  api.put(`word/update`, body, { headers: headers }).then(success).catch(fail);
+}
+
+export { getMyWordList, getDBWordList, updateMyWord };
