@@ -1,10 +1,21 @@
-import { createBoard, getBoard } from "@/api/Feature/Feed";
+import { createBoard, getBoardList } from "@/api/Feature/Feed";
 
-const state = {};
+const state = {
+  board: {},
+  boardList: {},
+};
 
-const getters = {};
+const getters = {
+  boardList() {
+    return state.boardList;
+  },
+};
 
-const mutations = {};
+const mutations = {
+  SET_BOARD_LIST(boardList) {
+    state.boardList = boardList;
+  },
+};
 
 const actions = {
   async createBoard(params) {
@@ -22,12 +33,15 @@ const actions = {
       },
     );
   },
-  async getBoard(userId) {
-    await getBoard(
+  async getBoardList(userId) {
+    await getBoardList(
       userId,
       ({ data }) => {
+        console.log(data);
+        mutations.SET_BOARD_LIST(data);
         if (data["message"] === "success") {
           console.log(data);
+          mutations.SET_BOARD_LIST(data);
         } else {
           console.log("board list failed");
         }

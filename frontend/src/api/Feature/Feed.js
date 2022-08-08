@@ -21,11 +21,11 @@ async function createBoard(params, success, fail) {
     .then(success)
     .catch(fail);
 }
-async function getBoard(userId, success, fail) {
+async function getBoardList(userId, success, fail) {
   await api
     .get(`/feed/board/list/${userId}`, { headers: { "access-token": access_token } })
     .then(success)
     .catch(fail);
 }
 
-export { getFeed, createBoard, getBoard };
+export { getFeed, createBoard, getBoardList };

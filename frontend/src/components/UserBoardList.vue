@@ -7,8 +7,8 @@
     </form>
 
     <div class="row">
-      <div class="col-4">
-        <user-board-list-item></user-board-list-item>
+      <div class="col-4" v-for="board in boardList" :key="board.boardId">
+        <user-board-list-item :board="board"></user-board-list-item>
       </div>
     </div>
   </div>
@@ -34,6 +34,7 @@ export default {
         boardName: "",
         userId: "",
       },
+      boardList: {},
     };
   },
   methods: {
@@ -45,7 +46,8 @@ export default {
   async created() {
     const userId = userStore.getters.profile().userId;
     this.newBoard.userId = userId;
-    await boardStore.actions.getBoard(userId);
+    await boardStore.actions.getBoardList(userId);
+    this.boardList = boardStore.getters.boardList();
   },
 };
 </script>
