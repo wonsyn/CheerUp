@@ -64,12 +64,20 @@ const actions = {
           mutations.SET_IS_LOGIN(true);
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
-          console.log(user);
           sessionStorage.setItem("current_user", user.id);
           mutations.SET_CURRENT_USER(user);
         } else {
           mutations.SET_IS_LOGIN(false);
         }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+    await getUser(
+      user.id,
+      ({ data }) => {
+        sessionStorage.setItem("current_user_num", data.userDetail.userId);
       },
       (error) => {
         console.log(error);
