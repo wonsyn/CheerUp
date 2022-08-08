@@ -143,10 +143,12 @@ export default {
     },
 
     deleteComment() {
-      commentStore.actions.deleteComment(this.commentId);
-      const commentTemplate = document.getElementById("comment_template" + this.commentId);
-      commentTemplate.classList.add("d-none");
-      commentTemplate.classList.remove("d-block");
+      if (confirm("댓글을 삭제하시겠습니까?")) {
+        commentStore.actions.deleteComment(this.commentId);
+        const commentTemplate = document.getElementById("comment_template" + this.commentId);
+        commentTemplate.classList.add("d-none");
+        commentTemplate.classList.remove("d-block");
+      }
     },
   },
 };
