@@ -148,11 +148,12 @@ public class WordController {
 	}
 	
 	@ApiOperation(value="내 단어장 안에서 수정", 
-			  notes="추가할 때 수정하는 것이 아니고 내 개인 단어장에서 단어 수정")
+			  notes="추가할 때 수정하는 것이 아니고 내 개인 단어장에서 단어 수정 \n personalWordDtoId와 personalWordExp만 주면 됨")
 	@PutMapping("/update")
 	public ResponseEntity<Map<String, Object>> editPersonalWord(@RequestBody PersonalWordDto personalWordDto){
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
+			System.out.println(personalWordDto);
 			int result = personalWordService.editPersonalWord(personalWordDto);
 			if(result == 1) {
 				resultMap.put("message", "success");

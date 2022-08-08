@@ -28,8 +28,6 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int editBoard(BoardDto boardDto) {
 		BoardDto dto = boardDao.selectBoardByBoardId(boardDto.getBoardId());
-		dto.setBoardId(boardDto.getBoardId());
-		dto.setUserId(boardDto.getUserId());
 		dto.setBoardName(boardDto.getBoardName());
 		return boardDao.updateBoard(dto);
 	}
