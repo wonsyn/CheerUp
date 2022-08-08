@@ -37,7 +37,7 @@ export default {
     };
   },
   async created() {
-    await wordStore.actions.getMyWordList(1);
+    await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
     this.myVocaList = wordStore.getters.getMyWordList();
 
     for (let i = 0; i < this.myVocaList.length; i++) {
