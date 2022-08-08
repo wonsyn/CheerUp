@@ -29,4 +29,8 @@ async function removeFavWord(wordId, success, fail) {
   await api.put(`word/fav/cancel/${wordId}`, {}, { headers: headers }).then(success).catch(fail);
 }
 
-export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord };
+async function getMyFavWordList(userId, success, fail) {
+  await api.get(`word/myword/fav/${userId}`, { headers: headers }).then(success).catch(fail);
+}
+
+export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList };

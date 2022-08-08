@@ -1,18 +1,25 @@
-import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord } from "@/api/Feature/Word";
+import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
+  myFavWordList: [],
 };
 
 const getters = {
   getMyWordList() {
     return state.myWordList;
   },
+  getMyFavWordList() {
+    return state.myFavWordList;
+  },
 };
 
 const mutations = {
   SET_MY_WORDLIST(data) {
     state.myWordList = data;
+  },
+  SET_MY_FAVWORDLIST(data) {
+    state.myFavWordList = data;
   },
 };
 
@@ -74,6 +81,18 @@ const actions = {
       favWordId,
       ({ data }) => {
         console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async getMyFavWordList(userId) {
+    await getMyFavWordList(
+      userId,
+      ({ data }) => {
+        mutations.SET_MY_FAVWORDLIST(data);
       },
       (error) => {
         console.log(error);
