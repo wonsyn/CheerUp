@@ -50,12 +50,7 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	public int editPersonalWord(PersonalWordDto personalWordDto) {
 		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordDto.getPersonalWordId());
 		
-		dto.setPersonalWordId(personalWordDto.getPersonalWordId());
-		dto.setUserId(personalWordDto.getUserId());
-		dto.setPersonalWord(personalWordDto.getPersonalWord());
 		dto.setPersonalWordExp(personalWordDto.getPersonalWordExp());
-		dto.setPersonalFavWord(personalWordDto.getPersonalFavWord());
-		dto.setPersonalWordDate(personalWordDto.getPersonalWordDate());
 		System.out.println("dto : " + dto);
 		return personalWordDao.updatePersonalWord(dto);
 		

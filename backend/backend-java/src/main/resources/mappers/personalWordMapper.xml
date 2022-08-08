@@ -60,12 +60,7 @@
 	<update id="updatePersonalWord" parameterType="personalWordDto">
 		UPDATE personal_word
 		SET
-		personal_word_id = #{personalWordId},
-		user_id = #{userId},
-		personal_word = #{personalWord},
-		personal_word_exp = #{personalWordExp},
-		personal_fav_word = #{personalFavWord},
-		personal_word_date = #{personalWordDate}
+		personal_word_exp = #{personalWordExp}
 		WHERE personal_word_id = #{personalWordId}
 	</update>
 </mapper>

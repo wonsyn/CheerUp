@@ -95,11 +95,12 @@ public class CommentController {
 	}
 	
 	@ApiOperation(value="댓글 수정하는 메서드", 
-			  notes="댓글 작성자에게만 수정/삭제 보여주는 기능은 Front와 협의 후 수정 여지 있으면 수정 예정")
+			  notes="commentId와 commentContent만 입력하여 수정 가능")
 	@PutMapping("/update")
 	public ResponseEntity<Map<String, Object>> editComment(@RequestBody CommentDto commentDto){
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
+			System.out.println(commentDto);
 			int result = commentService.editComment(commentDto);
 			if(result == 1) {
 				resultMap.put("message", "success");

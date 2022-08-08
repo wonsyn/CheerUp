@@ -35,11 +35,7 @@ public class CommentServiceImpl implements CommentService{
 	public int editComment(CommentDto commentDto) {
 		System.out.println(commentDto.getCommentId());
 		CommentDto dto = commentDao.selectCommentById(commentDto.getCommentId());
-		dto.setCommentId(commentDto.getCommentId());
-		dto.setFeedId(commentDto.getFeedId());
 		dto.setCommentContent(commentDto.getCommentContent());
-		dto.setId(commentDto.getId());
-		dto.setCommentDate(commentDto.getCommentDate());
 		
 		return commentDao.updateComment(dto);
 	}
