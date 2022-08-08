@@ -6,19 +6,27 @@ const headers = {
 };
 
 async function getMyWordList(userId, success, fail) {
-  api.get(`/word/myword/${userId}`, { headers: headers }).then(success).catch(fail);
+  await api.get(`/word/myword/${userId}`, { headers: headers }).then(success).catch(fail);
 }
 
 async function getDBWordList(success, fail) {
-  api.get(`/word/listtest`, { headers: headers }.then(success).catch(fail));
+  await api.get(`/word/listtest`, { headers: headers }.then(success).catch(fail));
 }
 
 async function updateMyWord(body, success, fail) {
-  api.put(`word/update`, body, { headers: headers }).then(success).catch(fail);
+  await api.put(`word/update`, body, { headers: headers }).then(success).catch(fail);
 }
 
 async function deleteMyWord(wordId, success, fail) {
-  api.delete(`word/delete/${wordId}`, { headers: headers }).then(success).catch(fail);
+  await api.delete(`word/delete/${wordId}`, { headers: headers }).then(success).catch(fail);
 }
 
-export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord };
+async function addFavWord(wordId, success, fail) {
+  await api.put(`word/fav/add/${wordId}`, {}, { headers: headers }).then(success).catch(fail);
+}
+
+async function removeFavWord(wordId, success, fail) {
+  await api.put(`word/fav/cancel/${wordId}`, {}, { headers: headers }).then(success).catch(fail);
+}
+
+export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord };

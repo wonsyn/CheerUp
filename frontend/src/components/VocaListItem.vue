@@ -10,8 +10,8 @@
       <div class="d-flex">
         <div class="me-auto">{{ personalWordDate }}</div>
         <img class="me-2" @click="openWordEditWindow" src="@/assets/edit.png" alt="edit" style="width: 4%; height: 4%" />
-        <img v-if="isFav" class="me-2" src="@/assets/star_filled.png" alt="fav" style="width: 4%; height: 4%" />
-        <img v-else class="me-2" src="@/assets/star_outline.png" alt="fav" style="width: 4%; height: 4%" />
+        <img v-if="isFav" class="me-2" @click="updateFav" src="@/assets/star_filled.png" alt="fav" style="width: 4%; height: 4%" />
+        <img v-else class="me-2" @click="updateFav" src="@/assets/star_outline.png" alt="fav" style="width: 4%; height: 4%" />
         <img src="@/assets/delete.png" @click="deleteWord" alt="delete" style="width: 4%; height: 4%" />
       </div>
     </div>
@@ -59,6 +59,13 @@ export default {
       originalExp: String,
     };
   },
+  created() {
+    if (this.personalFavWord == 0) {
+      this.isFav = false;
+    } else if (this.personalFavWord == 1) {
+      this.isFav = true;
+    }
+  },
   methods: {
     openWordEditWindow() {
       this.originalExp = this.wordExp;
@@ -80,6 +87,15 @@ export default {
         await wordStore.actions.deleteMyWord(this.personalWordId);
         this.isDeleted = true;
         this.$emit("refresh");
+      }
+    },
+    async updateFav() {
+      if (this.isFav) {
+        await wordStore.actions.removeFavWord(this.personalWordId);
+        this.isFav = false;
+      } else {
+        await wordStore.actions.addFavWord(this.personalWordId);
+        this.isFav = true;
       }
     },
   },

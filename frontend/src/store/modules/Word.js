@@ -1,4 +1,4 @@
-import { getMyWordList, updateMyWord, deleteMyWord } from "@/api/Feature/Word";
+import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
@@ -48,6 +48,30 @@ const actions = {
   async deleteMyWord(wordId) {
     await deleteMyWord(
       wordId,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async addFavWord(favWordId) {
+    await addFavWord(
+      favWordId,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async removeFavWord(favWordId) {
+    await removeFavWord(
+      favWordId,
       ({ data }) => {
         console.log(data);
       },
