@@ -8,7 +8,7 @@
     </div>
     <div>컨텐츠 내용</div>
     <hr />
-    <voca-list-item></voca-list-item>
+    <detail-voca-list-item></detail-voca-list-item>
     <div id="voca_add_window" class="px-3 pb-3" style="display: none">
       <input id="voca_name_input" class="px-3 py-1 mb-2" type="text" placeholder="단어명" style="font-size: 14px; width: 100%; border-radius: 7px" /> <br />
       <textarea name="voca_add_textarea" id="voca_add_textarea" class="px-2" placeholder="단어 내용.." style="font-size: 13px; width: 100%; height: 130px; border-radius: 7px"></textarea>
@@ -38,7 +38,7 @@
 
 <script>
 import CommentListItem from "@/components/CommentListItem.vue";
-import VocaListItem from "@/components/VocaListItem.vue";
+import DetailVocaListItem from "@/components/DetailVocaListItem.vue";
 import useStore from "@/store";
 // import FeedList from "@/components/FeedList.vue";
 
@@ -48,7 +48,7 @@ const commentStore = useStore().modules.commentStore;
 export default {
   components: {
     CommentListItem,
-    VocaListItem,
+    DetailVocaListItem,
     // FeedList,
   },
   props: {
