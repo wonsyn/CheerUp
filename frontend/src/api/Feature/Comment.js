@@ -33,14 +33,14 @@ async function deleteComment(commentId, success, fail) {
 
 async function addLike(body, success, fail) {
   await api
-    .post(`/comment/like`, body, { headers: { "access-token": access_token } })
+    .post(`/comment/like`, JSON.stringify(body), { headers: { "access-token": access_token } })
     .then(success)
     .catch(fail);
 }
 
 async function deleteLike(body, success, fail) {
   await api
-    .delete(`/comment/like`, body, { headers: { "access-token": access_token } })
+    .delete(`/comment/like`, { data: body, headers: { "access-token": access_token } })
     .then(success)
     .catch(fail);
 }
