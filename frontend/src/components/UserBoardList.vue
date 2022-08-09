@@ -1,10 +1,13 @@
 <template>
   <div class="container">
-    <h3>보드 리스트</h3>
-    <form @submit.prevent="createBoard">
-      <input type="text" v-model="newBoard.boardName" />
-      <button class="btn btn-outline-primary">보드 생성</button>
-    </form>
+    <div class="d-inline">
+      <h3 class="text-center">보드 리스트</h3>
+      <form class="position-relative" @submit.prevent="createBoard">
+        <input type="text" v-model="newBoardName" />
+        {{ newBoard }}
+        <button type="submit" class="btn btn-outline-primary">보드 생성</button>
+      </form>
+    </div>
 
     <div class="row">
       <div class="col-4" v-for="board in boardList" :key="board.boardId">
@@ -21,33 +24,47 @@ import useStore from "@/store";
 
 const store = useStore();
 const boardStore = store.modules.boardStore;
-const userStore = store.modules.userStore;
 
 export default {
   components: {
     UserBoardListItem,
   },
+  props: {
+    profile: Object,
+  },
   data() {
     return {
-      profile: {},
-      newBoard: {
-        boardName: "",
-        userId: "",
-      },
-      boardList: {},
+      newBoardName: "",
+      userId: "",
+      boardList: [],
+      subBoardList: [],
     };
   },
   methods: {
-    createBoard() {
-      console.log(this.newBoard);
-      boardStore.actions.createBoard(this.newBoard);
+    async createBoard() {
+      if (this.newBoardName) {
+        const params = {
+          userId: this.profile.userId,
+          boardName: this.newBoardName,
+        };
+        await boardStore.actions.createBoard(params);
+        this.getBoardList();
+      }
+      this.boardList = this.subBoardList;
+      this.newBoardName = "";
+    },
+    async getBoardList() {
+      console.log("getboardList method");
+      await boardStore.actions.getBoardList(this.profile.userId);
+      this.boardList = boardStore.getters.boardList();
     },
   },
+  computed: {},
   async created() {
-    const userId = userStore.getters.profile().userId;
-    this.newBoard.userId = userId;
-    await boardStore.actions.getBoardList(userId);
-    this.boardList = boardStore.getters.boardList();
+    console.log("created");
+    await boardStore.actions.getBoardList(this.profile.userId);
+    this.subBoardList = boardStore.getters.boardList();
+    this.boardList = this.subBoardList;
   },
 };
 </script>
