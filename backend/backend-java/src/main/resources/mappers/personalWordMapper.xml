@@ -29,18 +29,22 @@
 		WHERE personal_word_id = #{personalWordId}
 	</delete>
 	
-	<select id="selectPersonalWordList" resultMap="personalWordMap" parameterType="int">
+	<select id="selectPersonalWordList" resultMap="personalWordMap" parameterType="java.util.HashMap">
 		SELECT *
 		FROM personal_word
 		WHERE user_id = #{userId}
+			AND 
+			  personal_word LIKE '%${keyword}%'
 	</select>
 	
-	<select id="selectPersonalFavWordList" resultMap="personalWordMap" parameterType="int">
+	<select id="selectPersonalFavWordList" resultMap="personalWordMap" parameterType="java.util.HashMap">
 		SELECT *
 		FROM personal_word
 		WHERE user_id = #{userId}
 			AND
 			  personal_fav_word = 1
+  			AND 
+			  personal_word LIKE '%${keyword}%'
 	</select>
 	
 	<update id="addPersonalFavWord" parameterType="int">
