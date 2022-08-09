@@ -1,5 +1,6 @@
 package com.web.curation.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.web.curation.model.dto.PersonalWordDto;
@@ -16,10 +17,10 @@ public interface PersonalWordDao {
 	int deletePersonalWord(int personalWordId);
 	
 	// 내 단어장 조회
-	List<PersonalWordDto> selectPersonalWordList(int userId);
+	List<PersonalWordDto> selectPersonalWordList(HashMap params);
 	
 	// 즐겨찾기
-	List<PersonalWordDto> selectPersonalFavWordList(int userId);
+	List<PersonalWordDto> selectPersonalFavWordList(HashMap params);
 //	
 //	// 즐겨찾기 된 단어들만 조회
 //	List<PersonalWordDto> selectPersonalFavWordList(int userId);

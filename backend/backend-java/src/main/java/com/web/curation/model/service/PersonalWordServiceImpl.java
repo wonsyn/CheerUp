@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,13 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	}
 
 	@Override
-	public List<PersonalWordDto> getPersonalWordList(int userId) {
-		return personalWordDao.selectPersonalWordList(userId);
+	public List<PersonalWordDto> getPersonalWordList(HashMap params) {
+		return personalWordDao.selectPersonalWordList(params);
 	}
 
 	@Override
-	public List<PersonalWordDto> getPersonalFavWordList(int userId) {
-		return personalWordDao.selectPersonalFavWordList(userId);
+	public List<PersonalWordDto> getPersonalFavWordList(HashMap params) {
+		return personalWordDao.selectPersonalFavWordList(params);
 	}
 
 	@Override

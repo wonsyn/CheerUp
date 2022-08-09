@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.model.dto.PersonalWordDto;
@@ -94,17 +95,27 @@ public class WordController {
 	}
 	
 	@ApiOperation(value="내 단어장 조회", 
-			  notes="회원 번호로 내가 추가한 단어들 모두 조회")
+			  notes="회원 번호로 내가 추가한 단어들 모두 조회 \n requestParam으로 검색 값 입력 \n ex) /myword/{userId}?keyword={검색값} - 검색값 없으면 기본 GET")
 	@GetMapping("/myword/{userId}")
-	public ResponseEntity<List<PersonalWordDto>> getPersonalWordList(@PathVariable int userId){
-		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalWordList(userId), HttpStatus.OK);
+	public ResponseEntity<List<PersonalWordDto>> getPersonalWordList(@PathVariable int userId, 
+																	 @RequestParam(defaultValue = "") String keyword){
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", Integer.toString(userId));
+		params.put("keyword", keyword);
+		System.out.println(keyword);
+		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalWordList(params), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="단어 즐겨찾기 리스트 조회", 
-			  notes="회원 번호로 내가 추가했던 단어들 중 즐겨찾기 된 단어들 조회")
+			  notes="회원 번호로 내가 추가했던 단어들 중 즐겨찾기 된 단어들 조회 \\n requestParam으로 검색 값 입력 \\n ex) /myword/{userId}?keyword={검색값} - 검색값 없으면 기본 GET")
 	@GetMapping("/myword/fav/{userId}")
-	public ResponseEntity<List<PersonalWordDto>> getPersonalFavWordList(@PathVariable int userId){
-		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalFavWordList(userId), HttpStatus.OK);
+	public ResponseEntity<List<PersonalWordDto>> getPersonalFavWordList(@PathVariable int userId,
+			 															@RequestParam(defaultValue = "") String keyword){
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", Integer.toString(userId));
+		params.put("keyword", keyword);
+		return new ResponseEntity<List<PersonalWordDto>>(personalWordService.getPersonalFavWordList(params), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="단어 즐겨찾기 추가", 
