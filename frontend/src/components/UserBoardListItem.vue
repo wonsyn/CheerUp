@@ -31,6 +31,7 @@ export default {
     return {
       currentUser: sessionStorage.getItem("current_user"),
       scrapsInBoard: {},
+      scrapForThumbnail: {},
       isEdit: false,
       inputForUpdate: "",
     };
@@ -74,15 +75,13 @@ export default {
     console.log(params);
     await scrapStore.actions.getFeedInBoard(params);
     this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
+    if (this.scrapsInBoard) {
+      this.scrapForThumbnail = this.scrapsInBoard.at(-1);
+    }
     console.log(this.board);
     boardStore.mutations.SET_BOARD(this.board);
     this.inputForUpdate = this.board.boardName;
   },
-  // watch: {
-  //   board() {
-  //     return boardStore.getters.board();
-  //   },
-  // },
 };
 </script>
 
