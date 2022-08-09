@@ -16,4 +16,11 @@ async function getFeed(params, success, fail) {
     .catch(fail);
 }
 
-export { getFeed };
+async function getFeedDetail(feedId, success, fail) {
+  await api
+    .get(`/feed/detail/${feedId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+export { getFeed, getFeedDetail };

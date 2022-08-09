@@ -6,14 +6,14 @@
         <div id="word_desc" class="text-break text-start px-3" style="font-size: 12px">단어내용단어내용단어내용단어내용단어내용단어내용단어내용단어내용단어내용</div>
       </div>
       <div id="voca_edit" class="d-none align-middle my-auto me-3">
-        <button id="btn_voca_edit" class="btn me-1" @click="openVocaEditWindow" style="background-color: #eae784; height: 25px; font-size: 10px">수정</button>
+        <button id="btn_voca_edit" class="btn me-1" @click="openVocaEditWindow" style="background-color: #eae784; height: 25px; font-size: 11px">수정 및 추가</button>
       </div>
     </div>
     <div id="voca_edit_window" class="d-none">
       <input id="voca_edit_input" class="px-3 py-1 mb-2" type="text" placeholder="단어명" style="font-size: 14px; width: 100%; border-radius: 7px" /> <br />
       <textarea name="voca_edit_textarea" id="voca_edit_textarea" class="px-2" placeholder="단어 내용.." style="font-size: 13px; width: 100%; height: 130px; border-radius: 7px"></textarea>
       <div class="d-flex justify-content-end">
-        <button id="voca_edit_btn" class="me-2 btn btn-primary" @click="editVoca" style="font-size: 15px; height: 30px">수정</button>
+        <button id="voca_edit_btn" class="me-2 btn btn-primary" @click="editVoca" style="font-size: 15px; height: 30px">수정 및 추가</button>
         <button id="voca_cancel_btn" class="btn btn-danger" @click="closeVocaEditWindow" style="font-size: 15px; height: 30px">취소</button>
       </div>
     </div>
