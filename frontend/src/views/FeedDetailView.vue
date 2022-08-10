@@ -1,13 +1,16 @@
 <template>
-  <div class="container">
+  <div class="container px-4 py-3" style="border-radius: 7px; box-shadow: 0 0 10px 7px lightgray">
     <div class="row">
-      <div class="col-11">기사 제목</div>
-      <div class="col-1">
-        <button class="btn">Scrap</button>
-      </div>
+      <div style="font-size: 30px; font-weight: bold">{{ feedDetail.feedTitle }}</div>
     </div>
-    <div>컨텐츠 내용</div>
+    <div class="d-flex">
+      <div class="me-auto"></div>
+      <button class="btn">Scrap</button>
+    </div>
+    <br />
+    <div v-html="feedDetail.feedContent"></div>
     <hr />
+    <detail-voca-list-item></detail-voca-list-item>
     <detail-voca-list-item></detail-voca-list-item>
     <div id="voca_add_window" class="px-3 pb-3" style="display: none">
       <input id="voca_name_input" class="px-3 py-1 mb-2" type="text" placeholder="단어명" style="font-size: 14px; width: 100%; border-radius: 7px" /> <br />
@@ -16,9 +19,6 @@
         <button id="voca_add_btn" class="me-2 btn btn-primary" @click="addVoca" style="font-size: 15px; height: 30px">추가</button>
         <button id="voca_cancel_btn" class="btn btn-danger" @click="closeVocaAddWindow" style="font-size: 15px; height: 30px">취소</button>
       </div>
-    </div>
-    <div class="d-flex">
-      <button id="vocalist_add_btn" class="btn ms-3 mt-2" @click="openVocaAddWindow" style="font-size: 13px; font-weight: bold; background-color: #00dd99; color: white">내 단어장에 추가</button>
     </div>
     <hr />
     <div class="text-start ps-3" style="font-size: 13px; font-weight: bold">댓글</div>
@@ -44,6 +44,7 @@ import useStore from "@/store";
 
 const userStore = useStore().modules.userStore;
 const commentStore = useStore().modules.commentStore;
+const feedStore = useStore().modules.feedStore;
 
 export default {
   components: {
@@ -59,6 +60,7 @@ export default {
       loginUserId: sessionStorage.getItem("current_user"),
       loginUserInfo: Object,
       commentList: Object,
+      feedDetail: null,
     };
   },
   async created() {
@@ -66,7 +68,11 @@ export default {
     this.loginUserInfo = userStore.getters.profile();
     await commentStore.actions.listComment(this.feedId);
     this.commentList = commentStore.getters.getCommentList();
-    console.log(this.commentList);
+    await feedStore.actions.getFeedDetail(this.feedId);
+    this.feedDetail = feedStore.getters.getFeedDetail();
+    this.feedDetail.feedContent = this.feedDetail.feedContent.substr(1, this.feedDetail.feedContent.length - 2);
+    const contentDiv = document.getElementById("div_content");
+    contentDiv.innerHTML = this.feedDetail.feedContent;
   },
   methods: {
     openVocaAddWindow() {
