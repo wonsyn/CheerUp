@@ -29,6 +29,9 @@ const getters = {
   socket() {
     return state.socket;
   },
+  isLogin() {
+    return state.isLogin;
+  },
 };
 
 const mutations = {
