@@ -162,6 +162,7 @@ public class FeedController {
 	@GetMapping("/scrap/{userId}/{boardId}")
 	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeedEachBoard(@PathVariable int userId, @PathVariable int boardId){
 		System.out.println(userId);
+		System.out.println(userScrapfeedMyfeedService.getMyScrapEachBoard(7, 2));
 		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
 	}
 	
