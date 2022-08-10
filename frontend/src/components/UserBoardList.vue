@@ -66,6 +66,9 @@ export default {
     this.subBoardList = boardStore.getters.boardList();
     this.boardList = this.subBoardList;
   },
+  watch: {
+    $route: "getBoardList",
+  },
 };
 </script>
 

@@ -1,13 +1,12 @@
-import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById } from "@/api/Feature/User.js";
 
 const state = {
   isLogin: false,
-  currentUser: "",
-  token: sessionStorage.getItem("token") || "",
   profile: {},
   followerList: {},
   followingList: {},
   isFollowing: false,
+  userList: [],
 };
 
 const getters = {
@@ -23,20 +22,14 @@ const getters = {
   isFollowing() {
     return state.isFollowing;
   },
-  currentUser() {
-    return state.currentUser;
+  userList() {
+    return state.userList;
   },
 };
 
 const mutations = {
   SET_IS_LOGIN: (isLogin) => {
     state.isLogin = isLogin;
-  },
-  SET_TOKEN: (token) => {
-    state.token = token;
-  },
-  SET_CURRENT_USER: (user) => {
-    state.currentUser = user;
   },
   SET_PROFILE: (user) => {
     state.profile = user;
@@ -49,6 +42,9 @@ const mutations = {
   },
   SET_IS_FOLLOWING: (isFollowing) => {
     state.isFollowing = isFollowing;
+  },
+  SET_USER_LIST: (userList) => {
+    state.userList = userList;
   },
 };
 
@@ -65,7 +61,6 @@ const actions = {
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
           sessionStorage.setItem("current_user", user.id);
-          mutations.SET_CURRENT_USER(user);
         } else {
           mutations.SET_IS_LOGIN(false);
         }
@@ -102,18 +97,22 @@ const actions = {
       },
     );
   },
-  saveToken(token) {
-    localStorage.setItem("token", token);
-    mutations.SET_TOKEN(token);
-  },
-  removeToken() {
-    localStorage.setItem("token", "");
-    mutations.SET_TOKEN("");
-  },
-  fetchCurrentUser() {
-    const currentUser = sessionStorage.getItem("current_user");
-    console.log("current user", currentUser);
-    mutations.SET_CURRENT_USER(currentUser);
+  async searchById(id) {
+    await searchById(
+      id,
+      ({ data }) => {
+        console.log(data);
+        if (data["message"] === "success") {
+          console.log(data);
+          mutations.SET_USER_LIST(data.userList);
+        } else {
+          console.log("search failed");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   },
   async getProfile(id) {
     await getUser(

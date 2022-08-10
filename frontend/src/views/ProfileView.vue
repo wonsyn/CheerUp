@@ -10,7 +10,7 @@
         <div id="username" class="my-3">
           <span class="m-3">{{ profile.nickname }}</span>
           <span>
-            <button @click="isModalViewed = true" class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
+            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
             <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
           </span>
@@ -57,14 +57,11 @@ export default {
   data() {
     return {
       password: "",
-      currentUser: "",
-      username: this.$route.params.username,
       onBoardTab: false,
       profile: {},
       isFollowing: false,
       followers: 0,
       followings: 0,
-      isModalViewed: false,
     };
   },
   methods: {
@@ -94,13 +91,29 @@ export default {
         console.log("failed");
       }
     },
+    async fetchData() {
+      await userStore.actions.getProfile(this.username);
+      this.profile = userStore.getters.profile();
+      console.log(this.profile);
+      await userStore.actions.isFollowing(this.username);
+      this.isFollowing = userStore.getters.isFollowing();
+      await userStore.actions.getFollowerList(this.profile.id);
+      this.followers = userStore.getters.followerList()?.length;
+      await userStore.actions.getFollowingList(this.profile.id);
+      this.followings = userStore.getters.followingList()?.length;
+      this.onBoardTab = false;
+    },
   },
-  computed: {},
+  computed: {
+    username() {
+      return this.$route.params.username;
+    },
+    currentUser() {
+      return sessionStorage.getItem("current_user");
+    },
+  },
   async created() {
     console.log("created");
-    await userStore.actions.fetchCurrentUser();
-    this.currentUser = userStore.getters.currentUser();
-    console.log(this.currentUser);
     await userStore.actions.getProfile(this.username);
     this.profile = userStore.getters.profile();
     console.log(this.profile);
@@ -111,7 +124,9 @@ export default {
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
   },
-  conputed: {},
+  watch: {
+    $route: "fetchData",
+  },
 };
 </script>
 

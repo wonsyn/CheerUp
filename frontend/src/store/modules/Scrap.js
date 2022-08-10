@@ -1,7 +1,7 @@
 import { getFeedInBoard } from "@/api/Feature/Feed";
 
 const state = {
-  scrapsInBoard: {},
+  scrapsInBoard: [],
 };
 
 const getters = {

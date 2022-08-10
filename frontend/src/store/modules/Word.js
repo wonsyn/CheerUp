@@ -1,8 +1,9 @@
-import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList } from "@/api/Feature/Word";
+import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList, getDBWordList, addMyWord } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
   myFavWordList: [],
+  DBWordList: [],
 };
 
 const getters = {
@@ -12,6 +13,9 @@ const getters = {
   getMyFavWordList() {
     return state.myFavWordList;
   },
+  getDBWordList() {
+    return state.DBWordList;
+  },
 };
 
 const mutations = {
@@ -20,6 +24,9 @@ const mutations = {
   },
   SET_MY_FAVWORDLIST(data) {
     state.myFavWordList = data;
+  },
+  SET_DBWORDLIST(data) {
+    state.DBWordList = data;
   },
 };
 
@@ -93,6 +100,36 @@ const actions = {
       userId,
       ({ data }) => {
         mutations.SET_MY_FAVWORDLIST(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async getDBWordList() {
+    await getDBWordList(
+      ({ data }) => {
+        mutations.SET_DBWORDLIST(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+
+  async addMyWord(personalWord, personalWordExp) {
+    const body = {
+      userId: sessionStorage.getItem("current_user_num"),
+      personalWord: personalWord,
+      personalWordExp: personalWordExp,
+      personalFavWord: 0,
+    };
+    console.log(body);
+    await addMyWord(
+      body,
+      ({ data }) => {
+        console.log(data);
       },
       (error) => {
         console.log(error);

@@ -53,6 +53,7 @@ import useStore from "@/store/index.js";
 import router from "@/router";
 
 const store = useStore();
+const wordStore = useStore().modules.wordStore;
 
 export default {
   name: "LoginView",
@@ -84,6 +85,10 @@ export default {
       if (this.checkInfo) {
         await this.login(this.credentials);
         if (store.modules.userStore.state.isLogin) {
+          console.log("api start");
+          await wordStore.actions.getDBWordList();
+          console.log("api end");
+          console.log(wordStore.getters.getDBWordList());
           router.push({ name: "home" });
         } else {
           this.toast("아이디 비밀번호가 올바르지 않습니다.", "로그인 실패", "");
