@@ -19,31 +19,35 @@
             <router-link id="nav-btn-main" class="nav-link" aria-current="page" to="/">메인</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#" @click="outMain">달력</router-link>
+            <router-link class="nav-link" to="/calendar" @click="outMain">달력</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#" @click="outMain">일정</router-link>
+            <router-link class="nav-link" to="/schedule" @click="outMain">일정</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/voca" @click="outMain">단어장</router-link>
           </li>
         </ul>
-        <div id="searchuser" class="nav-item dropdown me-3">
-          <form @submit.prevent="autoFillInput(result[0])" class="dropdown-toggle pe-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-            <input type="text" v-model="userInput" @input="submitAutoComplete" placeholder="유저 이름" />
+        <div id="searchuser" class="nav-item me-3">
+          <form @submit.prevent="autoFillInput()" class="pe-3">
+            <input id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 이름" />
           </form>
-          <ul v-if="!!userInput == true" id="user-search-box" class="dropdown-menu autocomplete disabled">
-            <li class="dropdown-item">결과</li>
-            <li class="dropdown-item" @click="searchUserAdd" style="cursor: pointer" v-for="(res, i) in result" :key="i">
-              <img src="@/assets/logo.png" alt="profile-img" style="height: 20px" />
-              <span>{{ res }}</span>
-            </li>
-          </ul>
+          <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled bg-light">
+            <div class="d-flex justify-content-start" @click="searchUserAdd" style="cursor: pointer" v-for="(user, i) in result" :key="i">
+              <img v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
+              <img v-else src="@/assets/logo.png" v-bind:alt="user.userImgName" style="height: 20px" />
+              <span>{{ user.id }}</span>
+            </div>
+          </div>
         </div>
         <div class="nav-item me-3">
           <notice-tab></notice-tab>
         </div>
-        <div class="nav-item"><router-link class="nav-link" :to="{ name: 'profile', params: { username: 'user1' } }">유저 프로필</router-link></div>
+        <div class="nav-item">
+          <router-link class="nav-link" :to="{ name: 'profile', params: { username: currentUser } }"
+            ><strong>{{ currentUser }}</strong></router-link
+          >
+        </div>
       </div>
     </div>
   </nav>
@@ -52,6 +56,11 @@
 <script>
 // import { mapGetters } from "vuex";
 import NoticeTab from "@/components/NoticeTab.vue";
+import useStore from "@/store";
+import router from "@/router";
+
+const store = useStore();
+const userStore = store.modules.userStore;
 
 export default {
   name: "NavBar",
@@ -60,35 +69,58 @@ export default {
   },
   data() {
     return {
-      users: ["장진세", "장원석", "정제희", "윤원상", "연창모", "BongMyeong-dong", "DeokMyeong-Dong", "CheerUpChUp", "JangDae-Dong", "Ajax", "Algorithm", "Vuejs Vuex", "Java Spring"],
+      users: [],
       userInput: null,
       result: [],
       dayBefore: ["오늘", "어제", /* "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", */ "1주 전" /* "2주 전", "3주 전"*/],
     };
   },
-  computed: {},
+  computed: {
+    currentUser() {
+      return sessionStorage.getItem("current_user");
+    },
+  },
   methods: {
     // ...mapGetters(['isLoggedIn', 'currentUser']),
     // username() {
     //   return this.currentUser.username ? this.currentUser.username : 'guest'
     // },
-    submitAutoComplete() {
+    async submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
+      console.log(autocomplete);
+      await this.searchUserById();
       if (this.userInput) {
+        console.log("search");
         autocomplete.classList.remove("disabled");
-        this.result = this.users.filter((user) => {
-          return user.match(new RegExp("^" + this.userInput, "i"));
-        });
+        // this.result = this.users.filter((user) => {
+        //   return user.match(new RegExp("^" + this.userInput, "i"));
+        // });
+        // this.result = this.users.map((user) => {
+        //   return user.id;
+        // });
+        this.result = this.users.slice(0, 10);
       } else {
         this.result = [];
         autocomplete.classList.add("disabled");
       }
     },
-    searchUserAdd(event) {
+    async searchUserById() {
+      await userStore.actions.searchById(this.userInput);
+      this.users = userStore.getters.userList();
+      console.log(this.users);
+    },
+    async searchUserAdd(event) {
+      const searchInput = document.getElementById("searchinput");
       this.userInput = event.target.innerText;
+      await this.searchUserById();
+      this.result = this.users;
+      searchInput.focus();
     },
     autoFillInput() {
-      this.userInput = this.result[0];
+      this.userInput = this.result[0].id;
+      router.push({ name: "profile", params: { username: this.userInput } });
+      console.log(router);
+      this.userInput = "";
     },
     goMain() {
       const mainBtn = document.getElementById("nav-btn-main");
@@ -97,6 +129,9 @@ export default {
     outMain() {
       const mainBtn = document.getElementById("nav-btn-main");
       mainBtn.classList.remove("active");
+    },
+    replaceImg(e) {
+      e.target.src = require(`@/assets/logo.png`);
     },
   },
 };

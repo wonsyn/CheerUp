@@ -45,5 +45,11 @@ async function getFollowingList(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+async function searchById(params, success, fail) {
+  await api
+    .get(`/user/searchById`, { params: { id: params }, headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
 
-export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList };
+export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById };
