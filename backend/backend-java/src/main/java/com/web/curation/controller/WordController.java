@@ -57,7 +57,7 @@ public class WordController {
 	@ApiOperation(value="내 단어장에 추가", 
 			  notes="기본 단어를 내 단어장에 추가 / 그냥 기본 단어 추가뿐만 아니라 수정 후 추가도 이 메서드 사용")
 	@PostMapping("/create")
-	public ResponseEntity<Map<String, Object>> putWord(PersonalWordDto personalWordDto){
+	public ResponseEntity<Map<String, Object>> putWord(@RequestBody PersonalWordDto personalWordDto){
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			int result = personalWordService.createPersonalWord(personalWordDto);
