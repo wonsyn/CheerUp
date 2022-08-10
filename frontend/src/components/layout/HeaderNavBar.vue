@@ -1,5 +1,5 @@
 <template>
-  <nav id="navbar-frame" class="navbar navbar-expand-lg px-3 mb-5" style="box-shadow: 0px 2px 7px 1px lightgray">
+  <nav v-if="isLogin == true" id="navbar-frame" class="navbar navbar-expand-lg px-3 mb-5" style="box-shadow: 0px 2px 7px 1px lightgray">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/" @click="goMain"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
       <button
@@ -69,22 +69,22 @@ export default {
   },
   data() {
     return {
+      isLogin: false,
       users: [],
       userInput: null,
       result: [],
+      currentUser: sessionStorage.getItem("current_user"),
       dayBefore: ["오늘", "어제", /* "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", */ "1주 전" /* "2주 전", "3주 전"*/],
     };
   },
-  computed: {
-    currentUser() {
-      return sessionStorage.getItem("current_user");
-    },
+  watch: {
+    $route: "fetchCurrentUser",
   },
   methods: {
-    // ...mapGetters(['isLoggedIn', 'currentUser']),
-    // username() {
-    //   return this.currentUser.username ? this.currentUser.username : 'guest'
-    // },
+    fetchCurrentUser() {
+      this.isLogin = userStore.getters.isLogin();
+      this.currentUser = sessionStorage.getItem("current_user");
+    },
     async submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
       console.log(autocomplete);
