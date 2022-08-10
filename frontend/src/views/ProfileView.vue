@@ -30,10 +30,10 @@
         <div></div>
       </div>
       <div v-if="onBoardTab == true">
-        <user-board-list></user-board-list>
+        <user-board-list :profile="profile" :boardList="boardList"></user-board-list>
       </div>
       <div v-else>
-        <user-scrap-list></user-scrap-list>
+        <user-scrap-list :profile="profile"></user-scrap-list>
       </div>
     </div>
   </div>
@@ -95,6 +95,7 @@ export default {
       }
     },
   },
+  computed: {},
   async created() {
     console.log("created");
     await userStore.actions.fetchCurrentUser();
