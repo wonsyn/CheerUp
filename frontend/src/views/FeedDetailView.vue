@@ -10,8 +10,7 @@
     <br />
     <div v-html="feedDetail.feedContent"></div>
     <hr />
-    <detail-voca-list-item></detail-voca-list-item>
-    <detail-voca-list-item></detail-voca-list-item>
+    <detail-voca-list-item v-for="voca in vocaList" :key="voca.wordId" v-bind="voca"></detail-voca-list-item>
     <div id="voca_add_window" class="px-3 pb-3" style="display: none">
       <input id="voca_name_input" class="px-3 py-1 mb-2" type="text" placeholder="단어명" style="font-size: 14px; width: 100%; border-radius: 7px" /> <br />
       <textarea name="voca_add_textarea" id="voca_add_textarea" class="px-2" placeholder="단어 내용.." style="font-size: 13px; width: 100%; height: 130px; border-radius: 7px"></textarea>
@@ -45,6 +44,7 @@ import useStore from "@/store";
 const userStore = useStore().modules.userStore;
 const commentStore = useStore().modules.commentStore;
 const feedStore = useStore().modules.feedStore;
+const wordStore = useStore().modules.wordStore;
 
 export default {
   components: {
@@ -61,6 +61,7 @@ export default {
       loginUserInfo: Object,
       commentList: Object,
       feedDetail: null,
+      vocaList: [],
     };
   },
   async created() {
@@ -71,8 +72,45 @@ export default {
     await feedStore.actions.getFeedDetail(this.feedId);
     this.feedDetail = feedStore.getters.getFeedDetail();
     this.feedDetail.feedContent = this.feedDetail.feedContent.substr(1, this.feedDetail.feedContent.length - 2);
-    const contentDiv = document.getElementById("div_content");
-    contentDiv.innerHTML = this.feedDetail.feedContent;
+    await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
+
+    const dbWordList = wordStore.getters.getDBWordList();
+    // const myWordList = wordStore.getters.getMyWordList();
+    this.vocaList = dbWordList.filter((x) => {
+      return this.feedDetail.feedContent.indexOf(x.word) != -1;
+    });
+    // console.log("myList", myWordList);
+
+    // for (let i = 0; i < this.vocaList.length; i++) {
+    //   for (let j = 0; j < myWordList.length; j++) {
+    //     if (this.vocaList[i].word == myWordList[j].word) {
+    //       this.vocaList[i].wordExp = myWordList[j].wordExp;
+    //       break;
+    //     }
+    //   }
+    // }
+    // console.log(this.vocaList);
+
+    // this.vocaList = this.vocaList.map((x) => {
+    //   for (let i = 0; i < myWordList.length; i++) {
+    //     if (x.word == myWordList[i].word) {
+    //       x.wordExp = myWordList[i].wordExp;
+    //       return x;
+    //     }
+    //   }
+    //   return x;
+    // });
+
+    // console.log(this.vocaList);
+
+    // for (let i = 0; i < dbWordList.length; i++) {
+    //   if (this.feedDetail.feedContent.indexOf(dbWordList[i].word) != -1) {
+    //     for(let j = 0; j < myWordList.length; j++) {
+
+    //       this.vocaList.push(dbWordList[i]);
+    //     }
+    //   }
+    // }
   },
   methods: {
     openVocaAddWindow() {
