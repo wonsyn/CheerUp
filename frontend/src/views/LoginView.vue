@@ -84,6 +84,8 @@ export default {
       if (this.checkInfo) {
         await this.login(this.credentials);
         if (store.modules.userStore.state.isLogin) {
+          store.modules.userStore.actions.connect();
+          console.log("login: " + store.modules.userStore.state.socket);
           router.push({ name: "home" });
         } else {
           this.toast("아이디 비밀번호가 올바르지 않습니다.", "로그인 실패", "");
