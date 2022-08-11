@@ -47,6 +47,7 @@ import router from "@/router";
 
 const store = useStore();
 const userStore = store.modules.userStore;
+const scrapStore = store.modules.scrapStore;
 
 export default {
   name: "ProfileView",
@@ -62,6 +63,7 @@ export default {
       isFollowing: false,
       followers: 0,
       followings: 0,
+      scrapList: [],
     };
   },
   methods: {
@@ -106,6 +108,8 @@ export default {
       await userStore.actions.getFollowingList(this.profile.id);
       this.followings = userStore.getters.followingList()?.length;
       this.onBoardTab = false;
+      await scrapStore.actions.getScrapList(this.profile.id);
+      this.scrapList = scrapStore.getters.scrapList();
     },
   },
   computed: {
@@ -127,7 +131,11 @@ export default {
     this.followers = userStore.getters.followerList()?.length;
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
+
+    await scrapStore.actions.getScrapList(this.profile.id);
+    this.scrapList = scrapStore.getters.scrapList();
   },
+
   watch: {
     $route: "fetchData",
   },

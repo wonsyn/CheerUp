@@ -39,6 +39,13 @@ async function deleteBoard(boardId, success, fail) {
     .then(success)
     .catch(fail);
 }
+
+async function getScrapList(userId, success, fail) {
+  await api
+    .get(`/feed/scrap/${userId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
 async function getFeedInBoard(params, success, fail) {
   await api
     .get(`/feed/scrap/${params.userId}/${params.boardId}`, { headers: { "access-token": access_token } })
@@ -60,4 +67,4 @@ async function recommFeed(feedId, success, fail) {
     .catch(fail);
 }
 
-export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail, recommFeed };
+export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail, recommFeed, getScrapList };
