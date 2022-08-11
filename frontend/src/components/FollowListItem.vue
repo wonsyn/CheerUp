@@ -11,7 +11,7 @@
         <button v-else @click="toggleFollow" class="btn btn-sm btn-danger">팔로우 취소</button>
       </div>
     </div>
-    <hr class="py-0" />
+    <hr class="py-0 my-0" />
   </div>
 </template>
 
