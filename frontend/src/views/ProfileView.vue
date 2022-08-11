@@ -16,7 +16,7 @@
           </span>
         </div>
         <div id="user-follow">
-          <span>팔로우: {{ followings }}</span> / <span>팔로워: {{ followers }}</span>
+          <span @click="goFollowList('followings')">팔로우: {{ followings }}</span> / <span @click="goFollowList('followers')">팔로워: {{ followers }}</span>
         </div>
       </div>
       <div></div>
@@ -65,6 +65,9 @@ export default {
     };
   },
   methods: {
+    goFollowList(param) {
+      router.push({ name: "follow", usename: this.profile.id, params: { param: param } });
+    },
     clickBoardTab() {
       this.onBoardTab = true;
     },
