@@ -53,4 +53,11 @@ async function getFeedDetail(feedId, success, fail) {
     .catch(fail);
 }
 
-export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail };
+async function recommFeed(feedId, success, fail) {
+  await api
+    .get(`/feed/recomm/${feedId}`, { headers: { "access-token": access_token } })
+    .then(success)
+    .catch(fail);
+}
+
+export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail, recommFeed };
