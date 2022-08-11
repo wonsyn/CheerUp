@@ -11,7 +11,7 @@
 
     <div class="row">
       <div class="col-4" v-for="board in boardList" :key="board.boardId">
-        <user-board-list-item :board="board"></user-board-list-item>
+        <user-board-list-item :board="board" @viewBoard="viewBoard"></user-board-list-item>
       </div>
     </div>
   </div>
@@ -41,6 +41,9 @@ export default {
     };
   },
   methods: {
+    viewBoard() {
+      this.$emit("viewBoard");
+    },
     async createBoard() {
       if (this.newBoardName) {
         const params = {

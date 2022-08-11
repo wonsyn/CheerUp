@@ -1,8 +1,8 @@
 <template>
   <div id="board-list-item" class="board-list-item card my-3" style="width: 18rem">
-    <img src="@/assets/logo.png" class="card-img-top" alt="img" />
+    <img @click="goBoardDetail" style="cursor: pointer" src="@/assets/logo.png" class="card-img-top" alt="img" />
     <div class="card-body">
-      <h4 v-if="!isEdit" class="card-text text-start">{{ board.boardName }}</h4>
+      <h4 @click="goBoardDetail" style="cursor: pointer" v-if="!isEdit" class="card-text text-start">{{ board.boardName }}</h4>
       <form v-else @submit.prevent="updateBoard">
         <input class="w-75 my-1" type="text" v-model="inputForUpdate" />
         <button class="btn btn-sm btn-outline-primary mx-1">수정</button>
@@ -40,6 +40,11 @@ export default {
     board: Object,
   },
   methods: {
+    goBoardDetail() {
+      boardStore.actions.fetchBoard(this.board);
+      console.log(boardStore.state.board);
+      this.$emit("viewBoard");
+    },
     cancel() {
       this.isEdit = false;
     },
@@ -79,7 +84,7 @@ export default {
       this.scrapForThumbnail = this.scrapsInBoard.at(-1);
     }
     console.log(this.board);
-    boardStore.mutations.SET_BOARD(this.board);
+    boardStore.actions.fetchBoard(this.board);
     this.inputForUpdate = this.board.boardName;
   },
 };

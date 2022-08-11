@@ -24,13 +24,14 @@
     <div id="user-scrap-and-board">
       <div class="d-flex justify-content-around my-5 py-3 fw-bold" style="box-shadow: 0px 5px 5px 1px lightgray">
         <div></div>
-        <div @click="clickScrapTab">스크랩</div>
+        <div id="scraptab" class="text-center px-5 py-1 fs-5" @click="clickScrapTab">스크랩</div>
         |
-        <div @click="clickBoardTab">보드</div>
+        <div id="boardtab" class="text-center px-5 py-1 fs-5 tabcursor" @click="clickBoardTab">보드</div>
         <div></div>
       </div>
       <div v-if="onBoardTab == true">
-        <user-board-list :profile="profile" :boardList="boardList"></user-board-list>
+        <user-board-list :profile="profile" :boardList="boardList" v-if="viewScrapsInBoard === false" @viewBoard="viewBoard"></user-board-list>
+        <board-scrap-list :board="board" :profile="profile" @goBoardList="goBoardTab" v-else></board-scrap-list>
       </div>
       <div v-else>
         <user-scrap-list :profile="profile"></user-scrap-list>
@@ -42,18 +43,21 @@
 <script>
 import UserBoardList from "@/components/UserBoardList.vue";
 import UserScrapList from "@/components/UserScrapList.vue";
+import BoardScrapList from "@/components/BoardScrapList.vue";
 import useStore from "@/store";
 import router from "@/router";
 
 const store = useStore();
 const userStore = store.modules.userStore;
 const scrapStore = store.modules.scrapStore;
+const boardStore = store.modules.boardStore;
 
 export default {
   name: "ProfileView",
   components: {
     UserBoardList,
     UserScrapList,
+    BoardScrapList,
   },
   data() {
     return {
@@ -64,17 +68,42 @@ export default {
       followers: 0,
       followings: 0,
       scrapList: [],
+      viewScrapsInBoard: false,
+      board: {},
     };
   },
   methods: {
+    viewBoard() {
+      this.board = boardStore.getters.board();
+      console.log(this.board);
+      this.viewScrapsInBoard = true;
+    },
     goFollowList(param) {
       router.push({ name: "follow", usename: this.profile.id, params: { param: param } });
     },
     clickBoardTab() {
+      if (this.onBoardTab === false) {
+        const boardTab = document.getElementById("boardtab");
+        const scrapTab = document.getElementById("scraptab");
+        this.onBoardTab = true;
+        this.viewScrapsInBoard = false;
+        boardTab.classList.remove("tabcursor");
+        scrapTab.classList.add("tabcursor");
+      }
+    },
+    goBoardTab() {
       this.onBoardTab = true;
+      this.viewScrapsInBoard = false;
     },
     clickScrapTab() {
-      this.onBoardTab = false;
+      if (this.onBoardTab === true) {
+        const boardTab = document.getElementById("boardtab");
+        const scrapTab = document.getElementById("scraptab");
+        this.onBoardTab = false;
+        this.viewScrapsInBoard = false;
+        boardTab.classList.add("tabcursor");
+        scrapTab.classList.remove("tabcursor");
+      }
     },
     async follow() {
       await userStore.actions.follow(this.profile.id);
@@ -110,6 +139,7 @@ export default {
       this.onBoardTab = false;
       await scrapStore.actions.getScrapList(this.profile.id);
       this.scrapList = scrapStore.getters.scrapList();
+      this.viewScrapsInBoard = false;
     },
   },
   computed: {
@@ -153,5 +183,9 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.tabcursor {
+  cursor: pointer;
+  color: #a9a9a9;
 }
 </style>
