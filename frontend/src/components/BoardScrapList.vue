@@ -1,0 +1,57 @@
+<template>
+  <div class="container">
+    <div class="d-flex">
+      <button @click="goBack" class="btn btn-secondary mx-3 px-5 my-0">이전으로</button>
+      <h3 class="my-0 align-text-bottom">{{ board.boardName }}</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-4" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
+        <feed-list-item :feed="feed"></feed-list-item>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import FeedListItem from "@/components/FeedListItem";
+import useStore from "@/store";
+// import router from "@/router";
+
+const store = useStore();
+const scrapStore = store.modules.scrapStore;
+
+export default {
+  name: "BoardScrapList",
+  data() {
+    return {
+      scrapList: [],
+    };
+  },
+  components: {
+    FeedListItem,
+  },
+  props: {
+    board: Object,
+    profile: Object,
+  },
+  methods: {
+    goBack() {
+      this.$emit("goBoardList");
+    },
+  },
+  async created() {
+    console.log(this.board);
+    const params = {
+      userId: this.profile.userId,
+      boardId: this.board.boardId,
+    };
+    console.log(params);
+    await scrapStore.actions.getFeedInBoard(params);
+    this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
+  },
+  watch: {},
+};
+</script>
+
+<style scoped></style>
