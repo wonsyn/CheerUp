@@ -30,8 +30,8 @@
       <button @click="addComment" class="btn" style="background-color: #00dd99; color: white; font-weight: bold; width: 7%">작성</button>
     </div>
     <hr />
-    <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">~~~님이 좋아할 만한 기사들</div>
-    <!-- <feed-list></feed-list> -->
+    <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">{{ loginUserId }}님이 좋아할 만한 기사들</div>
+    <feed-list :feedList="recommList" class="mt-3 p-3"></feed-list>
   </div>
 </template>
 
@@ -39,7 +39,6 @@
 import CommentListItem from "@/components/CommentListItem.vue";
 import DetailVocaListItem from "@/components/DetailVocaListItem.vue";
 import useStore from "@/store";
-// import FeedList from "@/components/FeedList.vue";
 
 const userStore = useStore().modules.userStore;
 const commentStore = useStore().modules.commentStore;
@@ -50,7 +49,6 @@ export default {
   components: {
     CommentListItem,
     DetailVocaListItem,
-    // FeedList,
   },
   props: {
     feedId: Number,
@@ -62,9 +60,14 @@ export default {
       commentList: Object,
       feedDetail: null,
       vocaList: [],
+      recommList: [],
+      listKey: 0,
     };
   },
   async created() {
+    await feedStore.actions.recommFeed(this.feedId);
+    this.recommList = feedStore.getters.getRecommList();
+    console.log("this", ...this.recommList);
     await userStore.actions.getProfile(this.loginUserId);
     this.loginUserInfo = userStore.getters.profile();
     await commentStore.actions.listComment(this.feedId);
