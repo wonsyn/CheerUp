@@ -75,6 +75,7 @@ export default {
       await userStore.actions.follow(this.profile.id);
       this.isFollowing = userStore.getters.isFollowing();
       this.followers++;
+      console.log("follow" + store.modules.userStore.state.socket);
     },
     async unfollow() {
       await userStore.actions.unfollow(this.profile.id);

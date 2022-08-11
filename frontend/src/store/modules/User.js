@@ -7,6 +7,7 @@ const state = {
   followingList: {},
   isFollowing: false,
   userList: [],
+  socket: null,
 };
 
 const getters = {
@@ -24,6 +25,12 @@ const getters = {
   },
   userList() {
     return state.userList;
+  },
+  socket() {
+    return state.socket;
+  },
+  isLogin() {
+    return state.isLogin;
   },
 };
 
@@ -46,9 +53,25 @@ const mutations = {
   SET_USER_LIST: (userList) => {
     state.userList = userList;
   },
+  SET_SOCKET: (socket) => {
+    state.socket = socket;
+  },
 };
 
 const actions = {
+  async connect() {
+    // var ws = new SockJS("ws://localhost:8080/cheerup/ws");
+    var ws = new WebSocket("ws://localhost:8080/cheerup/ws");
+    // console.log("here" + ws);
+    mutations.SET_SOCKET(ws);
+    // console.log("here" + state.socket);
+    state.socket.onmessage = function (e) {
+      console.log(e.data);
+    };
+    state.socket.onopen = function () {
+      console.log("socket open");
+    };
+  },
   async login(user) {
     await login(
       user,
