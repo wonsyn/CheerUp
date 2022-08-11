@@ -64,7 +64,7 @@ const routes = [
     component: NotFoundView,
   },
   {
-    path: "/detail",
+    path: "/detail/:feedId",
     name: "detail",
     component: FeedDetailView,
     props: true,
