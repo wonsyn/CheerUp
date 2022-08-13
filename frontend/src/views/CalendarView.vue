@@ -30,17 +30,17 @@
 
 <script>
 import "@fullcalendar/core/vdom"; // solves problem with Vite
-// import * as Popper from "@popperjs/core";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-// import bootstrap from "bootstrap";
+import router from "@/router";
 import Popover from "bootstrap/js/src/popover";
 import useStore from "@/store";
 
 const userStore = useStore().modules.userStore;
 const scrapStore = useStore().modules.scrapStore;
 const boardStore = useStore().modules.boardStore;
+const feedStore = useStore().modules.feedStore;
 
 export default {
   name: "CalendarView",
@@ -71,6 +71,7 @@ export default {
         dayHeaderFormat: {
           weekday: "short",
         },
+        displayEventTime: false,
         eventClick: this.handleEventClick,
         eventMouseEnter: this.handleMouseEnter,
         eventMouseLeave: this.handleMouseLeave,
@@ -89,18 +90,17 @@ export default {
     };
   },
   methods: {
-    handleDateClick: function (arg) {
-      alert("date click! " + arg.dateStr);
-    },
     handleEventClick: function (arg) {
       console.log(arg.event);
-      alert("event click! " + arg);
+      if (confirm("피드 상세 페이지로 이동")) {
+        router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
+      }
     },
     handleMouseEnter: function (arg) {
       const myPopover = new Popover(arg.el, {
         trigger: "hover",
         title: arg.event.title,
-        content: arg.event.extendedProps.type,
+        content: arg.event.extendedProps.content,
         delay: { show: 200, hide: 200 },
         animation: true,
       });
@@ -120,17 +120,33 @@ export default {
       await boardStore.actions.getBoardList(this.profile.userId);
       this.boardList = boardStore.getters.boardList();
     },
-    async searchFeed() {
+    searchFeed() {
       const selectType = document.getElementById("select_feed_type");
       const selectCategory = document.getElementById("select_feed_category");
+      const selectBoard = document.getElementById("select_board");
 
       let type = selectType.options[selectType.selectedIndex].value;
       let category = selectCategory.options[selectCategory.selectedIndex].value;
+      let boardId = selectBoard.options[selectCategory.selectedIndex].value;
 
-      console.log(" " + type + category);
-
-      await scrapStore.actions.getScrapList(this.profile.id);
-      this.feedList = scrapStore.getters.getScrapList();
+      console.log(" " + type + category + boardId);
+      this.eventList = [...this.scrapList];
+      if (type > 0) {
+        this.eventList.filter((scrap) => {
+          scrap.type == type;
+        });
+      }
+      if (category > 0) {
+        this.eventList.filter((scrap) => {
+          scrap.category == category;
+        });
+      }
+      if (boardId > 0) {
+        this.eventList.filter((scrap) => {
+          scrap.boardId == boardId;
+        });
+      }
+      this.calendarOptions.events = this.eventList;
     },
   },
   computed: {
@@ -143,27 +159,33 @@ export default {
   },
   async created() {
     console.log("created");
-    this.eventList = [
-      { title: "dvent13333333333333333333333333333333", date: "2022-08-13", type: "1", backgroundColor: "#000000" },
-      { title: "cvent2", date: "2022-08-13", type: "2", backgroundColor: "#ff0000" },
-      { title: "bvent2", date: "2022-08-13", type: "2" },
-      { title: "avent2", date: "2022-08-13", type: "1" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-      { title: "event2", date: "2022-08-13", type: "2" },
-
-      { title: "event3", date: "2022-08-14", type: "3" },
-    ];
-    this.calendarOptions.events.push(...this.eventList);
     await userStore.actions.getProfile(this.username);
     this.profile = userStore.getters.profile();
     await scrapStore.actions.getScrapList(this.profile.id);
     this.scrapList = scrapStore.getters.scrapList();
+    this.scrapList.map(async function (el) {
+      const eventListElement = el;
+      await feedStore.actions.getFeedDetail(el.feedId);
+      let feed = feedStore.getters.getFeedDetail();
+      const categories = ["전체", "금융", "게임", "보안", "IT 서비스", "모바일"];
+      const category = categories[feed.feedCategory || 0];
+      const type = feed.feedType;
+      eventListElement["title"] = feed.feedTitle;
+      eventListElement["date"] = el.feedDate;
+      if (type == 1) {
+        eventListElement["backgroundColor"] = "#00dd99";
+      } else if (type == 2) {
+        eventListElement["backgroundColor"] = "#5bc0de";
+      } else {
+        eventListElement["backgroundColor"] = "#000000";
+      }
+      eventListElement["content"] = type + "," + (feed.feedSource || "") + ", " + category;
+      eventListElement["imgUrl"] = feed.feedImgUrl;
+      return eventListElement;
+    });
+    this.calendarOptions.events = this.scrapList;
+    // const testEvent = { title: "test1", date: "2022-08-14", content: "1, , 게임", imgUrl: "https://www.naver.com", feedId: 1160 };
+    // this.calendarOptions.events.push(testEvent);
     await boardStore.actions.getBoardList(this.profile.userId);
     this.boardList = boardStore.getters.boardList();
   },
