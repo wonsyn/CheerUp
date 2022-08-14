@@ -54,7 +54,7 @@ export default {
     if (sessionStorage.getItem("access-token") == null) {
       router.push({ name: "login" });
     } else {
-      await feedStore.actions.getFeed(0, 0);
+      await feedStore.actions.getFeed(1, 1);
       this.feedList = feedStore.getters.getFeedList();
     }
   },
@@ -74,3 +74,4 @@ export default {
   },
 };
 </script>
+<style scoped></style>
