@@ -16,7 +16,7 @@ import { Toast } from "bootstrap";
 import useStore from "@/store/index.js";
 
 const userStore = useStore().modules.userStore;
-var getNewSocketMessage = false;
+// var getNewSocketMessage = false;
 export default {
   data() {
     return {

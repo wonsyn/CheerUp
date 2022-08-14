@@ -17,9 +17,9 @@ export default {
   data() {
     return {
       socket: userStore.getters.socket(),
-      socketMessage: (this.socket.onmessage = function (e) {
-        return e.data;
-      }),
+      // socketMessage: (this.socket.onmessage = function (e) {
+      //   return e.data;
+      // }),
     };
   },
   components: {

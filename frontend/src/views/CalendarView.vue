@@ -40,7 +40,6 @@ import useStore from "@/store";
 const userStore = useStore().modules.userStore;
 const scrapStore = useStore().modules.scrapStore;
 const boardStore = useStore().modules.boardStore;
-const feedStore = useStore().modules.feedStore;
 
 export default {
   name: "CalendarView",
@@ -133,12 +132,12 @@ export default {
       this.eventList = [...this.scrapList];
       if (type > 0) {
         this.eventList.filter((scrap) => {
-          scrap.scrapfeeTtype == type;
+          scrap.scrapfeedType == type;
         });
       }
       if (category > 0) {
         this.eventList.filter((scrap) => {
-          scrap.category == category;
+          scrap.feedCategory == category;
         });
       }
       if (boardId > 0) {
@@ -163,27 +162,25 @@ export default {
     this.profile = userStore.getters.profile();
     await scrapStore.actions.getScrapList(this.profile.id);
     this.scrapList = scrapStore.getters.scrapList();
-    this.scrapList.map(async function (el) {
+    this.scrapList.map(function (el) {
       const eventListElement = el;
-      await feedStore.actions.getFeedDetail(el.feedId);
-      let feed = feedStore.getters.getFeedDetail();
       const categories = ["전체", "금융", "게임", "보안", "IT 서비스", "모바일"];
       const types = ["기타", "뉴스", "정보"];
-      const category = categories[feed.feedCategory || 0];
-      const type = feed.feedType;
+      const category = categories[el.feedCategory || 0];
+      const type = el.scrapfeedType;
       const typeName = types[type || 0];
-      eventListElement["title"] = feed.feedTitle;
+      eventListElement["title"] = el.feedTitle;
       eventListElement["date"] = el.feedDate;
       if (type == 1) {
         eventListElement["backgroundColor"] = "#00dd99";
       } else if (type == 2) {
-        eventListElement["backgroundColor"] = "#5bc0de";
+        eventListElement["backgroundColor"] = "#2a00dd";
       } else {
         eventListElement["backgroundColor"] = "#000000";
       }
-      eventListElement["content"] = typeName + "," + (feed.feedSource || "") + ", " + category;
-      eventListElement["imgUrl"] = feed.feedImgUrl;
-      eventListElement["category"] = feed.feedCategory;
+      eventListElement["content"] = typeName + "," + (el.feedSource || "") + ", " + category;
+      eventListElement["imgUrl"] = el.feedImgUrl;
+      eventListElement["category"] = el.feedCategory;
       return eventListElement;
     });
     this.calendarOptions.events = this.scrapList;
