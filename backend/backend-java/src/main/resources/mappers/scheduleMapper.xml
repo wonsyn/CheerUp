@@ -28,7 +28,7 @@
 	<!-- 일정 상세 정보 가져오기 -->
 	<select id="getScheduleDetail" parameterType="int" resultType="scheduleDto">
 		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
-			schedule_date scheduleDate, schedule_memo scheduleMemo, schedule_category scheduleCategory, schedule_status scheduleStatus		
+				schedule_date scheduleDate, schedule_memo scheduleMemo
 		from schedule
 		where schedule_id = #{scheduleId}
 	</select>
@@ -112,7 +112,7 @@
 	</select>
 	
 	<!-- 알람 ID로 유저 id 가져오기 -->
-	<select id="getUserIdByScheduleId" parameterType="int" resultType="scheduleDto">
+	<select id="getUserIdByScheduleId" parameterType="int" resultType="int">
 		select user_id userId 		
 		from schedule
 		where schedule_id = #{scheduleId}
