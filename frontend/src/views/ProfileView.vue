@@ -1,14 +1,14 @@
 <template>
   <div id="profile-view">
-    프로필
+    <h3>프로필</h3>
     <div id="user-profile" class="d-flex justify-content-around">
       <div></div>
       <div id="profile-img" class="box">
-        <img class="profile" :src="profile.userImgUrl" :alt="profile.userImgName" />
+        <img class="profile" :src="imgUrl" :alt="profile.userImgName" />
       </div>
       <div id="user-info" class="my-3">
         <div id="username" class="my-3">
-          <span class="m-3">{{ profile.nickname }}</span>
+          <h4 class="m-3">{{ profile.nickname }}</h4>
           <span>
             <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
             <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
@@ -16,7 +16,8 @@
           </span>
         </div>
         <div id="user-follow">
-          <span @click="goFollowList('followings')">팔로우: {{ followings }}</span> / <span @click="goFollowList('followers')">팔로워: {{ followers }}</span>
+          <span style="cursor: pointer" @click="goFollowList('followings')">팔로우: {{ followings }}</span> /
+          <span style="cursor: pointer" @click="goFollowList('followers')">팔로워: {{ followers }}</span>
         </div>
       </div>
       <div></div>
@@ -70,6 +71,7 @@ export default {
       scrapList: [],
       viewScrapsInBoard: false,
       board: {},
+      imgUrl: null,
     };
   },
   methods: {
@@ -171,6 +173,7 @@ export default {
 
     await scrapStore.actions.getScrapList(this.profile.id);
     this.scrapList = scrapStore.getters.scrapList();
+    this.imgUrl = this.profile.userImgUrl == null ? require("@/assets/blank_profile.png") : require(this.profile.userImgUrl);
   },
 
   watch: {
