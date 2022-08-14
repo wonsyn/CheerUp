@@ -86,8 +86,11 @@ export default {
         await this.login(this.credentials);
         if (store.modules.userStore.state.isLogin) {
           await wordStore.actions.getDBWordList();
+          console.log("api end");
+          console.log(wordStore.getters.getDBWordList());
+          // store.modules.userStore.actions.connect("socket open");
           store.modules.userStore.actions.connect();
-          console.log("login: " + store.modules.userStore.state.socket);
+          console.log("login: " + store.modules.userStore.getters.socket());
           router.push({ name: "home" });
         } else {
           this.toast("아이디 비밀번호가 올바르지 않습니다.", "로그인 실패", "");

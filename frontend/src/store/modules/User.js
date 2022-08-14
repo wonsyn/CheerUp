@@ -8,6 +8,7 @@ const state = {
   isFollowing: false,
   userList: [],
   socket: null,
+  socketMessage: "",
 };
 
 const getters = {
@@ -28,6 +29,9 @@ const getters = {
   },
   socket() {
     return state.socket;
+  },
+  socketMessage() {
+    return state.socketMessage;
   },
   isLogin() {
     return state.isLogin;
@@ -56,20 +60,33 @@ const mutations = {
   SET_SOCKET: (socket) => {
     state.socket = socket;
   },
+  SET_SOCKETMESSAGE: (socketMessage) => {
+    state.socketMessage = socketMessage;
+  },
 };
 
 const actions = {
   async connect() {
-    // var ws = new SockJS("ws://localhost:8080/cheerup/ws");
-    var ws = new WebSocket("ws://localhost:8080/cheerup/ws");
-    // console.log("here" + ws);
+    // console.log(state.profile.id);
+    // console.log("팔로워 리스트: " + state.followerList);
+    // console.log("팔로잉 리스트: " + state.followingList);
+    // console.log(sessionStorage.getItem("current_user"));
+    // var ws = new SockJS("ws://localhost:3000/api/cheerup/ws");
+    var ws = new WebSocket("ws://localhost:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
+    // console.log("here" + ws.getId);
     mutations.SET_SOCKET(ws);
     // console.log("here" + state.socket);
     state.socket.onmessage = function (e) {
-      console.log(e.data);
+      mutations.SET_SOCKETMESSAGE(e.data);
+      console.log("insert data: " + getters.socketMessage());
+      return e.data;
     };
-    state.socket.onopen = function () {
-      console.log("socket open");
+    state.socket.onopen = function (msg) {
+      // console.log("socket open");
+      state.socket.send(msg);
+    };
+    state.socket.onclose = function () {
+      console.log("언제 꺼지냐");
     };
   },
   async login(user) {
