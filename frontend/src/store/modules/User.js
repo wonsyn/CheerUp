@@ -1,7 +1,6 @@
 import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById } from "@/api/Feature/User.js";
 
 const state = {
-  isLogin: false,
   profile: {},
   followerList: {},
   followingList: {},
@@ -33,15 +32,9 @@ const getters = {
   socketMessage() {
     return state.socketMessage;
   },
-  isLogin() {
-    return state.isLogin;
-  },
 };
 
 const mutations = {
-  SET_IS_LOGIN: (isLogin) => {
-    state.isLogin = isLogin;
-  },
   SET_PROFILE: (user) => {
     state.profile = user;
   },
@@ -97,12 +90,11 @@ const actions = {
         if (data["message"] === "success") {
           let access_token = data["access-token"];
           let refresh_token = data["refresh-token"];
-          mutations.SET_IS_LOGIN(true);
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
           sessionStorage.setItem("current_user", user.id);
         } else {
-          mutations.SET_IS_LOGIN(false);
+          console.log("Login Fail");
         }
       },
       (error) => {
@@ -129,7 +121,6 @@ const actions = {
           console.log(user);
         } else {
           console.log("signup failed");
-          mutations.SET_IS_LOGIN(false);
         }
       },
       (error) => {
@@ -253,8 +244,8 @@ const actions = {
     );
   },
   logout() {
-    sessionStorage.removeItem("access_token");
-    sessionStorage.removeItem("refresh-token");
+    sessionStorage.removeItem("access-token");
+    sessionStorage.removeItem("refresh_token");
     sessionStorage.removeItem("current_user");
     sessionStorage.removeItem("current_user_num");
   },
