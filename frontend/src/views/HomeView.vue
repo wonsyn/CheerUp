@@ -55,7 +55,7 @@ export default {
     if (!userStore.state.isLogin) {
       router.push({ name: "login" });
     } else {
-      await feedStore.actions.getFeed(0, 0);
+      await feedStore.actions.getFeed(1, 1);
       this.feedList = feedStore.getters.getFeedList();
     }
   },
@@ -75,3 +75,4 @@ export default {
   },
 };
 </script>
+<style scoped></style>

@@ -41,7 +41,7 @@
 		where user_id = #{userId}
 		and schedule_date between date_format(#{scheduleDate}, '%Y-%m-01') and date_format(last_day(#{scheduleDate}), '%Y-%m-%d')
 	</select>
-	
+	<!-- 2022-08-11 11:46:23 -->
 	<!-- 일정 검색 ( 제목으로 ) -->
 	<select id="getScheduleListByTitle" parameterType="scheduleDto" resultType="scheduleDto">
 		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 

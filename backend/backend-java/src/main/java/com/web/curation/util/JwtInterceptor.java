@@ -71,7 +71,7 @@ public class JwtInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		System.out.println("prehandle");
+//		System.out.println("prehandle");
 //		System.out.println(request.getMethod().equals("OPTIONS"));
 		if (request.getMethod().equals("OPTIONS")) {
             return true;
@@ -87,15 +87,15 @@ public class JwtInterceptor implements HandlerInterceptor{
 		String refreshToken = request.getHeader("refresh-token");
 		
 		
-		System.out.println("access: "+ accessToken);
-		System.out.println("refresh: "+ refreshToken);
+//		System.out.println("access: "+ accessToken);
+//		System.out.println("refresh: "+ refreshToken);
 		
 		String jwt;
 		
 		Jws<Claims> claims = null;
 		
 		if(accessToken != null && refreshToken == null) {
-			System.out.println("기능 수행 요청");
+//			System.out.println("기능 수행 요청");
 
 //			jwt = jwtService.getUserIdByJwt(accessToken);
 //			System.out.println("jwt: "+ jwt);
@@ -107,10 +107,10 @@ public class JwtInterceptor implements HandlerInterceptor{
 							
 				claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(accessToken);
 				
-				System.out.println("claims: "+claims);
+//				System.out.println("claims: "+claims);
 				Map<String, Object> value = claims.getBody();
 				logger.info("value : {}", value);
-				System.out.println("value: "+value);
+//				System.out.println("value: "+value);
 				return true;
 			} catch (Exception e) {
 //				if (logger.isInfoEnabled()) {
@@ -131,7 +131,7 @@ public class JwtInterceptor implements HandlerInterceptor{
 			
 		}
 		else if(accessToken != null && refreshToken != null) {
-			System.out.println("access 갱신");
+//			System.out.println("access 갱신");
 			/*
 			jwt = jwtService.getUserIdByJwt(refreshToken);
 			System.out.println("jwt: "+ jwt);
@@ -197,7 +197,7 @@ public class JwtInterceptor implements HandlerInterceptor{
 					JwtDto newRefreshToken = new JwtDto(token.getTokenId(), userId, ""); 
 					jwtService.updateRefreshToken(newRefreshToken);
 					refreshToken = jwtService.createAccessToken("id", userId, "refresh-token");
-					System.out.println("리프레시 토큰 업데이트: " + newRefreshToken);
+//					System.out.println("리프레시 토큰 업데이트: " + newRefreshToken);
 					logger.debug("로그인 refresh 토큰정보 : {}", newRefreshToken);
 				}
 				// 리프레시 토큰의 유효 기간이 충분하다면
