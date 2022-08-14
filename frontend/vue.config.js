@@ -7,6 +7,10 @@ module.exports = defineConfig({
         target: "https://openapi.naver.com/",
         changeOrigin: true,
       },
+      "/api":{
+        target: "cheerup.kro.kr:3000/",
+        changeOrigin: true,
+      }
     },
   },
 });
