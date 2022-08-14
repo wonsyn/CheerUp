@@ -11,7 +11,7 @@
 
     <div class="row d-flex justify-content-center">
       <div class="col-auto" v-for="board in boardList" :key="board.boardId">
-        <user-board-list-item :board="board" @viewBoard="viewBoard"></user-board-list-item>
+        <user-board-list-item :board="board" :profile="profile" @viewBoard="viewBoard"></user-board-list-item>
       </div>
     </div>
   </div>
