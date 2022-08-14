@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h3>스크랩 리스트</h3>
-    <div class="row">
-      <div class="col-4" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
+    <div class="row d-flex justify-content-center">
+      <div class="col-auto" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
         <feed-list-item :feed="feed"></feed-list-item>
       </div>
     </div>
