@@ -219,7 +219,7 @@ public class FeedController {
 		
 		// 랜덤 3개 담은 list
 		List<FeedDto> recommList = new ArrayList<>();
-		for(int i=0; i<3; i++) {
+ 		for(int i=0; i<3; i++) {
 			recommList.add(list.get(ran[i]));
 		}
 		
