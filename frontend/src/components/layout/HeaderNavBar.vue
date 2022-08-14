@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="isLogin == true" id="navbar-frame" class="navbar navbar-expand-lg px-3 mb-5" style="box-shadow: 0px 2px 7px 1px lightgray">
+  <nav v-if="token != null" id="navbar-frame" class="navbar navbar-expand-lg px-3 mb-5" style="box-shadow: 0px 2px 7px 1px lightgray">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/" @click="goMain"><img src="@/assets/logo.png" alt="home" style="height: 50px" /></router-link>
       <button
@@ -69,12 +69,13 @@ export default {
   },
   data() {
     return {
-      isLogin: false,
+      // isLogin: false,
       users: [],
       userInput: null,
       result: [],
-      currentUser: sessionStorage.getItem("current_user"),
+      currentUser: String,
       dayBefore: ["오늘", "어제", /* "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", */ "1주 전" /* "2주 전", "3주 전"*/],
+      token: String,
     };
   },
   watch: {
@@ -82,7 +83,9 @@ export default {
   },
   methods: {
     fetchCurrentUser() {
-      this.isLogin = userStore.getters.isLogin();
+      // this.isLogin = userStore.getters.isLogin();
+      this.token = sessionStorage.getItem("access-token");
+      console.log("acccccesssss", this.token);
       this.currentUser = sessionStorage.getItem("current_user");
     },
     async submitAutoComplete() {

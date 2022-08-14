@@ -85,10 +85,7 @@ export default {
       if (this.checkInfo) {
         await this.login(this.credentials);
         if (store.modules.userStore.state.isLogin) {
-          console.log("api start");
           await wordStore.actions.getDBWordList();
-          console.log("api end");
-          console.log(wordStore.getters.getDBWordList());
           store.modules.userStore.actions.connect();
           console.log("login: " + store.modules.userStore.state.socket);
           router.push({ name: "home" });
