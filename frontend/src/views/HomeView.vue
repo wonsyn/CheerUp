@@ -19,12 +19,12 @@
           <div class="col text-end me-3">
             <button @click="searchFeed" type="button" class="btn" style="background-color: #00dd99">검색</button>
           </div>
-          <div class="text-start pt-3 align-middle">
+          <!-- <div class="text-start pt-3 align-middle">
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
               <label class="form-check-label" for="flexSwitchCheckDefault">팔로우 한 사람 게시글 보기</label>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <feed-list :feedList="feedList" :key="listKey" class="mt-3 p-3" style="border: 1px black solid; border-radius: 7px"></feed-list>

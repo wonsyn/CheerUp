@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <div class="row">
+      <!-- <div class="col-4" v-for="feed in list" :key="feed.feedId" v-bind="feed">
+        <feed-list-item :feed="feed"></feed-list-item>
+      </div> -->
       <div class="col">
         <feed-list-item v-for="feed in list1" :key="feed.feedId" v-bind="feed"></feed-list-item>
       </div>
@@ -16,10 +19,6 @@
 
 <script>
 import FeedListItem from "@/components/FeedListItem.vue";
-// import useStore from "@/store/index.js";
-// import { throwStatement } from "@babel/types";
-
-// const store = useStore();
 
 export default {
   name: "FeedList",
@@ -34,11 +33,18 @@ export default {
       list1: [],
       list2: [],
       list3: [],
+      list: [],
+      size: 20,
     };
   },
   created() {
     console.log("FeedList.vue created start");
     console.log(this.feedList);
+
+    // for (let i = 0; i < this.size; i++) {
+    //   this.list.push(this.feedList[i]);
+    // }
+
     for (let i = 0; i < this.feedList.length; i++) {
       if (i % 3 == 0) {
         this.list1.push(this.feedList[i]);
@@ -54,6 +60,12 @@ export default {
   watch: {
     feedList() {
       console.log("FeedList.vue watch start");
+
+      // this.list.length = 0;
+      // for (let i = 0; i < this.size; i++) {
+      //   this.list.push(this.feedList[i]);
+      // }
+
       this.list1.length = 0;
       this.list2.length = 0;
       this.list3.length = 0;

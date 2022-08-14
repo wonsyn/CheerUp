@@ -59,7 +59,7 @@
             </form>
           </div>
           <div class="modal-footer d-flex">
-            <button type="button" @click="executeDelete" id="btn_modal_edit_delete" class="btn btn-danger">삭제</button>
+            <button type="button" @click="executeDelete" id="btn_modal_edit_delete" class="btn btn-danger" data-bs-dismiss="modal">삭제</button>
             <div class="me-auto"></div>
             <button type="button" @click="executeUpdate" data-bs-dismiss="modal" id="btn_modal_edit_submit" class="btn btn-primary">수정</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>

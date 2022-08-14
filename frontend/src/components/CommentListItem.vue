@@ -1,7 +1,8 @@
 <template>
   <div :id="'comment_template' + commentId">
     <div :id="'item' + commentId" class="my-2 py-1 d-flex px-3" @mouseover="displayEdit" @mouseout="hideEdit" style="border-radius: 5px; height: 35px">
-      <img class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
+      <img v-if="userImgUrl != null" class="align-self-center" :src="userImgUrl" alt="profile" style="width: 20px; height=20px" />
+      <img v-else class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
       <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
       <div class="ms-2 align-self-center" style="font-size: 13px">{{ content }}</div>
       <div class="pe-3 me-auto d-flex" @click="updateLike">
@@ -57,13 +58,16 @@ export default {
       likeNum: this.countLike,
       like: false,
       socket: userStore.getters.socket(),
+      userImgUrl: String,
     };
   },
   async created() {
     await commentStore.actions.checkLike(this.commentId, sessionStorage.getItem("current_user_num"));
     this.like = commentStore.getters.getLikeState();
-    console.log("created");
     console.log(this.like);
+    await userStore.actions.searchById(this.id);
+    this.userImgUrl = userStore.getters.userList()[0].userImgUrl;
+    console.log(this.userImgUrl);
   },
   methods: {
     updateLike() {
