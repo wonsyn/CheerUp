@@ -86,9 +86,7 @@ export default {
   },
   methods: {
     fetchCurrentUser() {
-      // this.isLogin = userStore.getters.isLogin();
       this.token = sessionStorage.getItem("access-token");
-      console.log("acccccesssss", this.token);
       this.currentUser = sessionStorage.getItem("current_user");
     },
     async submitAutoComplete() {
