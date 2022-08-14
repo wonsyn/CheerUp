@@ -133,7 +133,7 @@ export default {
       this.eventList = [...this.scrapList];
       if (type > 0) {
         this.eventList.filter((scrap) => {
-          scrap.type == type;
+          scrap.scrapfeeTtype == type;
         });
       }
       if (category > 0) {
@@ -168,8 +168,10 @@ export default {
       await feedStore.actions.getFeedDetail(el.feedId);
       let feed = feedStore.getters.getFeedDetail();
       const categories = ["전체", "금융", "게임", "보안", "IT 서비스", "모바일"];
+      const types = ["기타", "뉴스", "정보"];
       const category = categories[feed.feedCategory || 0];
       const type = feed.feedType;
+      const typeName = types[type || 0];
       eventListElement["title"] = feed.feedTitle;
       eventListElement["date"] = el.feedDate;
       if (type == 1) {
@@ -179,8 +181,9 @@ export default {
       } else {
         eventListElement["backgroundColor"] = "#000000";
       }
-      eventListElement["content"] = type + "," + (feed.feedSource || "") + ", " + category;
+      eventListElement["content"] = typeName + "," + (feed.feedSource || "") + ", " + category;
       eventListElement["imgUrl"] = feed.feedImgUrl;
+      eventListElement["category"] = feed.feedCategory;
       return eventListElement;
     });
     this.calendarOptions.events = this.scrapList;
