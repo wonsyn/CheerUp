@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.model.dto.BoardDto;
 import com.web.curation.model.dto.FeedDto;
 import com.web.curation.model.dto.UserScrapfeedMyfeedDto;
+import com.web.curation.model.dto.UserScrapfeedMyfeedJoinDto;
 import com.web.curation.model.service.BoardService;
 import com.web.curation.model.service.FeedService;
 import com.web.curation.model.service.UserScrapfeedMyfeedService;
@@ -153,18 +154,20 @@ public class FeedController {
 	@ApiOperation(value="내가 스크랩 한 피드 보기", 
 			  notes="userId로 내가 스크랩 한 피드 모두 보기")
 	@GetMapping("/scrap/{userId}")
-	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeed(@PathVariable int userId){
-		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrap(userId), HttpStatus.OK);
+	public ResponseEntity<List<UserScrapfeedMyfeedJoinDto>> getMyFeed(@PathVariable int userId){
+		return new ResponseEntity<List<UserScrapfeedMyfeedJoinDto>>(userScrapfeedMyfeedService.getMyScrap(userId), HttpStatus.OK);
 	}
 	
+	// -------------------------
 	@ApiOperation(value="보드 별 내가 스크랩 한 피드 보기", 
 			  notes="userId와 boardId로 내가 스크랩 한 피드 보기")
 	@GetMapping("/scrap/{userId}/{boardId}")
-	public ResponseEntity<List<UserScrapfeedMyfeedDto>> getMyFeedEachBoard(@PathVariable int userId, @PathVariable int boardId){
+	public ResponseEntity<List<UserScrapfeedMyfeedJoinDto>> getMyFeedEachBoard(@PathVariable int userId, @PathVariable int boardId){
 		System.out.println(userId);
 		System.out.println(userScrapfeedMyfeedService.getMyScrapEachBoard(7, 2));
-		return new ResponseEntity<List<UserScrapfeedMyfeedDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
+		return new ResponseEntity<List<UserScrapfeedMyfeedJoinDto>>(userScrapfeedMyfeedService.getMyScrapEachBoard(userId, boardId), HttpStatus.OK);
 	}
+	// -------------------------
 	
 	@ApiOperation(value="피드 타입 및 산업군 별로 조회", 
 			  notes="main 피드의 cheerup/feed/main?type='타입코드'&industry='산업코드' -> 전체 조회 시 parameter 안 줘도 됨")
