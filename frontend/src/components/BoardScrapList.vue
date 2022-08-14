@@ -6,6 +6,7 @@
     </div>
 
     <div class="row d-flex justify-content-center">
+      <h5 v-if="scrapList.length == 0">스크랩이 없습니다.</h5>
       <div class="col-auto" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
         <feed-list-item :feed="feed"></feed-list-item>
       </div>

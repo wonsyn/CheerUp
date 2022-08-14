@@ -10,6 +10,7 @@
     </div>
 
     <div class="row d-flex justify-content-center">
+      <h5 v-if="boardList === undefined || boardList === null || boardList.length === 0">보드가 없습니다.</h5>
       <div class="col-auto" v-for="board in boardList" :key="board.boardId">
         <user-board-list-item :board="board" :profile="profile" @viewBoard="viewBoard"></user-board-list-item>
       </div>

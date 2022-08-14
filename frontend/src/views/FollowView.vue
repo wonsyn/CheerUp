@@ -1,10 +1,16 @@
 <template>
-  <div id="follow" class="mx-auto">
+  <div id="follow" class="mx-auto" style="min-width: 660px">
     <div class="d-flex justify-content-around">
-      <div class="mx-5" style="box-shadow: 0px 5px 5px 1px lightgray">
-        <span style="cursor: pointer" class="px-5" @click="followListTab = 'followings'"> <strong v-if="followListTab === 'followings'">팔로잉</strong><span v-else>팔로잉</span></span>
+      <div class="mx-5 d-flex" style="box-shadow: 0px 5px 5px 1px lightgray; border-radius: 15px">
+        <div style="cursor: pointer" class="px-5" @click="followListTab = 'followings'">
+          <strong v-if="followListTab === 'followings'">팔로잉</strong>
+          <div v-else>팔로잉</div>
+        </div>
         |
-        <span style="cursor: pointer" class="px-5" @click="followListTab = 'followers'"><strong v-if="followListTab === 'followers'">팔로워</strong><span v-else>팔로워</span></span>
+        <div style="cursor: pointer" class="px-5" @click="followListTab = 'followers'">
+          <strong v-if="followListTab === 'followers'">팔로워</strong>
+          <div v-else>팔로워</div>
+        </div>
       </div>
       <div id="searchuser" class="nav-item me-3">
         <form @submit.prevent="autoFillInput()" class="pe-3">
