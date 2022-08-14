@@ -3,7 +3,9 @@
     <div style="color: #00dd99; font-size: 30px; font-weight: bold">내 일정</div>
     <div class="d-flex mb-3">
       <div class="me-auto"></div>
-      <button class="btn" data-bs-toggle="modal" data-bs-target="#scheduleCreateModal" data-bs-title="일정 추가" style="background-color: lightseagreen; color: white">일정 추가하기</button>
+      <button class="btn" @click="createSchedule" data-bs-toggle="modal" data-bs-target="#scheduleCreateModal" data-bs-title="일정 추가" style="background-color: lightseagreen; color: white">
+        일정 추가하기
+      </button>
     </div>
     <table class="table table-bordered table-striped table-hover">
       <thead>
@@ -40,24 +42,26 @@
             <form>
               <div class="mb-3">
                 <label for="schedule-name" class="col-form-label">일정명:</label>
-                <input type="text" class="form-control" id="schedule-edit-name" />
+                <input type="text" v-model="curSchedule.scheduleTitle" class="form-control" id="schedule-edit-name" />
               </div>
               <div class="mb-3">
                 <label for="company-name" class="col-form-label">기업명:</label>
-                <input type="text" class="form-control" id="company-edit-name" />
+                <input type="text" v-model="curSchedule.scheduleCompany" class="form-control" id="company-edit-name" />
               </div>
               <div class="mb-3">
                 <label for="schedule-date" class="col-form-label">날짜:</label>
-                <input type="text" class="form-control" id="schedule-edit-date" />
+                <input type="date" v-model="curSchedule.scheduleDate" class="form-control" id="schedule-edit-date" />
               </div>
               <div class="mb-3">
                 <label for="schedule-memo" class="col-form-label">메모:</label>
-                <textarea class="form-control" id="schedule-edit-memo" style="min-height: 200px"></textarea>
+                <textarea class="form-control" v-model="curSchedule.scheduleMemo" id="schedule-edit-memo" style="min-height: 200px"></textarea>
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" id="btn_modal_edit_submit" class="btn btn-primary">수정</button>
+          <div class="modal-footer d-flex">
+            <button type="button" @click="executeDelete" id="btn_modal_edit_delete" class="btn btn-danger">삭제</button>
+            <div class="me-auto"></div>
+            <button type="button" @click="executeUpdate" data-bs-dismiss="modal" id="btn_modal_edit_submit" class="btn btn-primary">수정</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
           </div>
         </div>
@@ -75,25 +79,25 @@
             <form>
               <div class="mb-3">
                 <label for="schedule-name" class="col-form-label">일정명:</label>
-                <input type="text" class="form-control" id="schedule-name" />
+                <input type="text" class="form-control" id="schedule-create-name" />
               </div>
               <div class="mb-3">
                 <label for="company-name" class="col-form-label">기업명:</label>
-                <input type="text" class="form-control" id="company-name" />
+                <input type="text" class="form-control" id="company-create-name" />
               </div>
               <div class="mb-3">
                 <label for="schedule-date" class="col-form-label">날짜:</label>
-                <input type="text" class="form-control" id="schedule-date" />
+                <input type="date" class="form-control" id="schedule-create-date" />
               </div>
               <div class="mb-3">
                 <label for="schedule-memo" class="col-form-label">메모:</label>
-                <textarea class="form-control" id="schedule-memo" style="min-height: 200px"></textarea>
+                <textarea class="form-control" id="schedule-create-memo" style="min-height: 200px"></textarea>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" id="btn_modal_create_submit" class="btn btn-primary">추가</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" @click="executeCreate" id="btn_modal_create_submit" data-bs-dismiss="modal" class="btn btn-primary">추가</button>
+            <button type="button" class="btn btn-secondary" id="btn_modal_create_close" data-bs-dismiss="modal">취소</button>
           </div>
         </div>
       </div>
@@ -114,6 +118,7 @@ export default {
   data() {
     return {
       scheduleList: [],
+      curSchedule: Object,
     };
   },
   async created() {
@@ -124,7 +129,7 @@ export default {
   methods: {
     updateSchedule(index) {
       const schedule = this.scheduleList[index];
-      console.log(this.scheduleList[index]);
+      this.curSchedule = Object.assign({}, this.scheduleList[index]);
       const modal = document.getElementById("scheduleEditModal");
       modal.addEventListener("show.bs.modal", (event) => {
         // Button that triggered the modal
@@ -146,6 +151,18 @@ export default {
         modalCompany.value = schedule.scheduleCompany;
         modalDate.value = schedule.scheduleDate;
         modalMemo.value = schedule.scheduleMemo;
+
+        // const deleteBtn = modal.querySelector("#btn_modal_edit_delete");
+        // deleteBtn.onclick = this.executeDelete(schedule.scheduleId);
+        // deleteBtn.removeEventListener("click")
+        // deleteBtn.addEventListener("click", () => {
+        //   this.executeDelete(schedule.scheduleId);
+        // });
+        // const updateBtn = modal.querySelector("#btn_modal_edit_submit");
+        // updateBtn.setAttribute("onClick", "this.executeUpdate");
+        // updateBtn.addEventListener("click", () => {
+        //   this.executeUpdate(schedule.scheduleId);
+        // });
       });
     },
     createSchedule() {
@@ -160,10 +177,10 @@ export default {
         //
         // Update the modal's content.
         const modalTitle = modal.querySelector(".modal-title");
-        const modalName = modal.querySelector("#schedule-edit-name");
-        const modalCompany = modal.querySelector("#company-edit-name");
-        const modalDate = modal.querySelector("#schedule-edit-date");
-        const modalMemo = modal.querySelector("#schedule-edit-memo");
+        const modalName = modal.querySelector("#schedule-create-name");
+        const modalCompany = modal.querySelector("#company-create-name");
+        const modalDate = modal.querySelector("#schedule-create-date");
+        const modalMemo = modal.querySelector("#schedule-create-memo");
 
         modalTitle.textContent = `${title}`;
         modalName.value = "";
@@ -171,6 +188,50 @@ export default {
         modalDate.value = "";
         modalMemo.value = "";
       });
+    },
+    async executeCreate() {
+      const modal = document.getElementById("scheduleCreateModal");
+
+      const modalName = modal.querySelector("#schedule-create-name");
+      const modalCompany = modal.querySelector("#company-create-name");
+      const modalDate = modal.querySelector("#schedule-create-date");
+      const modalMemo = modal.querySelector("#schedule-create-memo");
+
+      await scheduleStore.actions.addSchedule(
+        modalName.value,
+        modalCompany.value,
+        modalDate.value,
+        modalMemo.value,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+
+      await scheduleStore.actions.getSchedule();
+      this.scheduleList = scheduleStore.getters.getScheduleList();
+    },
+    async executeUpdate() {
+      const modal = document.getElementById("scheduleEditModal");
+      console.log("update", this.curSchedule.scheduleId);
+      const modalName = modal.querySelector("#schedule-edit-name");
+      const modalCompany = modal.querySelector("#company-edit-name");
+      const modalDate = modal.querySelector("#schedule-edit-date");
+      const modalMemo = modal.querySelector("#schedule-edit-memo");
+
+      await scheduleStore.actions.updateSchedule(this.curSchedule.scheduleId, modalName.value, modalCompany.value, modalDate.value, modalMemo.value);
+
+      await scheduleStore.actions.getSchedule();
+      this.scheduleList = scheduleStore.getters.getScheduleList();
+    },
+    async executeDelete() {
+      console.log(this.curSchedule.scheduleId);
+      await scheduleStore.actions.deleteSchedule(this.curSchedule.scheduleId);
+
+      await scheduleStore.actions.getSchedule();
+      this.scheduleList = scheduleStore.getters.getScheduleList();
     },
   },
 };

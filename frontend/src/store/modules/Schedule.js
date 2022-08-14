@@ -1,4 +1,4 @@
-import { getSchedule } from "@/api/Feature/Schedule.js";
+import { getSchedule, updateSchedule, deleteSchedule, addSchedule } from "@/api/Feature/Schedule.js";
 
 const state = {
   scheduleList: [],
@@ -32,6 +32,53 @@ const actions = {
       ({ data }) => {
         mutations.SET_SCHEDULE_LIST(data.scheduleList);
         console.log(data.scheduleList);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async addSchedule(scheduleTitle, scheduleCompany, scheduleDate, scheduleMemo) {
+    const body = {
+      userId: sessionStorage.getItem("current_user_num"),
+      scheduleTitle: scheduleTitle,
+      scheduleCompany: scheduleCompany,
+      scheduleDate: scheduleDate,
+      scheduleMemo: scheduleMemo,
+    };
+    await addSchedule(
+      body,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async updateSchedule(scheduleId, scheduleTitle, scheduleCompany, scheduleDate, scheduleMemo) {
+    const body = {
+      scheduleId: scheduleId,
+      scheduleTitle: scheduleTitle,
+      scheduleCompany: scheduleCompany,
+      scheduleDate: scheduleDate,
+      scheduleMemo: scheduleMemo,
+    };
+    await updateSchedule(
+      body,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async deleteSchedule(scheduleId) {
+    await deleteSchedule(
+      scheduleId,
+      ({ data }) => {
+        console.log(data);
       },
       (error) => {
         console.log(error);
