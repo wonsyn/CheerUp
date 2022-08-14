@@ -1,7 +1,10 @@
+
+from bs4 import BeautifulSoup
+import pandas as pd
+import requests
 import schedule
 import time
 import requests
-import pandas as pd
 import re
 from konlpy.tag import Okt
 from tqdm import tqdm
@@ -35,11 +38,11 @@ def every12h():
         for i, v in i_dict.items():
             for s in s_words[v -1]:
                 search_word = c + ' ' + i + ' ' + s
-                for start in range(1, 10, 100):
+                for start in range(1, 5, 100):
                     url = f"https://openapi.naver.com/v1/search/news.{encode_type}?query={search_word}&display={str(int(max_display))}&start={str(int(start))}&sort={sort}"
 
                     r = requests.get(url, headers=headers)
-                    #요청 결과 : 200 (정상)
+                    # 요청 결과 : 200 (정상)
                     print(r)
                     print(r.json())
 
@@ -62,9 +65,9 @@ def every12h():
                     #     continue
 
                     # 파일 이름
-                    df.to_csv(f'schedule_test2.csv', encoding='utf-8-sig', mode='a', index=False)
+                    df.to_csv(f'schedule_test3.csv', encoding='utf-8-sig', mode='a', index=False)
                     
-    df = pd.read_csv("./schedule_test2.csv")
+    df = pd.read_csv("./schedule_test3.csv")
 
     okt = Okt() 
     kwords_list = []
@@ -79,7 +82,7 @@ def every12h():
     drop_index_list = []
     for i, row in df.iterrows():
         temp_kwords = row['kwords']
-        if len(temp_kwords) == 0: # 만약 명사리스트가 비어 있다면
+        if len(temp_kwords) == 0:
             drop_index_list.append(i) # 지울 index 추가
             
     df = df.drop(drop_index_list) 
@@ -106,32 +109,43 @@ def every12h():
     df['result'] = result
     # df.head()
 
-
-    def df_cleansing(x):
-        x = re.sub("\&\w*\;","",x)
-        x = re.sub("<.*?>","",x)
-        return x
-
-    df['title'] = df['title'].apply(lambda x: df_cleansing(x))
-    df['description'] = df['description'].apply(lambda x: df_cleansing(x))
-
     # print(df.head)
     # print('중복기사 수: ', df['result'].max(), '노이즈기사 수:', len(df[df['result'] == -1]), '클러스터 1 기사 개수:', len(df[df['result'] == 1]))
 
     # c3_df = df[df['result'] == 3]
 
     df = df[df['link'].str.contains('https://n.news.naver.com/')]
-    df.drop_duplicates(subset=['result'], keep='first')
+    # if df['result'].apply(lambda x, re:x > re, re = 0):
+    df.drop_duplicates(['result'], keep='first')
+    
 
-    # 인덱스 재정렬
-    df = df.reset_index(drop=True)
     # print('중복기사 수: ', df['result'].max(), '노이즈기사 수:', len(df[df['result'] == -1]), '클러스터 3 기사 개수:', len(df[df['result'] == 3]))
     # print(df.head)
 
-    df.to_csv(f'schedule_test_redsult2.csv', encoding='utf-8-sig', index=False)
+    
+    # 크롤링 : url 수정 필요
+    # df = pd.read_csv('./c_test.csv')
+    # urls = list(df['link'])
+    url = 'https://n.news.naver.com/mnews/article/009/0004995624?sid=105'
+
+    header = {
+        'user-agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'}
+
+    r = requests.get(url, headers=header).text
+    html = BeautifulSoup(r, 'lxml')
+
+    content = html.select_one('div#dic_area').text.strip()
+    img = html.select_one('#img1')['data-src']
+
+    df['content'] = content
+    df['img'] = img
+    
+    df.to_csv(f'schedule_test_result3.csv', encoding='utf-8-sig', index=False)
+    print("done")
 
 # 실행코드
-schedule.every().day.at("12:00").do(every12h)
+schedule.every().day.at("11:23").do(every12h)
 while True:
     schedule.run_pending()
     time.sleep(1)

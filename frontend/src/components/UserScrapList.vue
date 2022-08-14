@@ -2,14 +2,8 @@
   <div class="container">
     <h3>스크랩 리스트</h3>
     <div class="row">
-      <div class="col">
-        <feed-list-item></feed-list-item>
-      </div>
-      <div class="col">
-        <feed-list-item></feed-list-item>
-      </div>
-      <div class="col">
-        <feed-list-item></feed-list-item>
+      <div class="col-4" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
+        <feed-list-item :feed="feed"></feed-list-item>
       </div>
     </div>
   </div>
@@ -23,6 +17,13 @@ export default {
   components: {
     FeedListItem,
   },
+  props: {
+    scrapList: Array,
+  },
+  created() {
+    console.log("UserScrapList.vue created start");
+  },
+  watch: {},
 };
 </script>
 

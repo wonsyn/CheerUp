@@ -34,7 +34,7 @@ const routes = [
     component: CalendarView,
   },
   {
-    path: "/follow",
+    path: "/follow/:username",
     name: "follow",
     component: FollowView,
   },

@@ -38,7 +38,6 @@ import useStore from "@/store/index.js";
 import router from "@/router";
 
 const feedStore = useStore().modules.feedStore;
-const userStore = useStore().modules.userStore;
 
 export default {
   name: "HomeView",
@@ -52,7 +51,7 @@ export default {
     };
   },
   async created() {
-    if (!userStore.state.isLogin) {
+    if (sessionStorage.getItem("access-token") == null) {
       router.push({ name: "login" });
     } else {
       await feedStore.actions.getFeed(1, 1);

@@ -59,16 +59,6 @@ const actions = {
       },
     );
   },
-  getBoard(boardId) {
-    for (let board in state.boardList) {
-      if (board.boardId === boardId) {
-        mutations.SET_BOARD(board);
-        break;
-      } else {
-        console.log(boardId, "not found");
-      }
-    }
-  },
   async updateBoard(params) {
     await updateBoard(
       params,
@@ -104,6 +94,9 @@ const actions = {
         },
       );
     }
+  },
+  fetchBoard(board) {
+    mutations.SET_BOARD(board);
   },
 };
 

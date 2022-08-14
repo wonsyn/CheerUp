@@ -85,7 +85,6 @@ export default {
       if (this.checkInfo) {
         await this.login(this.credentials);
         if (store.modules.userStore.state.isLogin) {
-          console.log("api start");
           await wordStore.actions.getDBWordList();
           console.log("api end");
           console.log(wordStore.getters.getDBWordList());

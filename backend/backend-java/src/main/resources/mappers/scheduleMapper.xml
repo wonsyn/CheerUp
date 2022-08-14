@@ -7,15 +7,15 @@
 	<!-- 일정 생성 하기 -->
 	<insert id="createSchedule" parameterType="scheduleDto">
 		insert into schedule (user_id, schedule_title, schedule_company, schedule_date,
-							 schedule_memo, schedule_category, schedule_status) 
-		values (#{userId}, #{scheduleTitle}, #{scheduleCompany}, now(), #{scheduleMemo}, #{scheduleCategory}, #{scheduleStatus})
+							 schedule_memo) 
+		values (#{userId}, #{scheduleTitle}, #{scheduleCompany}, #{scheduleDate}, #{scheduleMemo})
 	</insert>
 	
 	<!-- 일정 수정 -->
 	<update id="updateSchedule" parameterType="scheduleDto">
 		update schedule
 		set schedule_title = #{scheduleTitle} , schedule_company = #{scheduleCompany}, schedule_date = #{scheduleDate}, 
-			schedule_memo = #{scheduleMemo}, schedule_category = #{scheduleCategory}, schedule_status = #{scheduleStatus}
+			schedule_memo = #{scheduleMemo}
 		where schedule_id = #{scheduleId}
 	</update>
 
@@ -35,11 +35,12 @@
 	
 	<!-- 나의 이번 달 일정 리스트 가져오기 -->
 	<select id="getScheduleList" parameterType="scheduleDto" resultType="scheduleDto">
-		select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
-			schedule_date scheduleDate, schedule_memo scheduleMemo, schedule_category scheduleCategory, schedule_status scheduleStatus		
-		from schedule
-		where user_id = #{userId}
-		and schedule_date between date_format(#{scheduleDate}, '%Y-%m-01') and date_format(last_day(#{scheduleDate}), '%Y-%m-%d')
+			select schedule_id scheduleId, user_id userId, schedule_title scheduleTitle, schedule_company scheduleCompany, 
+				schedule_date scheduleDate, schedule_memo scheduleMemo	
+			from schedule
+			where user_id = #{userId}
+			and schedule_date between date_format(#{scheduleDate}, '%Y-%m-01') and date_format(last_day(#{scheduleDate}), '%Y-%m-%d')
+			order by scheduleDate
 	</select>
 	<!-- 2022-08-11 11:46:23 -->
 	<!-- 일정 검색 ( 제목으로 ) -->
