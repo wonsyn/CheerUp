@@ -43,10 +43,13 @@
         <div class="nav-item me-3">
           <notice-tab></notice-tab>
         </div>
-        <div class="nav-item">
+        <div class="nav-item me-3">
           <router-link class="nav-link" :to="{ name: 'profile', params: { username: currentUser } }"
             ><strong>{{ currentUser }}</strong></router-link
           >
+        </div>
+        <div class="nav-item">
+          <router-link class="nav-link" :to="{ name: 'login' }" @click="logout">로그아웃</router-link>
         </div>
       </div>
     </div>
@@ -135,6 +138,10 @@ export default {
     },
     replaceImg(e) {
       e.target.src = require(`@/assets/logo.png`);
+    },
+    logout() {
+      this.token = null;
+      userStore.actions.logout();
     },
   },
 };

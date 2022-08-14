@@ -235,6 +235,12 @@ const actions = {
       },
     );
   },
+  logout() {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("refresh-token");
+    sessionStorage.removeItem("current_user");
+    sessionStorage.removeItem("current_user_num");
+  },
 };
 
 export default {
