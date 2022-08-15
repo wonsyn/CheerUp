@@ -50,7 +50,9 @@ public class CommentController {
 //        )
 	@GetMapping("/read/{feedId}")
 	public ResponseEntity<List<CommentDto>> readCommentByFeedId(@PathVariable int feedId){
+		System.out.println("댓글 컨트롤러 피드 id: "+feedId);
 		System.out.println(commentService.readCommentByFeedId(feedId));
+		for(CommentDto cur : commentService.readCommentByFeedId(feedId)) System.out.println(cur);
 		return new ResponseEntity<List<CommentDto>>(commentService.readCommentByFeedId(feedId), HttpStatus.OK);
 	}
 	

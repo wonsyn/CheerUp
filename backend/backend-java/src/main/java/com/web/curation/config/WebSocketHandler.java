@@ -30,51 +30,31 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {//클라이언트와 서버가 연결
-		// TODO Auto-generated method stub
 		logger.info("Socket 연결");
 		String loginUserId = session.getUri().toString().split("id=")[1];
-//		System.out.println("session: "+session);
-//		System.out.println("afterConnectionEstablished" + session.getUri().toString().split("id=")[1]);
 		sessions.add(session);
 		logger.info(currentUserName(session));//현재 접속한 사람
-//		System.out.println(currentUserName(session));
-//		System.out.println("세션 아이디: " +session.getId());
 		String senderId = currentUserName(session);
 		userSessionsMap.put(loginUserId,session);
-		
-//		System.out.println("here: "+userSessionsMap);
 	}
 	
 	private String currentUserName(WebSocketSession session) {
 		Map<String, Object> httpSession = session.getAttributes();
-//		System.out.println("session: "+session);
-//		System.out.println("httpsession: "+httpSession);
-//		System.out.println("httpSession: "+httpSession.get("login"));
-//		System.out.println("httpSession: " + session.);
-//		MemberVO loginUser = (MemberVO)httpSession.get("login");
 		UserDto loginUser = (UserDto)httpSession.get("id");
-//		System.out.println("loginUser: "+loginUser);
 		if(loginUser == null) {
 			String mid = session.getId();
-//			System.out.println("mid: "+mid);
 			return mid;
 		}
 		String mid = loginUser.getId();
-//		System.out.println("mid: "+mid);
 		return mid;
-		
 	}
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {// 메시지
-		// TODO Auto-generated method stub
-//		System.out.println("session: "+session);
-//		System.out.println("message: "+message);
 		logger.info("ssesion"+currentUserName(session));
 		String msg = message.getPayload();//자바스크립트에서 넘어온 Msg
 		logger.info("msg="+msg);
-		System.out.println("##########################");
-//		if (!StringUtils.isEmpty(msg)) {
+		
 		if (!msg.isBlank()) {
 			logger.info("if문 들어옴?");
 			String[] strs = msg.split(",");
@@ -96,19 +76,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				WebSocketSession boardWriterSession = userSessionsMap.get(boardWriter);
 				logger.info("boardWriterSession="+userSessionsMap.get(boardWriter));
 				logger.info("boardWirterSession"+boardWriterSession);
-				System.out.println("replyWriterSession: "+replyWriterSession);
-				System.out.println("boardWriterSession: "+boardWriterSession);
-				
 				
 				// 팔로우
 				if("follow".equals(cmd) && boardWriterSession != null) {
-					System.out.println("follow if문");
-					for(String s : strs) System.out.print(s+"\t");
+//					for(String s : strs) System.out.print(s+"\t");
+					System.out.println("follow");
 					//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 글을 DEV했습니다!</a>");
-					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 당신을 팔로우하였습니다."		
+					TextMessage tmpMsg = new TextMessage("a"+replyWriter + " 님이 당신을 팔로우하였습니다."		
 //							+ "<a href='/http://localhost:8080/cheerup/user/detail/"+replyWriter +"'");  
 							+ "<a href='/profile/"+replyWriter +"'");  
 					
@@ -120,7 +97,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 					//스크랩
 					if("scrap".equals(cmd) && boardWriterSession != null) {
 						//replyWriter = 스크랩누른사람 , boardWriter = 게시글작성자
-						TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
+						TextMessage tmpMsg = new TextMessage("b"+replyWriter + "님이 "
 								+ "<a href='/http://localhost:8080/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
 								+ title+"</strong> 을 스크랩했습니다!</a>");
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
@@ -134,9 +111,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
 					else if("comment_like".equals(cmd) && boardWriterSession != null) {
 						//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
 						System.out.println("*************");
-						TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
+						TextMessage tmpMsg = new TextMessage("c"+replyWriter + "님이 "
 								+ "<a href='/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
-								+ title+"</strong> 에 작성한" + content + " 댓글을 좋아요했습니다!</a>");
+								+ title+"</strong> 에 작성한 " + content + " 댓글을 좋아요했습니다!</a>");
 						
 //						<a href="/detail/7" style="color: black"><strong>김부겸 삼성 3년간 총 7만개 청년 일자리창출 기여</strong> 에 작성한 댓글을 좋아요했습니다!</a>
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "

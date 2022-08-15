@@ -5,7 +5,7 @@
 <mapper namespace="com.web.curation.model.dao.CommentDao">
 	<resultMap type="CommentDto" id="commentMap">
       <id column="comment_id" property="commentId"/>
-      <result column="comment_url" property="commentUrl"/>
+      <result column="feed_id" property="feedId"/>
       <result column="comment_content" property="commentContent"/>
       <result column="id" property="id"/>
       <result column="comment_date" property="commentDate"/>

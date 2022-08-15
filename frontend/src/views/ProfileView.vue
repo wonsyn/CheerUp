@@ -71,6 +71,7 @@ export default {
       scrapList: [],
       viewScrapsInBoard: false,
       board: {},
+      socket: userStore.getters.socket(),
       imgUrl: null,
     };
   },
@@ -115,10 +116,9 @@ export default {
       console.log("profile_id: " + this.profile.id);
       console.log("세션 아이디: " + sessionStorage.getItem("current_user"));
       // 소켓 발생 종류, 보내는 사람, 받는 사람, 피드 번호, 피드 제목
-      let socketMsg = "follow," + sessionStorage.getItem("current_user") + "," + this.profile.id + ",0";
-      console.log(socketMsg);
-      store.modules.userStore.actions.connect(socketMsg);
-      // store.modules.userStore.state.socket.send(socketMsg);
+      let socketMsg = "follow," + sessionStorage.getItem("current_user") + "," + this.profile.id + ",0,0";
+      // store.modules.userStore.actions.connect();
+      this.socket.onopen(socketMsg);
     },
     async unfollow() {
       await userStore.actions.unfollow(this.profile.id);

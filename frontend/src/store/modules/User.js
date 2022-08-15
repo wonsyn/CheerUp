@@ -1,4 +1,5 @@
 import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById } from "@/api/Feature/User.js";
+import main from "../../App.vue";
 
 const state = {
   profile: {},
@@ -71,11 +72,14 @@ const actions = {
     // console.log("here" + state.socket);
     state.socket.onmessage = function (e) {
       mutations.SET_SOCKETMESSAGE(e.data);
-      console.log("insert data: " + getters.socketMessage());
-      return e.data;
+      console.log("user.js: " + getters.socketMessage());
+      console.log(main.methods.getSocketMessage());
+      // if(getters.socketMessage().charAt(0) === 'a') console.log(main.methods.getSocketMessage());
+      // else if(getters.socketMessage().charAt(0) === 'b') console.log(main.methods.getSocketMessage());
+      // else if(getters.socketMessage().charAt(0) === 'c') console.log(main.methods.getSocketMessage());
     };
     state.socket.onopen = function (msg) {
-      // console.log("socket open");
+      console.log("socket open", msg);
       state.socket.send(msg);
     };
     state.socket.onclose = function () {
