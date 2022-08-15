@@ -7,10 +7,10 @@
         <input class="w-75 my-1" type="text" v-model="inputForUpdate" />
         <button class="btn btn-sm btn-outline-primary mx-1">수정</button>
       </form>
-      <div class="card-footer d-flex justify-content-end">
+      <div v-if="currentUser == profile.id" class="card-footer d-flex justify-content-end">
         <button v-if="!isEdit" @click="isEdit = true" class="btn btn-sm btn-outline-primary mx-1">수정</button>
-        <button v-else @click="cancel" class="btn btn-sm btn-outline-primary mx-1">취소</button>
-        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-outline-secondary">삭제</button>
+        <button v-else @click="cancel" class="btn btn-sm btn-outline-danger mx-1">취소</button>
+        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-outline-danger">삭제</button>
       </div>
     </div>
   </div>
@@ -38,6 +38,7 @@ export default {
   },
   props: {
     board: Object,
+    profile: Object,
   },
   methods: {
     goBoardDetail() {
@@ -50,26 +51,30 @@ export default {
     },
     async updateBoard() {
       console.log("update");
-      const params = {
-        userId: this.board.userId,
-        boardId: this.board.boardId,
-        boardName: this.inputForUpdate,
-      };
-      await boardStore.actions.updateBoard(params);
-      const isSuccess = boardStore.getters.isSuccess();
-      this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
-      if (isSuccess) {
-        console.log(isSuccess);
-        this.$parent.getBoardList();
-        this.isEdit = false;
-      } else {
-        console.log("변경 실패!");
+      if (this.currentUser == this.profile.id) {
+        const params = {
+          userId: this.board.userId,
+          boardId: this.board.boardId,
+          boardName: this.inputForUpdate,
+        };
+        await boardStore.actions.updateBoard(params);
+        const isSuccess = boardStore.getters.isSuccess();
+        this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
+        if (isSuccess) {
+          console.log(isSuccess);
+          this.$parent.getBoardList();
+          this.isEdit = false;
+        } else {
+          console.log("변경 실패!");
+        }
       }
     },
     async deleteBoard() {
       console.log("delete");
-      await boardStore.actions.deleteBoard(this.board.boardId);
-      this.$parent.getBoardList();
+      if (this.currentUser == this.profile.id) {
+        await boardStore.actions.deleteBoard(this.board.boardId);
+        this.$parent.getBoardList();
+      }
     },
   },
   async created() {

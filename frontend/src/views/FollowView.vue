@@ -1,10 +1,18 @@
 <template>
-  <div id="follow" class="mx-auto">
+  <div id="follow" class="mx-auto" style="min-width: 660px">
     <div class="d-flex justify-content-around">
-      <div class="mx-5" style="box-shadow: 0px 5px 5px 1px lightgray">
-        <span style="cursor: pointer" class="px-5" @click="followListTab = 'followings'"> <strong v-if="followListTab === 'followings'">팔로잉</strong><span v-else>팔로잉</span></span>
-        |
-        <span style="cursor: pointer" class="px-5" @click="followListTab = 'followers'"><strong v-if="followListTab === 'followers'">팔로워</strong><span v-else>팔로워</span></span>
+      <div class="mx-5 d-flex btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input @click="followListTab = 'followings'" type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked />
+        <label class="btn btn-outline-primary" for="btnradio1">
+          <strong v-if="followListTab === 'followings'">팔로잉</strong>
+          <div v-else>팔로잉</div></label
+        >
+
+        <input @click="followListTab = 'followers'" type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" />
+        <label class="btn btn-outline-primary" for="btnradio2">
+          <strong v-if="followListTab === 'followers'">팔로워</strong>
+          <div v-else>팔로워</div></label
+        >
       </div>
       <div id="searchuser" class="nav-item me-3">
         <form @submit.prevent="autoFillInput()" class="pe-3">
@@ -12,8 +20,8 @@
         </form>
         <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled bg-light">
           <div class="d-flex justify-content-start" @click="searchUserAdd" style="cursor: pointer" v-for="(user, i) in result" :key="i">
-            <img v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
-            <img v-else src="@/assets/logo.png" v-bind:alt="user.userImgName" style="height: 20px" />
+            <img class="profile-icon" v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
+            <img class="profile-icon" v-else src="@/assets/blank_profile.png" v-bind:alt="user.userImgName" style="height: 20px" />
             <span>{{ user.nickname }}({{ user.id }})</span>
           </div>
         </div>
@@ -71,12 +79,25 @@ export default {
         autocomplete.classList.remove("disabled");
         this.result = this.followList
           .filter((user) => {
-            const matchId = user.id.match(new RegExp("^" + this.userInput, "i"));
-            const matchNickname = user.nickname.match(new RegExp("^" + this.userInput, "i"));
+            const matchId = user?.id.match(new RegExp("^" + this.userInput, "i"));
+            const matchNickname = user?.nickname.match(new RegExp("^" + this.userInput, "i"));
             if (matchId) {
               return matchId;
             }
             return matchNickname;
+          })
+          .sort(function (a, b) {
+            var nameA = a.id.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.id.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            // 이름이 같을 경우
+            return 0;
           })
           .slice(0, 10);
       } else {
@@ -138,5 +159,11 @@ input[type="text"] {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
+}
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
 }
 </style>
