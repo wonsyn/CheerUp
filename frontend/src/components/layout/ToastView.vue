@@ -1,4 +1,4 @@
-<template v-if="getNewSocketMessage === true">
+<template>
   <div class="toast-container p-5 bottom-0 end-0">
     <div id="toast-template" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
@@ -16,54 +16,18 @@ import { Toast } from "bootstrap";
 import useStore from "@/store/index.js";
 
 const userStore = useStore().modules.userStore;
-var getNewSocketMessage = false;
 export default {
+  name: "ToastView",
   data() {
     return {
       socket: userStore.getters.socket(),
-      socketMessage: (this.socket.onmessage = function (e) {
-        return e.data;
-      }),
+      socketMessage: "",
     };
   },
-  created() {
-    // setInterval(() => {
-    //   // this.getSocketMessage();
-    //   console.log("timeout", this.socketMessage);
-    // }, 3000);
-    // this.getSocketMessage();
-  },
-  computed: {
-    // socketMessage() {
-    //   console.log("#####computed####", userStore.getters.socketMessage());
-    //   return userStore.getters.socketMessage();
-    // },
-    getSocketMessage() {
-      console.log("###computed####", this.socketMessage);
-      if (userStore.getters.socketMessage() === null) return null;
-      return this.getSocketMessage2();
-      // return this.socketMessage;
-      // return this.toast("1", "2", "3");
-      // return userStore.getters.socketMessage();
-      // return userStore.getters.socketMessage;
-      // return this.socket === null ? null : this.socket.onmessage();
-    },
-  },
-  watch: {
-    // socketMessage: function () {
-    //   console.log("###watch####", this.socketMessage);
-    //   this.toast("1", "2", "3");
-    // },
-    getSocketMessage(val) {
-      console.log("##watch##", val);
-      console.log("###watch####", this.socketMessage);
-      this.toast("1", "2", "3");
-    },
-  },
   methods: {
-    getSocketMessage2() {
+    getSocketMessage() {
       this.socketMessage = userStore.getters.socketMessage();
-      console.log("###methods####: ", this.socketMessage);
+      console.log("###toast methods####: ", this.socketMessage);
     },
     toast(msg, head, small) {
       const toastWindow = document.getElementById("toast-template");

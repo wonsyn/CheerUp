@@ -41,7 +41,6 @@ import useStore from "@/store/index.js";
 
 const commentStore = useStore().modules.commentStore;
 const userStore = useStore().modules.userStore;
-
 export default {
   props: {
     commentContent: String,
@@ -75,26 +74,10 @@ export default {
         commentStore.actions.addLike(this.commentId, sessionStorage.getItem("current_user_num")); // like == false 인 경우
         this.like = true;
         this.likeNum = this.likeNum + 1;
-        console.log("********************************");
-        // 소켓 전송
-        // console.log("댓글 작성자 아이디: " + this.id);
-        // console.log("세션 아이디: " + sessionStorage.getItem("current_user"));
-        // 소켓 발생 종류, 보내는 사람, 받는 사람, 피드 번호, 피드 제목(백에서 가져오기)
-        // console.log("피드 번호: " + this.id);
-        let socketMsg = "comment_like," + sessionStorage.getItem("current_user") + "," + this.id + "," + 7 + "," + this.commentContent;
-        console.log("open: ", this.socket);
+        let socketMsg = "comment_like," + sessionStorage.getItem("current_user") + "," + this.id + "," + this.feedId + "," + this.commentContent;
         this.socket.onopen(socketMsg);
-        /*
-        this.socket.onopen = function (e) {
-          console.log(e);
-          this.socket.send(socketMsg);
-        };
-        */
-        // useStore.modules.userStore.actions.connect(socketMsg);
-        // userStore.actions.connect(socketMsg);
       }
     },
-
     displayEdit() {
       const editWindow = document.getElementById("btn" + this.commentId);
       const comment = document.getElementById("item" + this.commentId);
