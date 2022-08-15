@@ -77,6 +77,11 @@ export default {
       return true;
     },
   },
+  created() {
+    if (sessionStorage.getItem("access-token") != null) {
+      router.push({ name: "home" });
+    }
+  },
   methods: {
     async login() {
       await store.modules.userStore.actions.login(this.credentials);
@@ -84,7 +89,7 @@ export default {
     async loginCheck() {
       if (this.checkInfo) {
         await this.login(this.credentials);
-        if (store.modules.userStore.state.isLogin) {
+        if (sessionStorage.getItem("access-token") != null) {
           await wordStore.actions.getDBWordList();
           console.log("api end");
           console.log(wordStore.getters.getDBWordList());

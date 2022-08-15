@@ -5,8 +5,9 @@
       <h3 class="my-0 align-text-bottom">{{ board.boardName }}</h3>
     </div>
 
-    <div class="row">
-      <div class="col-4" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
+    <div class="row d-flex justify-content-center">
+      <h5 v-if="scrapList.length == 0">스크랩이 없습니다.</h5>
+      <div class="col-auto" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
         <feed-list-item :feed="feed"></feed-list-item>
       </div>
     </div>

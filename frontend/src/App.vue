@@ -23,15 +23,15 @@ import useStore from "@/store/index.js";
 const userStore = useStore().modules.userStore;
 
 export default {
-  components: {
-    NavBar,
-    MainFooter,
-  },
   data() {
     return {
       socket: userStore.getters.socket(),
-      socketMessage: null,
+      socketMessage: "",
     };
+  },
+  components: {
+    NavBar,
+    MainFooter,
   },
   methods: {
     getSocketMessage() {

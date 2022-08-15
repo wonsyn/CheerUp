@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.model.dao.UserScrapfeedMyfeedDao;
 import com.web.curation.model.dto.UserScrapfeedMyfeedDto;
+import com.web.curation.model.dto.UserScrapfeedMyfeedJoinDto;
 
 @Service
 public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedService{
@@ -20,12 +21,12 @@ public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedServic
 	}
 
 	@Override
-	public List<UserScrapfeedMyfeedDto> getMyScrap(int user_id) {
+	public List<UserScrapfeedMyfeedJoinDto> getMyScrap(int user_id) {
 		return userScrapfeedMyfeedDao.selectMyScrap(user_id);
 	}
 
 	@Override
-	public List<UserScrapfeedMyfeedDto> getMyScrapEachBoard(int userId, int boardId) {
+	public List<UserScrapfeedMyfeedJoinDto> getMyScrapEachBoard(int userId, int boardId) {
 		return userScrapfeedMyfeedDao.selectMyScrapEachBoard(userId, boardId);
 	}
 

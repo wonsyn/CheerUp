@@ -2,16 +2,17 @@
   <div class="container">
     <div class="d-inline">
       <h3 class="text-center">보드 리스트</h3>
-      <form class="position-relative" @submit.prevent="createBoard">
+      <form v-if="currentUser == profile.id" class="position-relative" @submit.prevent="createBoard">
         <input type="text" v-model="newBoardName" />
         {{ newBoard }}
         <button type="submit" class="btn btn-outline-primary">보드 생성</button>
       </form>
     </div>
 
-    <div class="row">
-      <div class="col-4" v-for="board in boardList" :key="board.boardId">
-        <user-board-list-item :board="board" @viewBoard="viewBoard"></user-board-list-item>
+    <div class="row d-flex justify-content-center">
+      <h5 v-if="boardList === undefined || boardList === null || boardList.length === 0">보드가 없습니다.</h5>
+      <div class="col-auto" v-for="board in boardList" :key="board.boardId">
+        <user-board-list-item :board="board" :profile="profile" @viewBoard="viewBoard"></user-board-list-item>
       </div>
     </div>
   </div>
@@ -38,6 +39,7 @@ export default {
       userId: "",
       boardList: [],
       subBoardList: [],
+      currentUser: sessionStorage.getItem("current_user"),
     };
   },
   methods: {
@@ -45,7 +47,7 @@ export default {
       this.$emit("viewBoard");
     },
     async createBoard() {
-      if (this.newBoardName) {
+      if (this.newBoardName && this.currentUser == this.profile.id) {
         const params = {
           userId: this.profile.userId,
           boardName: this.newBoardName,

@@ -2,13 +2,14 @@
   <div class="w-75 mx-auto">
     <div class="d-flex justify-content-between align-items-center mt-3">
       <router-link :to="{ name: 'profile', params: { username: user.id } }" class="d-flex text-decoration-none text-dark">
-        <img src="@/assets/logo.png" style="height: 20px" v-bind:alt="user.userImgName" />
+        <img class="profile-icon" v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
+        <img class="profile-icon" v-else src="@/assets/blank_profile.png" v-bind:alt="user.userImgName" style="height: 20px" />
         <strong class="align-bottom">{{ user.nickname }}</strong>
         <span>( {{ user.id }})</span>
       </router-link>
       <div v-if="currentUser != user.id">
-        <button v-if="!isFollowing" @click="toggleFollow" class="btn btn-sm btn-outline-danger">팔로우</button>
-        <button v-else @click="toggleFollow" class="btn btn-sm btn-danger">팔로우 취소</button>
+        <button v-if="!isFollowing" @click="toggleFollow" class="btn btn-sm btn-outline-danger"><img src="@/assets/heart_outline.png" style="height: 20px" /></button>
+        <button v-else @click="toggleFollow" class="btn btn-sm btn-outline-danger"><img src="@/assets/heart_fill.png" style="height: 20px" /></button>
       </div>
     </div>
     <hr class="py-0 my-0" />
@@ -64,4 +65,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
+}
+</style>

@@ -29,24 +29,30 @@
           </li>
         </ul>
         <div id="searchuser" class="nav-item me-3">
-          <form @submit.prevent="autoFillInput()" class="pe-3">
-            <input id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 이름" />
+          <form @submit.prevent="autoFillInput()" class="pe-3 mx-auto">
+            <div class="d-flex justify-content-between w-100">
+              <input class="text-start" id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 이름" />
+              <img src="@/assets/magnifying-glass.png" alt="user-search" class="align-self-center text-light" style="height: 20px; filter: opacity(0.3) drop-shadow(0 0 0 #fff)" />
+            </div>
           </form>
           <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled bg-light">
             <div class="d-flex justify-content-start" @click="searchUserAdd" style="cursor: pointer" v-for="(user, i) in result" :key="i">
-              <img v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
-              <img v-else src="@/assets/logo.png" v-bind:alt="user.userImgName" style="height: 20px" />
-              <span>{{ user.id }}</span>
+              <img class="profile-icon" v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
+              <img class="profile-icon" v-else src="@/assets/blank_profile.png" v-bind:alt="user.userImgName" style="height: 20px" />
+              <span class="mx-1">{{ user.id }}</span>
             </div>
           </div>
         </div>
         <div class="nav-item me-3">
           <notice-tab></notice-tab>
         </div>
-        <div class="nav-item">
+        <div class="nav-item me-3">
           <router-link class="nav-link" :to="{ name: 'profile', params: { username: currentUser } }"
             ><strong>{{ currentUser }}</strong></router-link
           >
+        </div>
+        <div class="nav-item">
+          <router-link class="nav-link" :to="{ name: 'login' }" @click="logout">로그아웃</router-link>
         </div>
       </div>
     </div>
@@ -83,9 +89,7 @@ export default {
   },
   methods: {
     fetchCurrentUser() {
-      // this.isLogin = userStore.getters.isLogin();
       this.token = sessionStorage.getItem("access-token");
-      console.log("acccccesssss", this.token);
       this.currentUser = sessionStorage.getItem("current_user");
     },
     async submitAutoComplete() {
@@ -101,7 +105,21 @@ export default {
         // this.result = this.users.map((user) => {
         //   return user.id;
         // });
-        this.result = this.users.slice(0, 10);
+        this.result = this.users
+          .sort(function (a, b) {
+            var nameA = a.id.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.id.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            // 이름이 같을 경우
+            return 0;
+          })
+          .slice(0, 10);
       } else {
         this.result = [];
         autocomplete.classList.add("disabled");
@@ -135,6 +153,10 @@ export default {
     },
     replaceImg(e) {
       e.target.src = require(`@/assets/logo.png`);
+    },
+    logout() {
+      this.token = null;
+      userStore.actions.logout();
     },
   },
 };
@@ -178,5 +200,11 @@ input[type="text"] {
     height: 200px;
     overflow-y: auto;
   }
+}
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
 }
 </style>

@@ -75,6 +75,7 @@ export default {
     await feedStore.actions.getFeedDetail(this.feedId);
     this.feedDetail = feedStore.getters.getFeedDetail();
     this.feedDetail.feedContent = this.feedDetail.feedContent.substr(1, this.feedDetail.feedContent.length - 2);
+    this.feedDetail.feedContent = this.feedDetail.feedContent.replace(/data-src/g, "src");
     await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
 
     const dbWordList = wordStore.getters.getDBWordList();
