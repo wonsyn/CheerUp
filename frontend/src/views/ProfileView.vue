@@ -8,16 +8,16 @@
       </div>
       <div id="user-info" class="my-3">
         <div id="username" class="my-3">
-          <h4 class="m-3">{{ profile.nickname }}</h4>
+          <h4 class="m-3">{{ profile.nickname }} ( {{ profile.id }} )</h4>
           <span>
-            <button class="btn btn-sm btn-outline-dark" v-if="currentUser === username"><router-link to="/auth">정보 수정</router-link></button>
-            <button @click="unfollow" class="btn btn-sm btn-outline-dark" v-else-if="isFollowing === true">팔로우 취소</button>
-            <button @click="follow" class="btn btn-sm btn-outline-dark" v-else>팔로우</button>
+            <router-link v-if="currentUser === username" to="/auth"><button class="btn btn-sm btn-outline-success">정보 수정</button></router-link>
+            <button @click="unfollow" class="btn btn-sm btn-outline-danger" v-else-if="isFollowing === true">팔로우 취소</button>
+            <button @click="follow" class="btn btn-sm btn-outline-danger" v-else>팔로우</button>
           </span>
         </div>
         <div id="user-follow">
-          <span style="cursor: pointer" @click="goFollowList('followings')">팔로우: {{ followings }}</span> /
-          <span style="cursor: pointer" @click="goFollowList('followers')">팔로워: {{ followers }}</span>
+          <button class="btn btn-outline-primary mx-1" style="cursor: pointer" @click="goFollowList('followings')">팔로잉 {{ followings }}</button>
+          <button class="btn btn-outline-primary mx-1" style="cursor: pointer" @click="goFollowList('followers')">팔로워 {{ followers }}</button>
         </div>
       </div>
       <div></div>

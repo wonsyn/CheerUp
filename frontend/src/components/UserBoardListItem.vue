@@ -9,8 +9,8 @@
       </form>
       <div v-if="currentUser == profile.id" class="card-footer d-flex justify-content-end">
         <button v-if="!isEdit" @click="isEdit = true" class="btn btn-sm btn-outline-primary mx-1">수정</button>
-        <button v-else @click="cancel" class="btn btn-sm btn-outline-primary mx-1">취소</button>
-        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-outline-secondary">삭제</button>
+        <button v-else @click="cancel" class="btn btn-sm btn-outline-danger mx-1">취소</button>
+        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-outline-danger">삭제</button>
       </div>
     </div>
   </div>

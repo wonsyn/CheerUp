@@ -104,7 +104,21 @@ export default {
         // this.result = this.users.map((user) => {
         //   return user.id;
         // });
-        this.result = this.users.slice(0, 10);
+        this.result = this.users
+          .sort(function (a, b) {
+            var nameA = a.id.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.id.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            // 이름이 같을 경우
+            return 0;
+          })
+          .slice(0, 10);
       } else {
         this.result = [];
         autocomplete.classList.add("disabled");
