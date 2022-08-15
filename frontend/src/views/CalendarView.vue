@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     handleEventClick: function (arg) {
-      console.log(arg.event);
       if (confirm("피드 상세 페이지로 이동")) {
         router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
       }
@@ -104,17 +103,17 @@ export default {
         animation: true,
       });
       myPopover.toggle();
-      console.log("mouse enter", arg.event.title);
     },
     handleMouseLeave: function (arg) {
       const myPopover = new Popover(arg.el);
-      console.log(myPopover);
+      if (!!myPopover === true) {
+        console.log("popover");
+      }
     },
     async fetchData() {
-      await userStore.actions.getProfile(this.username);
+      await userStore.actions.getProfile(this.currentUser);
       this.profile = userStore.getters.profile();
-      console.log(this.profile);
-      await scrapStore.actions.getScrapList(this.profile.id);
+      await scrapStore.actions.getScrapList(this.profile.userId);
       this.scrapList = scrapStore.getters.scrapList();
       await boardStore.actions.getBoardList(this.profile.userId);
       this.boardList = boardStore.getters.boardList();
@@ -127,8 +126,6 @@ export default {
       let type = selectType.options[selectType.selectedIndex].value;
       let category = selectCategory.options[selectCategory.selectedIndex].value;
       let boardId = selectBoard.options[selectCategory.selectedIndex].value;
-
-      console.log(" " + type + category + boardId);
       this.eventList = [...this.scrapList];
       if (type > 0) {
         this.eventList.filter((scrap) => {
@@ -149,18 +146,14 @@ export default {
     },
   },
   computed: {
-    username() {
-      return this.$route.params.username;
-    },
     currentUser() {
       return sessionStorage.getItem("current_user");
     },
   },
   async created() {
-    console.log("created");
-    await userStore.actions.getProfile(this.username);
+    await userStore.actions.getProfile(this.currentUser);
     this.profile = userStore.getters.profile();
-    await scrapStore.actions.getScrapList(this.profile.id);
+    await scrapStore.actions.getScrapList(this.profile.userId);
     this.scrapList = scrapStore.getters.scrapList();
     this.scrapList.map(function (el) {
       const eventListElement = el;
@@ -169,8 +162,9 @@ export default {
       const category = categories[el.feedCategory || 0];
       const type = el.scrapfeedType;
       const typeName = types[type || 0];
+      const date = new Date(el.feedDate);
       eventListElement["title"] = el.feedTitle;
-      eventListElement["date"] = el.feedDate;
+      eventListElement["date"] = el.myfeedDate;
       if (type == 1) {
         eventListElement["backgroundColor"] = "#00dd99";
       } else if (type == 2) {
@@ -178,14 +172,12 @@ export default {
       } else {
         eventListElement["backgroundColor"] = "#000000";
       }
-      eventListElement["content"] = typeName + "," + (el.feedSource || "") + ", " + category;
+      eventListElement["content"] = typeName + ", " + category + ", " + Intl.DateTimeFormat().format(date) + "," + (el.feedSource || "");
       eventListElement["imgUrl"] = el.feedImgUrl;
       eventListElement["category"] = el.feedCategory;
       return eventListElement;
     });
     this.calendarOptions.events = this.scrapList;
-    // const testEvent = { title: "test1", date: "2022-08-14", content: "1, , 게임", imgUrl: "https://www.naver.com", feedId: 1160 };
-    // this.calendarOptions.events.push(testEvent);
     await boardStore.actions.getBoardList(this.profile.userId);
     this.boardList = boardStore.getters.boardList();
   },

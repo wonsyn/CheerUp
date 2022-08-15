@@ -50,7 +50,6 @@ import router from "@/router";
 
 const store = useStore();
 const userStore = store.modules.userStore;
-const scrapStore = store.modules.scrapStore;
 const boardStore = store.modules.boardStore;
 
 export default {
@@ -68,7 +67,6 @@ export default {
       isFollowing: false,
       followers: 0,
       followings: 0,
-      scrapList: [],
       viewScrapsInBoard: false,
       board: {},
       socket: userStore.getters.socket(),
@@ -78,7 +76,6 @@ export default {
   methods: {
     viewBoard() {
       this.board = boardStore.getters.board();
-      console.log(this.board);
       this.viewScrapsInBoard = true;
     },
     goFollowList(param) {
@@ -138,7 +135,6 @@ export default {
     async fetchData() {
       await userStore.actions.getProfile(this.username);
       this.profile = userStore.getters.profile();
-      console.log(this.profile);
       await userStore.actions.isFollowing(this.username);
       this.isFollowing = userStore.getters.isFollowing();
       await userStore.actions.getFollowerList(this.profile.id);
@@ -146,8 +142,6 @@ export default {
       await userStore.actions.getFollowingList(this.profile.id);
       this.followings = userStore.getters.followingList()?.length;
       this.onBoardTab = false;
-      await scrapStore.actions.getScrapList(this.profile.id);
-      this.scrapList = scrapStore.getters.scrapList();
       this.viewScrapsInBoard = false;
     },
   },
@@ -160,19 +154,14 @@ export default {
     },
   },
   async created() {
-    console.log("created");
     await userStore.actions.getProfile(this.username);
     this.profile = userStore.getters.profile();
-    console.log(this.profile);
     await userStore.actions.isFollowing(this.username);
     this.isFollowing = userStore.getters.isFollowing();
     await userStore.actions.getFollowerList(this.profile.id);
     this.followers = userStore.getters.followerList()?.length;
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
-
-    await scrapStore.actions.getScrapList(this.profile.id);
-    this.scrapList = scrapStore.getters.scrapList();
     this.imgUrl = this.profile.userImgUrl == null ? require("@/assets/blank_profile.png") : require(this.profile.userImgUrl);
   },
 
