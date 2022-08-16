@@ -56,4 +56,11 @@ async function checkId(param, success, fail) {
     .then(success)
     .catch(fail);
 }
-export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById, checkId };
+async function updateUserInfo(body, success, fail) {
+  await api
+    .put(`/user/update`, JSON.stringify(body), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+
+export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById, checkId, updateUserInfo };
