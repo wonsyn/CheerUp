@@ -1,4 +1,4 @@
-import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById, checkId } from "@/api/Feature/User.js";
 import main from "../../App.vue";
 
 const state = {
@@ -9,6 +9,7 @@ const state = {
   userList: [],
   socket: null,
   socketMessage: "",
+  isValidId: false,
 };
 
 const getters = {
@@ -33,6 +34,9 @@ const getters = {
   socketMessage() {
     return state.socketMessage;
   },
+  isValidId() {
+    return state.isValidId;
+  },
 };
 
 const mutations = {
@@ -56,6 +60,9 @@ const mutations = {
   },
   SET_SOCKETMESSAGE: (socketMessage) => {
     state.socketMessage = socketMessage;
+  },
+  SET_CHECK_ID: (isValidId) => {
+    state.isValidId = isValidId;
   },
 };
 
@@ -252,6 +259,23 @@ const actions = {
     sessionStorage.removeItem("refresh_token");
     sessionStorage.removeItem("current_user");
     sessionStorage.removeItem("current_user_num");
+  },
+  async checkId(param) {
+    await checkId(
+      param,
+      ({ data }) => {
+        if (data["message"] === "success") {
+          console.log(data);
+          mutations.SET_CHECK_ID(true);
+        } else {
+          console.log("failed");
+          mutations.SET_CHECK_ID(false);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   },
 };
 

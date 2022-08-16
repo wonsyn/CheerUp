@@ -50,5 +50,10 @@ async function searchById(params, success, fail) {
     .then(success)
     .catch(fail);
 }
-
-export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById };
+async function checkId(param, success, fail) {
+  await api
+    .get(`/user/checkid`, { params: { id: param } })
+    .then(success)
+    .catch(fail);
+}
+export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById, checkId };
