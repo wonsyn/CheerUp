@@ -41,17 +41,14 @@ export default {
       console.log(this.credentials.password);
       if (this.credentials.password === this.myProfile.password) {
         console.log("success");
-        router.push("edit");
+        router.push({ name: "useredit" });
       } else {
         console.log("failed");
       }
     },
   },
   async created() {
-    await userStore.actions.fetchCurrentUser();
-    this.currentUser = userStore.getters.currentUser();
-    console.log(this.currentUser);
-    await userStore.actions.getProfile(this.currentUser);
+    await userStore.actions.getProfile(sessionStorage.getItem("current_user"));
     this.myProfile = userStore.getters.profile();
   },
 };
