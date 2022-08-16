@@ -24,7 +24,14 @@
     <comment-list-item v-for="comment in commentList" :key="comment.commentId" v-bind="comment"></comment-list-item>
 
     <div class="d-flex justify-content-start px-3 pt-3">
-      <img class="me-2 mt-1 align-middle" :src="loginUserInfo.userImgUrl" alt="profile" style="width: 20px; height: 20px" />
+      <img
+        v-if="loginUserInfo.userImgUrl != null"
+        class="profile-icon me-2 mt-1 align-middle"
+        :src="require('@/assets/profile_icon/profile-' + loginUserInfo.userImgUrl + '.png')"
+        alt="profile"
+        style="width: 20px; height: 20px"
+      />
+      <img v-else class="profile-icon me-2 mt-1 align-middle" src="@/assets/blank_profile.png" alt="profile" style="width: 20px; height: 20px" />
       <span class="me-3 mt-1 align-middle" style="font-weight: bold">{{ loginUserId }}</span>
       <input type="text" class="px-2 me-3" id="input_comment_create" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
       <button @click="addComment" class="btn" style="background-color: #00dd99; color: white; font-weight: bold; width: 7%">작성</button>
@@ -61,7 +68,6 @@ export default {
       feedDetail: null,
       vocaList: [],
       recommList: [],
-      // feedId: this.$route.params.feedId,
     };
   },
   async created() {
@@ -80,42 +86,9 @@ export default {
     await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
 
     const dbWordList = wordStore.getters.getDBWordList();
-    // const myWordList = wordStore.getters.getMyWordList();
     this.vocaList = dbWordList.filter((x) => {
       return this.feedDetail.feedContent.indexOf(x.word) != -1;
     });
-    // console.log("myList", myWordList);
-
-    // for (let i = 0; i < this.vocaList.length; i++) {
-    //   for (let j = 0; j < myWordList.length; j++) {
-    //     if (this.vocaList[i].word == myWordList[j].word) {
-    //       this.vocaList[i].wordExp = myWordList[j].wordExp;
-    //       break;
-    //     }
-    //   }
-    // }
-    // console.log(this.vocaList);
-
-    // this.vocaList = this.vocaList.map((x) => {
-    //   for (let i = 0; i < myWordList.length; i++) {
-    //     if (x.word == myWordList[i].word) {
-    //       x.wordExp = myWordList[i].wordExp;
-    //       return x;
-    //     }
-    //   }
-    //   return x;
-    // });
-
-    // console.log(this.vocaList);
-
-    // for (let i = 0; i < dbWordList.length; i++) {
-    //   if (this.feedDetail.feedContent.indexOf(dbWordList[i].word) != -1) {
-    //     for(let j = 0; j < myWordList.length; j++) {
-
-    //       this.vocaList.push(dbWordList[i]);
-    //     }
-    //   }
-    // }
   },
   methods: {
     openVocaAddWindow() {
@@ -185,5 +158,11 @@ export default {
 <style scoped>
 .spaced {
   display: none;
+}
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
 }
 </style>

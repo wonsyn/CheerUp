@@ -37,7 +37,7 @@
           </form>
           <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled bg-light">
             <div class="d-flex justify-content-start" @click="searchUserAdd" style="cursor: pointer" v-for="(user, i) in result" :key="i">
-              <img class="profile-icon" v-if="user.userImgUrl != null" :src="require(user.userImgUrl)" v-bind:alt="user.userImgName" style="height: 20px" />
+              <img class="profile-icon" v-if="user.userImgUrl != null" :src="require('@/assets/profile_icon/profile-' + user.userImgUrl + '.png')" v-bind:alt="user.userImgName" style="height: 20px" />
               <img class="profile-icon" v-else src="@/assets/blank_profile.png" v-bind:alt="user.userImgName" style="height: 20px" />
               <span class="mx-1">{{ user.id }}</span>
             </div>

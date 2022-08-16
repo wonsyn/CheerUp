@@ -1,8 +1,9 @@
 <template>
   <div :id="'comment_template' + commentId">
     <div :id="'item' + commentId" class="my-2 py-1 d-flex px-3" @mouseover="displayEdit" @mouseout="hideEdit" style="border-radius: 5px; height: 35px">
-      <img v-if="userImgUrl != null" class="align-self-center" :src="userImgUrl" alt="profile" style="width: 20px; height=20px" />
-      <img v-else class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
+      <img v-if="userImgUrl === null" class="profile-icon align-self-center" src="@/assets/blank_profile.png" alt="profile" style="width: 20px; height: 20px" />
+      <img v-else class="profile-icon align-self-center" :src="userImgUrlreq" alt="profile" style="width: 20px; height: 20px" />
+      <!-- {{ userImgUrl }} -->
       <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
       <div class="ms-2 align-self-center" style="font-size: 13px">{{ content }}</div>
       <div class="pe-3 me-auto d-flex" @click="updateLike">
@@ -58,6 +59,7 @@ export default {
       like: false,
       socket: userStore.getters.socket(),
       userImgUrl: String,
+      userImgUrlreq: String,
     };
   },
   async created() {
@@ -66,7 +68,11 @@ export default {
     console.log(this.like);
     await userStore.actions.searchById(this.id);
     this.userImgUrl = userStore.getters.userList()[0].userImgUrl;
-    console.log(this.userImgUrl);
+    if (this.userImgUrl != null) {
+      this.userImgUrlreq = require("@/assets/profile_icon/profile-" + this.userImgUrl + ".png");
+    }
+    console.log("imgurl: ", this.userImgUrl);
+    // console.log("imgurl: ", this.userImgUrlreq);
   },
   methods: {
     updateLike() {
@@ -160,4 +166,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
+}
+</style>

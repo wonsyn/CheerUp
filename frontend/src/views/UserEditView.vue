@@ -5,7 +5,14 @@
       <div class="col-6 pt-5" style="display: inline-block; vertical-align: middle">
         <span class="mb-2" style="font-size: 30px"><strong>프로필 아이콘</strong></span>
         <br />
-        <img class="my-3" :src="userImgUrl" alt="profile" style="width: 50%; height: 50%" />
+        <img
+          v-if="profile.userImgUrl != null"
+          class="my-3 profile-icon"
+          :src="require('@/assets/profile_icon/profile-' + this.profile.userImgUrl + '.png')"
+          alt="profile"
+          style="width: 50%; height: 50%"
+        />
+        <img v-else class="my-3 profile-icon" src="@/assets/blank_profile.png" alt="profile" style="width: 50%; height: 50%" />
         <div class="row">
           <div class="col-3 px-2" v-for="(path, i) in iconList" :key="i" @click="changeImg(path, i)">
             <img :src="path" alt="icons" style="width: 30%" />
@@ -68,11 +75,6 @@ export default {
   async created() {
     await userStore.actions.getProfile(sessionStorage.getItem("current_user"));
     this.profile = userStore.getters.profile();
-    console.log(this.profile.userImgUrl);
-    console.log(this.profile);
-    this.userImgUrl = require("@/assets/profile_icon/profile-" + this.profile.userImgUrl + ".png");
-    // this.userImgUrl = require(this.profile.userImgUrl + "");
-    console.log("require: " + this.userImgUrl);
 
     this.iconList.length = 0;
     for (let i = 0; i < 20; i++) {
@@ -91,11 +93,17 @@ export default {
       }
     },
     changeImg(path, i) {
-      this.userImgUrl = path;
       this.profile.userImgUrl = i;
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.profile-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 70%;
+  overflow: hidden;
+}
+</style>
