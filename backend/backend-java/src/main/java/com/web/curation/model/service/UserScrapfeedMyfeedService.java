@@ -17,4 +17,7 @@ public interface UserScrapfeedMyfeedService {
 	
 	// 스크랩 된 것 board수정
 	int editScrapBoard(int myfeedId, int boardId);
+	
+	// 스크랩 취소
+	int cancelScrap(int myfeedId);
 }
