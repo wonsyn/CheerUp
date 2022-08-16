@@ -1,4 +1,4 @@
-import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById, updateUserInfo } from "@/api/Feature/User.js";
 import main from "../../App.vue";
 
 const state = {
@@ -252,6 +252,17 @@ const actions = {
     sessionStorage.removeItem("refresh_token");
     sessionStorage.removeItem("current_user");
     sessionStorage.removeItem("current_user_num");
+  },
+  async updateuserInfo(profile) {
+    await updateUserInfo(
+      profile,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   },
 };
 

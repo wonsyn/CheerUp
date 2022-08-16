@@ -50,5 +50,11 @@ async function searchById(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+async function updateUserInfo(body, success, fail) {
+  await api
+    .put(`/user/update`, JSON.stringify(body), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
 
-export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById };
+export { login, signup, getUser, isFollowing, follow, unfollow, getFollowerList, getFollowingList, searchById, updateUserInfo };
