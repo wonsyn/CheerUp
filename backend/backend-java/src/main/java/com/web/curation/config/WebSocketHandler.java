@@ -18,6 +18,8 @@ import com.web.curation.model.dto.AlarmDto;
 import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.FeedService;
+import com.web.curation.model.service.JwtService;
+import com.web.curation.model.service.UserService;
 
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
@@ -32,6 +34,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	
 	@Autowired
 	AlarmService alarmService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {//클라이언트와 서버가 연결
@@ -56,58 +61,73 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {// 메시지
-		logger.info("ssesion"+currentUserName(session));
-		String msg = message.getPayload();//자바스크립트에서 넘어온 Msg
-		logger.info("msg="+msg);
+		
+		//자바스크립트에서 넘어온 Msg
+		String msg = message.getPayload();
 		
 		if (!msg.isBlank()) {
-			logger.info("if문 들어옴?");
+			
 			String[] strs = msg.split(",");
+			
 			if(strs != null && strs.length == 5) {
 				for(String s : strs) System.out.println(s);
+				// 요청 종류( follow, scrap, comment_like )
 				String cmd = strs[0];
 				// 보내는 놈
-				String replyWriter = strs[1];
+				String senderId = strs[1];
 				// 받는 놈
-				String boardWriter = strs[2];
+				String receiverId = strs[2];
 				// 피드 번호
-				String bno = strs[3];
-				// 피드 제목
-//				String title = strs[4];
-//				String bgno = strs[5];
-				
-				TextMessage tmpMsg = null;
+				String feedId = strs[3];
+				// 
+				String content = strs[4];
+				// 프론트 toast 클릭 시 이동할 경로
 				String url = "";
+				// 프론트로 전달할 내용을 담는 객체
+				AlarmDto alarmDto = new AlarmDto();
+				// 프론트로 전달하는 객체
+				TextMessage tmpMsg = null;
 
-				WebSocketSession replyWriterSession = userSessionsMap.get(replyWriter);
-				WebSocketSession boardWriterSession = userSessionsMap.get(boardWriter);
-				logger.info("boardWriterSession="+userSessionsMap.get(boardWriter));
-				logger.info("boardWirterSession"+boardWriterSession);
+				WebSocketSession senderSession = userSessionsMap.get(senderId);
+				WebSocketSession receiverSession = userSessionsMap.get(receiverId);
+				
+				alarmDto.setAlarmType(cmd);
+				alarmDto.setAlarmSenderId(userService.getUserIdById(senderId));
+				alarmDto.setAlarmReceiverId(userService.getUserIdById(receiverId));
 				
 				// 팔로우
-				if("follow".equals(cmd) && boardWriterSession != null) {
+				if("follow".equals(cmd) && receiverSession != null) {
+					
+					alarmDto.setAlarmContent(senderId+" 님이 팔로우하였습니다.");
+					
 //					for(String s : strs) System.out.print(s+"\t");
 					System.out.println("follow");
 					//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 글을 DEV했습니다!</a>");
-					tmpMsg = new TextMessage("a"+replyWriter + " 님이 당신을 팔로우하였습니다."		
+					tmpMsg = new TextMessage("a"+senderId + " 님이 당신을 팔로우하였습니다!"		
 //							+ "<a href='/http://localhost:8080/cheerup/user/detail/"+replyWriter +"'");  
-							+ "<a href='/profile/"+replyWriter +"'");  
+							+ "<a href='/profile/"+senderId +"' data-v-c2383e3c=''>"+ senderId +"</a>");
+//							+ "<router-link to = '/profile/"+replyWriter +"'>"+replyWriter + " 님이 당신을 팔로우하였습니다."+"</router-link>");  
 					
-					url = "";
+//					<a href="/calendar" class="nav-link" data-v-c2383e3c="">달력</a>
+					
+//					replyWriter + " 님이 당신을 팔로우하였습니다." => content
+//					url = "/profile/"+replyWriter;
 					
 //					boardWriterSession.sendMessage(tmpMsg);
 				}
 				else {
-					String title = feedService.readFeedById(Integer.parseInt(bno)).getFeedTitle();
-					String content = strs[4];
+					String title = feedService.readFeedById(Integer.parseInt(feedId)).getFeedTitle();
+//					String content = strs[4];
 					//스크랩
-					if("scrap".equals(cmd) && boardWriterSession != null) {
+					if("scrap".equals(cmd) && receiverSession != null) {
 						//replyWriter = 스크랩누른사람 , boardWriter = 게시글작성자
-						tmpMsg = new TextMessage("b"+replyWriter + "님이 "
-								+ "<a href='/http://localhost:8080/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
+						alarmDto.setAlarmContent(senderId+" 님이 "+ title + " 을 스크랩하였습니다!");
+						
+						tmpMsg = new TextMessage("b"+senderId + "님이 "
+								+ "<a href='/http://localhost:8080/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
 								+ title+"</strong> 을 스크랩했습니다!</a>");
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
@@ -115,33 +135,46 @@ public class WebSocketHandler extends TextWebSocketHandler {
 						url = "";
 						
 //						boardWriterSession.sendMessage(tmpMsg);
+//						user1 님이 팔로우하였습니다.
 					}
 					
 					//좋아요  
-					else if("comment_like".equals(cmd) && boardWriterSession != null) {
+					else if("comment_like".equals(cmd) && receiverSession != null) {
 						//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
 						System.out.println("*************");
-						tmpMsg = new TextMessage("c"+replyWriter + "님이 "
-								+ "<a href='/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
+						tmpMsg = new TextMessage("c"+senderId + "님이 "
+								+ "<a href='/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
 								+ title+"</strong> 에 작성한 " + content + " 댓글을 좋아요했습니다!</a>");
 						
 //						<a href="/detail/7" style="color: black"><strong>김부겸 삼성 3년간 총 7만개 청년 일자리창출 기여</strong> 에 작성한 댓글을 좋아요했습니다!</a>
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 댓글을 좋아요했습니다!</a>");
-						url = "";
+						url = "/detail/" + feedId;
 						
 //						boardWriterSession.sendMessage(tmpMsg);
 					}
 				}
 				
+				// 알림이 이미 존재하는지 확인
+				
+				// 알람이 있다면 날짜 변경, 확인 시간 = null
+				
+				// 알람이 없다면 새로 생성
+				
+				
 //				(#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl})
-				alarmService.createAlarm(new AlarmDto(Integer.parseInt(boardWriter), Integer.parseInt(replyWriter), 
-						cmd, tmpMsg.toString(),	url));
+//				alarmService.createAlarm(new AlarmDto(userService.getUserIdById(boardWriter), userService.getUserIdById(replyWriter), 
+//						cmd, tmpMsg.toString(),	url));
 				
-				boardWriterSession.sendMessage(tmpMsg);
+				receiverSession.sendMessage(tmpMsg);
 				
+				/*
+				alarm_content
 				
+				alarm_type(String), receiver_id(String), url 
+				follow, user1, /profile/user
+				*/
 				/*
 				//댓글채택
 				else if("questionCheck".equals(cmd) && replyWriterSession != null) {
