@@ -1,4 +1,4 @@
-import { getFeedInBoard, getScrapList } from "@/api/Feature/Feed";
+import { getFeedInBoard, getScrapList, createScrap, deleteScrap, editScrap } from "@/api/Feature/Feed";
 
 const state = {
   scrapsInBoard: [],
@@ -41,6 +41,39 @@ const actions = {
       params,
       ({ data }) => {
         mutations.SET_SCRAP_IN_BOARD(data);
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async createScrap(params) {
+    await createScrap(
+      params,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async deleteScrap(param) {
+    await deleteScrap(
+      param,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async editScrap(params) {
+    await editScrap(
+      params,
+      ({ data }) => {
         console.log(data);
       },
       (error) => {

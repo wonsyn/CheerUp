@@ -59,14 +59,12 @@ export default {
       this.newBoardName = "";
     },
     async getBoardList() {
-      console.log("getboardList method");
       await boardStore.actions.getBoardList(this.profile.userId);
       this.boardList = boardStore.getters.boardList();
     },
   },
   computed: {},
   async created() {
-    console.log("created");
     await boardStore.actions.getBoardList(this.profile.userId);
     this.subBoardList = boardStore.getters.boardList();
     this.boardList = this.subBoardList;

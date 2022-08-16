@@ -1,6 +1,7 @@
 <template>
   <div id="board-list-item" class="board-list-item card my-3" style="width: 18rem">
-    <img @click="goBoardDetail" style="cursor: pointer" src="@/assets/logo.png" class="card-img-top" alt="img" />
+    <img v-if="scrapForThumbnail != null" @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" :src="scrapForThumbnail" class="card-img-top" alt="img" />
+    <img v-else @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" src="@/assets/logo.png" class="card-img-top" alt="img" />
     <div class="card-body">
       <h4 @click="goBoardDetail" style="cursor: pointer" v-if="!isEdit" class="card-text text-start">{{ board.boardName }}</h4>
       <form v-else @submit.prevent="updateBoard">
@@ -31,7 +32,7 @@ export default {
     return {
       currentUser: sessionStorage.getItem("current_user"),
       scrapsInBoard: {},
-      scrapForThumbnail: {},
+      scrapForThumbnail: null,
       isEdit: false,
       inputForUpdate: "",
     };
@@ -43,7 +44,6 @@ export default {
   methods: {
     goBoardDetail() {
       boardStore.actions.fetchBoard(this.board);
-      console.log(boardStore.state.board);
       this.$emit("viewBoard");
     },
     cancel() {
@@ -82,16 +82,17 @@ export default {
       userId: this.board.userId,
       boardId: this.board.boardId,
     };
-    console.log(params);
     await scrapStore.actions.getFeedInBoard(params);
     this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
-    if (this.scrapsInBoard) {
-      this.scrapForThumbnail = this.scrapsInBoard.at(-1);
+    if (this.scrapsInBoard.length > 0) {
+      const thumbsInd = this.scrapsInBoard.length - 1;
+      this.scrapForThumbnail = this.scrapsInBoard[thumbsInd].feedImgUrl;
     }
-    console.log(this.board);
+
     boardStore.actions.fetchBoard(this.board);
     this.inputForUpdate = this.board.boardName;
   },
+  mounted() {},
 };
 </script>
 

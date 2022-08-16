@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row d-flex justify-content-center">
-      <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed"></feed-list-item>
+      <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed" :scrapList="scrapList"></feed-list-item>
       <div class="px-3">
         <button v-if="hasMore" class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>
       </div>
@@ -11,6 +11,7 @@
 
 <script>
 import FeedListItem from "@/components/FeedListItem.vue";
+import scrapStore from "@/store/modules/Scrap";
 
 export default {
   name: "FeedList",
@@ -27,7 +28,29 @@ export default {
       hasMore: true,
     };
   },
+  methods: {
+    async getScrapList() {
+      await scrapStore.actions.getScrapList(sessionStorage.getItem("current_user_num"));
+      this.scrapList = scrapStore.getters.scrapList();
+    },
+    moreFeed() {
+      let oldsize = this.size;
+      this.size = this.size + 20;
+      for (let i = oldsize; i < this.size; i++) {
+        this.list.push(this.feedList[i]);
+        if (i == this.feedList.length - 1) {
+          break;
+        }
+      }
+    },
+  },
   mounted() {},
+  computed: {
+    scrapList() {
+      console.log("feedlist computed", scrapStore.getters.scrapList());
+      return scrapStore.getters.scrapList();
+    },
+  },
   created() {
     for (let i = 0; i < this.size; i++) {
       this.list.push(this.feedList[i]);
@@ -36,7 +59,8 @@ export default {
         break;
       }
     }
-    console.log(this.list);
+    scrapStore.actions.getScrapList(sessionStorage.getItem("current_user_num"));
+
     console.log("FeedList.vue created start");
     console.log(this.feedList);
 
@@ -50,21 +74,9 @@ export default {
       for (let i = 0; i < this.size; i++) {
         this.list.push(this.feedList[i]);
       }
-
       console.log("FeedList.vue watch end");
     },
-  },
-  methods: {
-    moreFeed() {
-      let oldsize = this.size;
-      this.size = this.size + 20;
-      for (let i = oldsize; i < this.size; i++) {
-        this.list.push(this.feedList[i]);
-        if (i == this.feedList.length - 1) {
-          break;
-        }
-      }
-    },
+    scrapList: "getScrapList",
   },
 };
 </script>
