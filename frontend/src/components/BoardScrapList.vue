@@ -6,10 +6,8 @@
     </div>
 
     <div class="row d-flex justify-content-center">
-      <h5 v-if="scrapList.length == 0">스크랩이 없습니다.</h5>
-      <div class="col-auto" v-for="feed in scrapList" :key="feed.feedId" v-bind="feed">
-        <feed-list-item :feed="feed"></feed-list-item>
-      </div>
+      <h5 v-if="scrapsInBoard.length == 0">스크랩이 없습니다.</h5>
+      <feed-list-item class="col-auto" v-for="feed in scrapsInBoard" :key="feed.feedId" :feed="feed" :scrapList="scrapsInBoard"></feed-list-item>
     </div>
   </div>
 </template>
@@ -26,7 +24,7 @@ export default {
   name: "BoardScrapList",
   data() {
     return {
-      scrapList: [],
+      scrapsInBoard: [],
     };
   },
   components: {
@@ -42,14 +40,13 @@ export default {
     },
   },
   async created() {
-    console.log(this.board);
     const params = {
       userId: this.profile.userId,
       boardId: this.board.boardId,
     };
-    console.log(params);
     await scrapStore.actions.getFeedInBoard(params);
     this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
+    console.log("board scrap", this.scrapsInBoard);
   },
   watch: {},
 };

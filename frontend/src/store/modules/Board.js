@@ -4,6 +4,7 @@ const state = {
   board: {},
   boardList: {},
   isSuccess: false,
+  boardCreateFailed: false,
 };
 
 const getters = {
@@ -15,6 +16,9 @@ const getters = {
   },
   board() {
     return state.board;
+  },
+  boardCreateFailed() {
+    return state.boardCreateFailed;
   },
 };
 
@@ -28,6 +32,9 @@ const mutations = {
   SET_BOARD(board) {
     state.board = board;
   },
+  SET_CREATE_BOARD_FAILED(boardCreateFailed) {
+    state.boardCreateFailed = boardCreateFailed;
+  },
 };
 
 const actions = {
@@ -38,12 +45,15 @@ const actions = {
         if (data["message"] === "success") {
           console.log(data);
           mutations.SET_BOARD_LIST(data);
+          mutations.SET_CREATE_BOARD_FAILED(false);
         } else {
           console.log("create board failed");
+          mutations.SET_CREATE_BOARD_FAILED(true);
         }
       },
       (error) => {
         console.log(error);
+        mutations.SET_CREATE_BOARD_FAILED(true);
       },
     );
   },
