@@ -14,7 +14,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.web.curation.model.dto.AlarmDto;
 import com.web.curation.model.dto.UserDto;
+import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.FeedService;
 
 @Component
@@ -27,6 +29,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	
 	@Autowired
 	FeedService feedService;
+	
+	@Autowired
+	AlarmService alarmService;
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {//클라이언트와 서버가 연결
@@ -70,8 +75,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				// 피드 제목
 //				String title = strs[4];
 //				String bgno = strs[5];
-				logger.info("length 성공?"+cmd);
 				
+				TextMessage tmpMsg = null;
+				String url = "";
+
 				WebSocketSession replyWriterSession = userSessionsMap.get(replyWriter);
 				WebSocketSession boardWriterSession = userSessionsMap.get(boardWriter);
 				logger.info("boardWriterSession="+userSessionsMap.get(boardWriter));
@@ -85,11 +92,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 글을 DEV했습니다!</a>");
-					TextMessage tmpMsg = new TextMessage("a"+replyWriter + " 님이 당신을 팔로우하였습니다."		
+					tmpMsg = new TextMessage("a"+replyWriter + " 님이 당신을 팔로우하였습니다."		
 //							+ "<a href='/http://localhost:8080/cheerup/user/detail/"+replyWriter +"'");  
 							+ "<a href='/profile/"+replyWriter +"'");  
 					
-					boardWriterSession.sendMessage(tmpMsg);
+					url = "";
+					
+//					boardWriterSession.sendMessage(tmpMsg);
 				}
 				else {
 					String title = feedService.readFeedById(Integer.parseInt(bno)).getFeedTitle();
@@ -97,21 +106,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
 					//스크랩
 					if("scrap".equals(cmd) && boardWriterSession != null) {
 						//replyWriter = 스크랩누른사람 , boardWriter = 게시글작성자
-						TextMessage tmpMsg = new TextMessage("b"+replyWriter + "님이 "
+						tmpMsg = new TextMessage("b"+replyWriter + "님이 "
 								+ "<a href='/http://localhost:8080/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
 								+ title+"</strong> 을 스크랩했습니다!</a>");
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 글을 스크랩했습니다!</a>");
+						url = "";
 						
-						boardWriterSession.sendMessage(tmpMsg);
+//						boardWriterSession.sendMessage(tmpMsg);
 					}
 					
 					//좋아요  
 					else if("comment_like".equals(cmd) && boardWriterSession != null) {
 						//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
 						System.out.println("*************");
-						TextMessage tmpMsg = new TextMessage("c"+replyWriter + "님이 "
+						tmpMsg = new TextMessage("c"+replyWriter + "님이 "
 								+ "<a href='/detail/" + bno + "'  style=\"color: black; text-decoration: none\"><strong>"
 								+ title+"</strong> 에 작성한 " + content + " 댓글을 좋아요했습니다!</a>");
 						
@@ -119,13 +129,17 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 //							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
 //							+ title+"</strong> 에 작성한 댓글을 좋아요했습니다!</a>");
+						url = "";
 						
-						boardWriterSession.sendMessage(tmpMsg);
+//						boardWriterSession.sendMessage(tmpMsg);
 					}
 				}
 				
+//				(#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl})
+				alarmService.createAlarm(new AlarmDto(Integer.parseInt(boardWriter), Integer.parseInt(replyWriter), 
+						cmd, tmpMsg.toString(),	url));
 				
-				
+				boardWriterSession.sendMessage(tmpMsg);
 				
 				
 				/*

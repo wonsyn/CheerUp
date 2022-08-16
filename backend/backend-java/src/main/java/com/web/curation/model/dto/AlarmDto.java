@@ -21,8 +21,17 @@ public class AlarmDto {
 		super();
 	}
 
+	public AlarmDto(int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent, String alarmUrl) {
+		super();
+		this.alarmReceiverId = alarmReceiverId;
+		this.alarmSenderId = alarmSenderId;
+		this.alarmType = alarmType;
+		this.alarmContent = alarmContent;
+		this.alarmUrl = alarmUrl;
+	}
+
 	public AlarmDto(int alarmId, int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent,
-			String alarmUrl, String alarmDateTime, String alarmCheckDateTime) {
+			String alarmUrl, String alarmDateTime, String alarmCheckDateTime, String endDate) {
 		super();
 		this.alarmId = alarmId;
 		this.alarmReceiverId = alarmReceiverId;
@@ -32,6 +41,7 @@ public class AlarmDto {
 		this.alarmUrl = alarmUrl;
 		this.alarmDateTime = alarmDateTime;
 		this.alarmCheckDateTime = alarmCheckDateTime;
+		this.endDate = endDate;
 	}
 
 	public int getAlarmId() {

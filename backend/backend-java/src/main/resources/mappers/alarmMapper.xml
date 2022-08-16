@@ -6,9 +6,9 @@
 
 	<!-- 알람 생성 -->
 	<insert id="createAlarm" parameterType="alarmDto">
-		insert into alarm (alarm_id, alarm_receiver_id, alarm_sender_id, alarm_type, 
+		insert into alarm (alarm_receiver_id, alarm_sender_id, alarm_type, 
 				alarm_content, alarm_url, alarm_datetime, alarm_check_datetime)
-		values (0,#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, now(), null)
+		values (#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, now(), null)
 	</insert>
 	
 	<!-- 알람 수정 -->

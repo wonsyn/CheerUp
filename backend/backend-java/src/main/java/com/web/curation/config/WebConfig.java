@@ -13,7 +13,7 @@ import com.web.curation.util.JwtInterceptor;
 //@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-	private static final String[] EXCLUDE_PATHS = { "/user/login", "/user/signup","/swagger-resources/**", "/swagger-ui/**", "/v2/api-docs" };
+	private static final String[] EXCLUDE_PATHS = { "/user/login", "/user/signup","/user/checkid", "/swagger-resources/**", "/swagger-ui/**", "/v2/api-docs" };
 
     @Autowired
     private JwtInterceptor jwtInterceptor;

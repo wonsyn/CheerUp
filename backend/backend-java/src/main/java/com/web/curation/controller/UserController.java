@@ -297,9 +297,9 @@ public class UserController {
 			notes = "경로 예시) http://localhost:8080/cheerup/user/checkId?id=d"
 					+ "\n http method : get"
 					+ "\n return 예시) json { 'message' : 'success, fail'}")
-	@GetMapping("/checkId")
+	@GetMapping("/checkid")
 	public ResponseEntity<Map<String,Object>> checkId(@RequestParam String id){
-		
+		System.out.println("checkid");
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
