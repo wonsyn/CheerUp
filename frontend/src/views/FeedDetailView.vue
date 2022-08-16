@@ -61,10 +61,11 @@ export default {
       feedDetail: null,
       vocaList: [],
       recommList: [],
-      listKey: 0,
+      // feedId: this.$route.params.feedId,
     };
   },
   async created() {
+    console.log("detail created", this.feedId);
     await feedStore.actions.recommFeed(this.feedId);
     this.recommList = feedStore.getters.getRecommList();
     console.log("this", ...this.recommList);
@@ -153,6 +154,30 @@ export default {
       this.commentList = commentStore.getters.getCommentList();
       comment_input.value = "";
     },
+    async reload() {
+      console.log("detail created", this.feedId);
+      await feedStore.actions.recommFeed(this.feedId);
+      this.recommList = feedStore.getters.getRecommList();
+      console.log("recommend", ...this.recommList);
+      await userStore.actions.getProfile(this.loginUserId);
+      this.loginUserInfo = userStore.getters.profile();
+      await commentStore.actions.listComment(this.feedId);
+      this.commentList = commentStore.getters.getCommentList();
+      await feedStore.actions.getFeedDetail(this.feedId);
+      this.feedDetail = feedStore.getters.getFeedDetail();
+      this.feedDetail.feedContent = this.feedDetail.feedContent.substr(1, this.feedDetail.feedContent.length - 2);
+      this.feedDetail.feedContent = this.feedDetail.feedContent.replace(/data-src/g, "src");
+      await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
+
+      const dbWordList = wordStore.getters.getDBWordList();
+      // const myWordList = wordStore.getters.getMyWordList();
+      this.vocaList = dbWordList.filter((x) => {
+        return this.feedDetail.feedContent.indexOf(x.word) != -1;
+      });
+    },
+  },
+  watch: {
+    $route: "reload",
   },
 };
 </script>

@@ -32,14 +32,11 @@ export default {
     feedType: Number,
     feedUrl: String,
   },
-  components: {},
-  setup() {},
   methods: {
     moveDetail() {
-      console.log(this.feedId);
+      console.log("detail", this.feedId);
       router.push({ name: "detail", params: { feedId: this.feedId } });
     },
-    created() {},
   },
 };
 </script>

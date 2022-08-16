@@ -1,4 +1,4 @@
-import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList, getDBWordList, addMyWord } from "@/api/Feature/Word";
+import { getMyWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList, getDBWordList, addMyWord, searchMyWordList } from "@/api/Feature/Word";
 
 const state = {
   myWordList: [],
@@ -31,16 +31,32 @@ const mutations = {
 };
 
 const actions = {
-  async getMyWordList(userId) {
-    await getMyWordList(
-      userId,
-      ({ data }) => {
-        mutations.SET_MY_WORDLIST(data);
-      },
-      (error) => {
-        console.log(error);
-      },
-    );
+  async getMyWordList(userId, keyword) {
+    if (keyword == null) {
+      await getMyWordList(
+        userId,
+        ({ data }) => {
+          mutations.SET_MY_WORDLIST(data);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+    } else {
+      const params = {
+        userId: userId,
+        keyword: keyword,
+      };
+      await searchMyWordList(
+        params,
+        ({ data }) => {
+          mutations.SET_MY_WORDLIST(data);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+    }
   },
 
   async updateMyword(wordId, wordExp) {
