@@ -14,8 +14,9 @@
               <label for="id" class="form-label">ID</label>
               <div class="input-group mb-3" required>
                 <input @input="dupIdBtn" v-model="credentials.id" id="id" type="text" class="form-control" placeholder="ID" aria-label="User ID" aria-describedby="btn_check_dup" required />
-                <button class="btn btn-outline-primary" type="button" id="btn_check_id" @click="checkDup" disabled>중복확인</button>
-                <div id="id-check-invalid" class="invalid-feedback">ID는 4자 이상 입력하세요.</div>
+                <button class="btn btn-outline-primary" id="btn_check_id" @click="checkDup" disabled>중복확인</button>
+                <div v-if="credentials.id.length < 4" id="id-check-invalid" class="invalid-feedback">ID는 4자 이상 입력하세요.</div>
+                <div v-else id="id-check-invalid" class="invalid-feedback">사용 불가능한 ID입니다.</div>
                 <div id="id-check-valid" class="valid-feedback">사용 가능한 ID입니다.</div>
               </div>
 
@@ -92,7 +93,7 @@ export default {
   },
   methods: {
     escape() {
-      router.push({ name: "home" });
+      router.push({ name: "login" });
     },
     completeEmail: function () {
       this.credentials.email = this.email_front + "@" + this.email_back;
@@ -125,12 +126,15 @@ export default {
     async checkDup() {
       await userStore.actions.checkId(this.credentials.id);
       this.isValid = userStore.getters.isValidId();
-
+      let inputId = document.getElementById("id");
       if (this.isValid == true) {
         this.validId = this.credentials.id;
-        let inputId = document.getElementById("id");
         inputId.classList.remove("is-invalid");
         inputId.classList.add("is-valid");
+      } else {
+        inputId.classList.add("is-invalid");
+        inputId.classList.remove("is-valid");
+        inputId.focus();
       }
     },
 
@@ -139,13 +143,11 @@ export default {
       let inputId = document.getElementById("id");
       if (this.credentials.id.length > 3) {
         btnCheckDup.removeAttribute("disabled");
-        console.log("remove disabeld");
         inputId.classList.remove("is-invalid");
       } else {
         btnCheckDup.setAttribute("disabled", true);
         inputId.classList.remove("is-valid");
         inputId.classList.add("is-invalid");
-        console.log("disabled");
       }
     },
     autoFillEmail: function (txt) {
@@ -163,6 +165,7 @@ export default {
   mounted() {
     let inputId = document.getElementById("id");
     inputId.classList.add("is-invalid");
+    inputId.focus();
   },
   computed: {},
   watch: {},
