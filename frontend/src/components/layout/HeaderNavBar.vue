@@ -31,7 +31,7 @@
         <div id="searchuser" class="nav-item me-3">
           <form @submit.prevent="autoFillInput()" class="pe-3 mx-auto">
             <div class="d-flex justify-content-between w-100">
-              <input class="text-start" id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 이름" />
+              <input class="text-start" id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 ID" />
               <img src="@/assets/magnifying-glass.png" alt="user-search" class="align-self-center text-light" style="height: 20px; filter: opacity(0.3) drop-shadow(0 0 0 #fff)" />
             </div>
           </form>
@@ -48,7 +48,7 @@
         </div>
         <div class="nav-item me-3">
           <router-link class="nav-link" :to="{ name: 'profile', params: { username: currentUser } }"
-            ><strong>{{ currentUser }}</strong></router-link
+            ><strong>{{ nickname }}</strong></router-link
           >
         </div>
         <div class="nav-item">
@@ -82,6 +82,7 @@ export default {
       currentUser: String,
       dayBefore: ["오늘", "어제", /* "2일 전", "3일 전", "4일 전", "5일 전", "6일 전", */ "1주 전" /* "2주 전", "3주 전"*/],
       token: String,
+      nickname: String,
     };
   },
   watch: {
@@ -91,6 +92,7 @@ export default {
     fetchCurrentUser() {
       this.token = sessionStorage.getItem("access-token");
       this.currentUser = sessionStorage.getItem("current_user");
+      this.nickname = sessionStorage.getItem("current_user_nickname");
     },
     async submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");

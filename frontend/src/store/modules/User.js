@@ -116,6 +116,7 @@ const actions = {
       user.id,
       ({ data }) => {
         sessionStorage.setItem("current_user_num", data.userDetail.userId);
+        sessionStorage.setItem("current_user_nickname", data.userDetail.nickname);
       },
       (error) => {
         console.log(error);
