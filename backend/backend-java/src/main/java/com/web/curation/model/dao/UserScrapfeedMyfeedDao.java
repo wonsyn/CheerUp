@@ -14,4 +14,7 @@ public interface UserScrapfeedMyfeedDao {
 	
 	// 내가 스크랩한 것 중 보드 별로 보여주기
 	List<UserScrapfeedMyfeedJoinDto> selectMyScrapEachBoard(int userId, int boardId);
+	
+	// 스크랩 보드 수정
+	int updateScrap(int myfeedId, int boardId);
 }
