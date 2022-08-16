@@ -280,7 +280,7 @@ public class UserController {
 	    try {
 	    	System.out.println(userService.userInfo(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))).getPassword());
 			if(!userService.userInfo(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))).getPassword().equals(userDto.getPassword())) {
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
+//				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				resultMap.put("message", FAIL);
 			} else {
 				resultMap.put("message", SUCCESS);
@@ -305,7 +305,7 @@ public class UserController {
 		
 	    try {
 			if(userService.userInfo(id) != null) {
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
+//				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				resultMap.put("message", FAIL);
 			} else {
 				resultMap.put("message", SUCCESS);
