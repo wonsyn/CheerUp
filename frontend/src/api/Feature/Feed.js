@@ -78,4 +78,10 @@ async function deleteScrap(myfeedId, success, fail) {
     .then(success)
     .catch(fail);
 }
-export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail, recommFeed, getScrapList, createScrap, deleteScrap };
+async function editScrap(params, success, fail) {
+  await api
+    .put(`/feed/scrap/update`, JSON.stringify(params), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+export { getFeed, createBoard, getBoardList, updateBoard, deleteBoard, getFeedInBoard, getFeedDetail, recommFeed, getScrapList, createScrap, deleteScrap, editScrap };

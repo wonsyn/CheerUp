@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="d-flex">
-      <button @click="goBack" class="btn btn-secondary mx-3 px-5 my-0">이전으로</button>
+      <button @click="goBack" class="btn btn-success mx-3 px-5 my-0">이전으로</button>
       <h3 class="my-0 align-text-bottom">{{ board.boardName }}</h3>
     </div>
 
     <div class="row d-flex justify-content-center">
       <h5 v-if="scrapsInBoard.length == 0">스크랩이 없습니다.</h5>
-      <feed-list-item class="col-auto" v-for="feed in scrapsInBoard" :key="feed.feedId" :feed="feed" :scrapList="scrapsInBoard"></feed-list-item>
+      <feed-list-item class="col-auto" v-for="feed of scrapsInBoard" :key="feed.feedId" v-bind="feed" :scrapList="scrapsInBoard"></feed-list-item>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   name: "BoardScrapList",
   data() {
     return {
-      scrapsInBoard: [],
+      scrapsInBoard: null,
     };
   },
   components: {
@@ -46,7 +46,6 @@ export default {
     };
     await scrapStore.actions.getFeedInBoard(params);
     this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
-    console.log("board scrap", this.scrapsInBoard);
   },
   watch: {},
 };

@@ -1,4 +1,4 @@
-import { getFeedInBoard, getScrapList, createScrap, deleteScrap } from "@/api/Feature/Feed";
+import { getFeedInBoard, getScrapList, createScrap, deleteScrap, editScrap } from "@/api/Feature/Feed";
 
 const state = {
   scrapsInBoard: [],
@@ -62,6 +62,17 @@ const actions = {
   async deleteScrap(param) {
     await deleteScrap(
       param,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async editScrap(params) {
+    await editScrap(
+      params,
       ({ data }) => {
         console.log(data);
       },

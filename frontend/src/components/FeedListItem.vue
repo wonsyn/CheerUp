@@ -8,7 +8,14 @@
       </div>
       <div class="card-footer d-flex justify-content-between">
         <div>{{ feedSource }}</div>
-        <button v-if="isBookmarked == true" :id="'btn-scrap-' + feedId" @click="scrapFeedAction" class="btn btn-sm btn-outline-primary">
+        <button
+          v-if="isBookmarked == true"
+          :id="'btn-scrap-' + feedId"
+          class="btn btn-sm btn-outline-primary"
+          data-bs-toggle="modal"
+          :data-bs-target="'#boardSelectModal-' + feedId"
+          data-bs-whatever="0"
+        >
           <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 20px" />
         </button>
         <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
@@ -18,10 +25,13 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" :id="'boardSelectModalLabel-' + feedId">보드 선택</h5>
+                <h5 class="modal-title" :id="'boardSelectModalLabel-' + feedId">스크랩</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
+                <div class="d-flex justify-content-start mx-2">
+                  <button @click="scrapFeedAction('delete')" type="button" class="btn btn-outline-danger my-2">스크랩 취소</button>
+                </div>
                 <form @submit.prevent="createBoard()">
                   <h6>보드 추가</h6>
                   <div class="mb-3 d-flex justify-content-center">
@@ -32,7 +42,7 @@
                 </form>
                 <form>
                   <div class="mb-3">
-                    <label for="message-text" class="col-form-label" :id="'select-board-label-' + feedId">스크랩 저장</label>
+                    <label for="message-text" class="col-form-label" :id="'select-board-label-' + feedId">저장 경로</label>
                     <select v-model="boardId" class="form-select form-control" :id="'board-menu-' + feedId">
                       <option value="0" selected>기본 프로필에 저장</option>
                       <option v-for="board in boardList" :key="board.boardId" :value="board.boardId">{{ board.boardName }}</option>
@@ -107,9 +117,9 @@ export default {
       await boardStore.actions.getBoardList(this.currentUserId);
       this.boardList = boardStore.getters.boardList();
     },
-    async scrapFeedAction() {
+    async scrapFeedAction(res) {
       const scrapBtn = document.getElementById("btn-scrap-" + this.feedId);
-      if (this.$route.name == "home" || this.$route.name == "detail") {
+      if (this.$route.name == "home" || this.$route.name == "detail" || res == "delete") {
         if (this.isBookmarked == true) {
           if (confirm("스크랩을 취소하시겠습니까?")) {
             scrapStore.actions.deleteScrap(this.filteredId);
@@ -124,11 +134,18 @@ export default {
           };
           await scrapStore.actions.createScrap(params);
           this.isBookmarked = true;
-          console.log(params);
           this.boardId = 0;
         }
       } else {
-        await scrapStore.actions.editScrap();
+        // const params = {
+        //   boardId: this.boardId,
+        //   myfeedId: this.filteredId.myfeedId,
+        //   feedId: this.feedId,
+        //   // scrapfeedType: this.feedType,
+        //   userId: Number(this.currentUserId),
+        // };
+        // await scrapStore.actions.editScrap(params);
+        this.boardId = 0;
         console.log("edit scrap");
       }
       this.myModal.hide();
@@ -137,7 +154,6 @@ export default {
       backdrop[0].remove();
       backdrop[1].remove();
       const body = document.querySelector("body");
-      console.log(document.querySelector("body"));
       body.classList.remove("modal-open");
       body.setAttribute("style", "");
       body.setAttribute("data-bs-overflow", "");
