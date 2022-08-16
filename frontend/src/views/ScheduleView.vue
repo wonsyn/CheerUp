@@ -119,6 +119,7 @@ export default {
     return {
       scheduleList: [],
       curSchedule: Object,
+      socket: useStore().modules.userStore.getters.socket(),
     };
   },
   async created() {
@@ -151,6 +152,12 @@ export default {
         modalCompany.value = schedule.scheduleCompany;
         modalDate.value = schedule.scheduleDate;
         modalMemo.value = schedule.scheduleMemo;
+
+        console.log("modalDateValue: ", modalDate.value);
+        let today = new Date();
+        console.log("비교 값: ", today.toLocaleDateString());
+        // let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + ",0,0";
+        // this.socket.onopen(socketMsg);
 
         // const deleteBtn = modal.querySelector("#btn_modal_edit_delete");
         // deleteBtn.onclick = this.executeDelete(schedule.scheduleId);

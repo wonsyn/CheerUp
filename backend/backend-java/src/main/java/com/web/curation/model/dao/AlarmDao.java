@@ -30,4 +30,6 @@ public interface AlarmDao {
 	public int getUserIdByAlarmId(int alarmId) throws SQLException;
 	// 알람 체크 시 상태 변경
 	public int checkAlarm(int alarmId) throws SQLException;
+	// receiverId, senderId, content, url 을 이용한 알람 존재 여부 체크
+	public AlarmDto alreadyExist(AlarmDto alarmDto) throws SQLException;
 }

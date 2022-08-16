@@ -21,13 +21,14 @@ public class AlarmDto {
 		super();
 	}
 
-	public AlarmDto(int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent, String alarmUrl) {
+	public AlarmDto(int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent, String alarmUrl, String alarmDateTime) {
 		super();
 		this.alarmReceiverId = alarmReceiverId;
 		this.alarmSenderId = alarmSenderId;
 		this.alarmType = alarmType;
 		this.alarmContent = alarmContent;
 		this.alarmUrl = alarmUrl;
+		this.alarmDateTime = alarmDateTime;
 	}
 
 	public AlarmDto(int alarmId, int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent,

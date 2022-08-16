@@ -10,7 +10,7 @@
         <small id="toast-small"></small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <div id="toast-body" class="toast-body"></div>
+      <div id="toast-body" @click="move" class="toast-body"></div>
     </div>
   </div>
 </template>
@@ -19,6 +19,7 @@ import NavBar from "@/components/layout/HeaderNavBar.vue";
 import MainFooter from "@/components/layout/MainFooter.vue";
 import { Toast } from "bootstrap";
 import useStore from "@/store/index.js";
+import router from "@/router";
 
 const userStore = useStore().modules.userStore;
 
@@ -27,6 +28,8 @@ export default {
     return {
       socket: userStore.getters.socket(),
       socketMessage: "",
+      url: "",
+      arr: [],
     };
   },
   components: {
@@ -37,9 +40,18 @@ export default {
     getSocketMessage() {
       this.socketMessage = userStore.getters.socketMessage();
       console.log("###methods####: ", this.socketMessage);
-      if (this.socketMessage.charAt(0) === "a") this.toast(this.socketMessage.substring(1), "팔로우 알림!!", "");
-      else if (this.socketMessage.charAt(0) === "b") this.toast(this.socketMessage.substring(1), "스크랩 알림!!", "");
-      else if (this.socketMessage.charAt(0) === "c") this.toast(this.socketMessage.substring(1), "댓글 좋아요 알림!!", "");
+      this.arr = this.socketMessage.split(",");
+      console.log("arr: ", this.arr[0]);
+      // console.log("arr: ", arr[1]);
+      // console.log("arr: ", arr[2]);
+      // console.log("arr: ", arr[3]);
+      // console.log("arr: ", arr[4]);
+      console.log("arr: ", this.arr[5]);
+      // console.log("arr: ", arr[6]);
+      userStore.mutations.SET_SOCKET_URL(this.arr[5]);
+      if (this.arr[0] === "follow") this.toast(this.arr, "팔로우 알림!!", "");
+      else if (this.arr[0] === "scrap") this.toast(this.arr, "스크랩 알림!!", "");
+      else if (this.arr[0] === "comment_like") this.toast(this.arr, "댓글 좋아요 알림!!", "");
     },
     toast(msg, head, small) {
       const toastWindow = document.getElementById("toast-template");
@@ -47,12 +59,17 @@ export default {
       const toastHead = document.getElementById("toast-head");
       const toastSmall = document.getElementById("toast-small");
 
-      // toastBody.innerText = msg;
-      toastBody.innerHTML = msg;
+      toastBody.innerText = msg[4];
+      // toastBody.innerHTML = "<router-link to='" + msg[5] + "'>" + msg[4] + "</router-link>";
       toastHead.innerText = head;
       toastSmall.innerText = small;
       const toast = new Toast(toastWindow);
       toast.show();
+    },
+    move() {
+      // console.log(this);
+      console.log("move: ", userStore.getters.socketUrl());
+      router.push(userStore.getters.socketUrl());
     },
   },
 };

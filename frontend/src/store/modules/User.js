@@ -10,6 +10,7 @@ const state = {
   socket: null,
   socketMessage: "",
   isValidId: false,
+  socketUrl: "",
 };
 
 const getters = {
@@ -36,6 +37,9 @@ const getters = {
   },
   isValidId() {
     return state.isValidId;
+  },
+  socketUrl() {
+    return state.socketUrl;
   },
 };
 
@@ -64,26 +68,20 @@ const mutations = {
   SET_CHECK_ID: (isValidId) => {
     state.isValidId = isValidId;
   },
+  SET_SOCKET_URL: (socketUrl) => {
+    state.socketUrl = socketUrl;
+  },
 };
 
 const actions = {
   async connect() {
-    // console.log(state.profile.id);
-    // console.log("팔로워 리스트: " + state.followerList);
-    // console.log("팔로잉 리스트: " + state.followingList);
-    // console.log(sessionStorage.getItem("current_user"));
-    // var ws = new SockJS("ws://localhost:3000/api/cheerup/ws");
     var ws = new WebSocket("ws://localhost:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
-    // console.log("here" + ws.getId);
     mutations.SET_SOCKET(ws);
-    // console.log("here" + state.socket);
     state.socket.onmessage = function (e) {
       mutations.SET_SOCKETMESSAGE(e.data);
+      console.log(e.data.alarmReceiverId);
       console.log("user.js: " + getters.socketMessage());
       console.log(main.methods.getSocketMessage());
-      // if(getters.socketMessage().charAt(0) === 'a') console.log(main.methods.getSocketMessage());
-      // else if(getters.socketMessage().charAt(0) === 'b') console.log(main.methods.getSocketMessage());
-      // else if(getters.socketMessage().charAt(0) === 'c') console.log(main.methods.getSocketMessage());
     };
     state.socket.onopen = function (msg) {
       console.log("socket open", msg);
