@@ -3,7 +3,7 @@
     <div class="row d-flex justify-content-center">
       <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed"></feed-list-item>
       <div class="px-3">
-        <button class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>
+        <button v-if="hasMore" class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>
       </div>
     </div>
   </div>
@@ -24,6 +24,7 @@ export default {
     return {
       list: [],
       size: 20,
+      hasMore: true,
     };
   },
   mounted() {},
@@ -31,6 +32,7 @@ export default {
     for (let i = 0; i < this.size; i++) {
       this.list.push(this.feedList[i]);
       if (i == this.feedList.length - 1) {
+        this.hasMore = false;
         break;
       }
     }
