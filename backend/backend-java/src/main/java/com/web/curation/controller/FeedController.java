@@ -150,6 +150,26 @@ public class FeedController {
 			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@ApiOperation(value="스크랩한 피드 board 수정", 
+			  notes="/scrap/update/{myfeedId}/{boardId} \n "
+			  		+ "boardId 수정")
+	@PutMapping("/scrap/update/{myfeedId}/{boardId}")
+	public ResponseEntity<Map<String, Object>> editScrapBoard(@PathVariable int myfeedId, @PathVariable int boardId){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			int result = userScrapfeedMyfeedService.editScrapBoard(myfeedId, boardId);
+			if(result == 1) {
+				resultMap.put("message", "success");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
+			}else {
+				resultMap.put("message", "faile");
+				return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}catch(Exception e) {
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@ApiOperation(value="내가 스크랩 한 피드 보기", 
 			  notes="userId로 내가 스크랩 한 피드 모두 보기")

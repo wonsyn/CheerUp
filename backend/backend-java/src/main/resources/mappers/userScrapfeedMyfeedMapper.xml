@@ -50,4 +50,10 @@
 			AND
 			  board_id = #{boardId}
 	</select>
+	
+	<update id="updateScrap" parameterType="int">
+		UPDATE user_feed_myfeed
+		SET board_id = #{boardId}
+		WHERE myfeed_id = #{myfeedId}
+	</update>
 </mapper>

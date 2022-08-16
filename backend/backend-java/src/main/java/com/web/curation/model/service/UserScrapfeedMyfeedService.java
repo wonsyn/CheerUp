@@ -14,4 +14,7 @@ public interface UserScrapfeedMyfeedService {
 	
 	// 내가 스크랩한 것 중 보드 별로 보여주기
 	List<UserScrapfeedMyfeedJoinDto> getMyScrapEachBoard(int userId, int boardId);
+	
+	// 스크랩 된 것 board수정
+	int editScrapBoard(int myfeedId, int boardId);
 }

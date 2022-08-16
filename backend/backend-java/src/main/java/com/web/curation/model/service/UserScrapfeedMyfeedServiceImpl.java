@@ -30,4 +30,8 @@ public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedServic
 		return userScrapfeedMyfeedDao.selectMyScrapEachBoard(userId, boardId);
 	}
 
+	@Override
+	public int editScrapBoard(int myfeedId, int boardId) {
+		return userScrapfeedMyfeedDao.updateScrap(myfeedId, boardId);
+	}
 }
