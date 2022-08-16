@@ -28,14 +28,8 @@ const actions = {
     await getScrapList(
       param,
       ({ data }) => {
-        if (data["message"] === "success") {
-          mutations.SET_SCRAP_LIST(data);
-          console.log("success");
-          console.log(data);
-        } else {
-          console.log("failed");
-          console.log(data);
-        }
+        mutations.SET_SCRAP_LIST(data);
+        console.log(data);
       },
       (error) => {
         console.log(error);
@@ -46,14 +40,8 @@ const actions = {
     await getFeedInBoard(
       params,
       ({ data }) => {
-        if (data["message"] === "success") {
-          mutations.SET_SCRAP_IN_BOARD(data);
-          console.log("success");
-          console.log(data);
-        } else {
-          console.log("failed");
-          console.log(data);
-        }
+        mutations.SET_SCRAP_IN_BOARD(data);
+        console.log(data);
       },
       (error) => {
         console.log(error);

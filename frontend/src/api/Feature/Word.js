@@ -58,4 +58,11 @@ async function addMyWord(body, success, fail) {
     .catch(fail);
 }
 
-export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList, addMyWord };
+async function searchMyWordList(params, success, fail) {
+  await api
+    .get(`/word/myword/${params.userId}`, { params: { keyword: params.keyword }, headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+
+export { getMyWordList, getDBWordList, updateMyWord, deleteMyWord, addFavWord, removeFavWord, getMyFavWordList, addMyWord, searchMyWordList };
