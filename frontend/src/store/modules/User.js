@@ -1,4 +1,4 @@
-import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById, checkId } from "@/api/Feature/User.js";
+import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById, checkId, updateUserInfo } from "@/api/Feature/User.js";
 import main from "../../App.vue";
 
 const state = {
@@ -269,6 +269,17 @@ const actions = {
           console.log("failed");
           mutations.SET_CHECK_ID(false);
         }
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  },
+  async updateuserInfo(profile) {
+    await updateUserInfo(
+      profile,
+      ({ data }) => {
+        console.log(data);
       },
       (error) => {
         console.log(error);

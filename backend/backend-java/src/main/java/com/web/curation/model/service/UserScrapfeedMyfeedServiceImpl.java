@@ -34,4 +34,9 @@ public class UserScrapfeedMyfeedServiceImpl implements UserScrapfeedMyfeedServic
 	public int editScrapBoard(int myfeedId, int boardId) {
 		return userScrapfeedMyfeedDao.updateScrap(myfeedId, boardId);
 	}
+
+	@Override
+	public int cancelScrap(int myfeedId) {
+		return userScrapfeedMyfeedDao.deleteScrap(myfeedId);
+	}
 }

@@ -17,4 +17,7 @@ public interface UserScrapfeedMyfeedDao {
 	
 	// 스크랩 보드 수정
 	int updateScrap(int myfeedId, int boardId);
+	
+	// 스크랩 취소
+	int deleteScrap(int myfeedId);
 }

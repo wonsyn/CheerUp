@@ -27,7 +27,7 @@
           </div> -->
         </div>
       </div>
-      <feed-list :feedList="feedList" :key="listKey" class="mt-3 p-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
+      <feed-list v-if="token != null" :feedList="feedList" :key="listKey" class="mt-3 p-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
     </div>
   </div>
 </template>
@@ -48,9 +48,11 @@ export default {
     return {
       feedList: [],
       listKey: 0,
+      token: String,
     };
   },
   async created() {
+    this.token = sessionStorage.getItem("access-token");
     if (sessionStorage.getItem("access-token") == null) {
       router.push({ name: "login" });
     } else {

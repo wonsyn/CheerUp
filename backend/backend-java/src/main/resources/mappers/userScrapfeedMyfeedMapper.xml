@@ -56,4 +56,9 @@
 		SET board_id = #{boardId}
 		WHERE myfeed_id = #{myfeedId}
 	</update>
+	
+	<delete id="deleteScrap" parameterType="int">
+		DELETE FROM user_feed_myfeed
+		WHERE myfeed_id = #{myfeedId}
+	</delete>
 </mapper>
