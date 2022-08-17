@@ -33,10 +33,12 @@ export default {
   },
   methods: {
     async fetchData() {
-      console.log("UserScrapList.vue created start");
       await scrapStore.actions.getScrapList(this.profile.userId);
       this.scrapList = scrapStore.getters.scrapList();
-      console.log("scraplist", this.scrapList);
+    },
+    async getScrapList() {
+      await scrapStore.actions.getScrapList(this.profile.userId);
+      this.scrapList = scrapStore.getters.scrapList();
     },
   },
   computed: {
@@ -45,10 +47,8 @@ export default {
     },
   },
   async created() {
-    console.log("UserScrapList.vue created start");
     await scrapStore.actions.getScrapList(this.profile.userId);
     this.scrapList = scrapStore.getters.scrapList();
-    console.log("scraplist", this.scrapList);
   },
   watch: {
     profile: "fetchData",
