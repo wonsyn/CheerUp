@@ -38,6 +38,14 @@ export default {
     goBack() {
       this.$emit("goBoardList");
     },
+    async getScrapList() {
+      const params = {
+        userId: this.profile.userId,
+        boardId: this.board.boardId,
+      };
+      await scrapStore.actions.getFeedInBoard(params);
+      this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
+    },
   },
   async created() {
     const params = {

@@ -80,7 +80,7 @@ async function deleteScrap(myfeedId, success, fail) {
 }
 async function editScrap(params, success, fail) {
   await api
-    .put(`/feed/scrap/update`, JSON.stringify(params), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .put(`/feed/scrap/update/${params.myfeedId}/${params.boardId}`, {}, { headers: { "access-token": sessionStorage.getItem("access-token") } })
     .then(success)
     .catch(fail);
 }
