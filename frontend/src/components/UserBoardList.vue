@@ -1,11 +1,10 @@
 <template>
-  <div class="container">
+  <div class="container my-3">
     <div class="d-inline">
-      <h3 class="text-center">보드 리스트</h3>
       <form v-if="currentUser == profile.id" class="position-relative" @submit.prevent="createBoard">
-        <input type="text" v-model="newBoardName" />
+        <input class="ps-3" type="text" v-model="newBoardName" style="border: none; border-bottom: 1px solid black; padding-left: 2px" placeholder="보드 이름" />
         {{ newBoard }}
-        <button type="submit" class="btn btn-outline-primary">보드 생성</button>
+        <button type="submit" class="btn btn-outline-primary mx-3">보드 생성</button>
       </form>
     </div>
 
@@ -75,4 +74,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+input:focus {
+  outline: none;
+}
+</style>

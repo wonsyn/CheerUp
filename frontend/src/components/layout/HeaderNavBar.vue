@@ -29,13 +29,13 @@
           </li>
         </ul>
         <div id="searchuser" class="nav-item me-3">
-          <form @submit.prevent="autoFillInput()" class="pe-3 mx-auto">
-            <div class="d-flex justify-content-between w-100">
+          <form @submit.prevent="autoFillInput()" class="pe-3 mx-auto border border-primary" style="border-radius: 7px; border-color: #00dd99">
+            <div class="d-flex justify-content-between w-100" style="border-radius: 15px; border-width: 2px; border-color: #00dd99">
               <input class="text-start" id="searchinput" type="text" v-model="userInput" @input="submitAutoComplete" autocomplete="off" placeholder="유저 ID" />
               <img src="@/assets/magnifying-glass.png" alt="user-search" class="align-self-center text-light" style="height: 20px; filter: opacity(0.3) drop-shadow(0 0 0 #fff)" />
             </div>
           </form>
-          <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled bg-light">
+          <div v-if="!!userInput == true" id="user-search-box" class="autocomplete disabled" style="background-color: white; border-radius: 7px; z-index: 1">
             <div class="d-flex justify-content-start" @click="searchUserAdd" style="cursor: pointer" v-for="(user, i) in result" :key="i">
               <img class="profile-icon" v-if="user.userImgUrl != null" :src="require('@/assets/profile_icon/profile-' + user.userImgUrl + '.png')" v-bind:alt="user.userImgName" style="height: 20px" />
               <img class="profile-icon" v-else src="@/assets/blank_profile.png" v-bind:alt="user.userImgName" style="height: 20px" />
@@ -174,23 +174,18 @@ export default {
   justify-content: space-around;
   text-align: center;
 }
-form {
-  outline: none;
-  background-color: #00dd99;
-  border-radius: 15px;
-}
 input {
   outline: none;
-  border-width: 0;
+  border: none;
   border-radius: 15px;
   background: transparent;
   padding-left: 1rem;
 }
 input::placeholder {
-  color: white;
+  color: lightgray;
 }
 input[type="text"] {
-  color: white;
+  color: #000;
 }
 #user-search-box {
   position: absolute;

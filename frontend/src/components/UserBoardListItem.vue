@@ -1,17 +1,17 @@
 <template>
-  <div id="board-list-item" class="board-list-item card my-3" style="width: 18rem">
+  <div id="board-list-item" class="ct-item board-list-item card my-3" style="width: 18rem">
     <img v-if="scrapForThumbnail != null" @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" :src="scrapForThumbnail" class="card-img-top" alt="img" />
     <img v-else @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" src="@/assets/logo.png" class="card-img-top" alt="img" />
     <div class="card-body">
       <h4 @click="goBoardDetail" style="cursor: pointer" v-if="!isEdit" class="card-text text-start">{{ board.boardName }}</h4>
       <form v-else @submit.prevent="updateBoard">
         <input class="w-75 my-1" type="text" v-model="inputForUpdate" />
-        <button class="btn btn-sm btn-outline-primary mx-1">수정</button>
+        <button class="btn btn-sm btn-info mx-1">수정</button>
       </form>
       <div v-if="currentUser == profile.id" class="card-footer d-flex justify-content-end">
-        <button v-if="!isEdit" @click="isEdit = true" class="btn btn-sm btn-outline-primary mx-1">수정</button>
+        <button v-if="!isEdit" @click="isEdit = true" class="btn btn-sm btn-info mx-1">수정</button>
         <button v-else @click="cancel" class="btn btn-sm btn-outline-danger mx-1">취소</button>
-        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-outline-danger">삭제</button>
+        <button v-if="!isEdit" @click="deleteBoard" class="btn btn-sm btn-danger">삭제</button>
       </div>
     </div>
   </div>
@@ -96,4 +96,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.ct-item:hover {
+  transform: scale(1.025);
+  transition: all 0.15s;
+}
+</style>

@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <div style="border: 1px black solid; border-radius: 7px">
+    <div style="border: 1px #00dd99 solid; border-radius: 7px">
       <div class="row p-3">
-        <select id="select_feed_type" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
+        <select style="border-width: 0" id="select_feed_type" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
           <option selected value="0">전체</option>
           <option value="1">뉴스</option>
           <option value="2">정보글</option>
         </select>
-        <select id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
+        <select style="border-width: 0" id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
           <option selected value="0">산업군(전체)</option>
           <option value="1">금융</option>
           <option value="2">게임</option>
@@ -15,12 +15,12 @@
           <option value="4">IT 서비스</option>
           <option value="5">모바일</option>
         </select>
-        <select id="select_board" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
+        <select style="border-width: 0" id="select_board" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
           <option selected value="0">전체</option>
           <option v-for="board in boardList" :key="board.boardId" :value="board.boardId">{{ board.boardName }}</option>
         </select>
         <div class="col text-end me-3">
-          <button @click="searchFeed" type="button" class="btn" style="background-color: #00dd99">검색</button>
+          <button @click="searchFeed" type="button" class="btn btn-primary">검색</button>
         </div>
       </div>
     </div>
@@ -227,5 +227,9 @@ export default {
 }
 .fc-col-header-cell {
   background-color: #bbbbbb;
+}
+.fc-button {
+  border-radius: 15px !important;
+  border-color: #bbbbbb !important;
 }
 </style>

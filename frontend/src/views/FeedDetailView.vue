@@ -49,7 +49,7 @@
       </div>
     </div>
     <br />
-    <div v-html="feedDetail.feedContent"></div>
+    <div style="font-family: 'RIDIBatang'" v-html="feedDetail.feedContent"></div>
     <hr />
     <detail-voca-list-item v-for="voca in vocaList" :key="voca.wordId" v-bind="voca"></detail-voca-list-item>
     <div id="voca_add_window" class="px-3 pb-3" style="display: none">
@@ -74,8 +74,16 @@
       />
       <img v-else class="profile-icon me-2 mt-1 align-middle" src="@/assets/blank_profile.png" alt="profile" style="width: 20px; height: 20px" />
       <span class="me-3 mt-1 align-middle" style="font-weight: bold">{{ loginUserId }}</span>
-      <input type="text" class="px-2 me-3" id="input_comment_create" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
-      <button @click="addComment" class="btn" style="background-color: #00dd99; color: white; font-weight: bold; width: 7%">작성</button>
+      <form class="w-100">
+        <input
+          type="text"
+          class="px-2"
+          id="input_comment_create"
+          placeholder="댓글을 입력하세요."
+          style="padding-left: 1rem; outline: none; border: 0; border-bottom: 1px solid black; font-size: 14px; width: 80%; margin-left: auto; margin-right: auto"
+        />
+        <button @click="addComment" class="btn btn-sm btn-primary fw-bold ms-3" style="width: 15%">작성</button>
+      </form>
     </div>
     <hr />
     <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">{{ loginUserId }}님이 좋아할 만한 기사들</div>

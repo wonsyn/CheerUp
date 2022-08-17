@@ -3,33 +3,33 @@
     <div style="color: #00dd99; font-size: 30px; font-weight: bold">내 일정</div>
     <div class="d-flex mb-3">
       <div class="me-auto"></div>
-      <button class="btn" @click="createSchedule" data-bs-toggle="modal" data-bs-target="#scheduleCreateModal" data-bs-title="일정 추가" style="background-color: lightseagreen; color: white">
-        일정 추가하기
-      </button>
+      <button class="btn btn-success" @click="createSchedule" data-bs-toggle="modal" data-bs-target="#scheduleCreateModal" data-bs-title="일정 추가">일정 추가하기</button>
     </div>
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th scope="col">번호</th>
-          <th scope="col">일정명</th>
-          <th scope="col">기업</th>
-          <th scope="col">날짜</th>
-          <th scope="col">메모</th>
-        </tr>
-      </thead>
-      <tbody>
-        <schedule-table-item
-          v-for="(schedule, index) in scheduleList"
-          :key="index"
-          :index="index + 1"
-          v-bind="schedule"
-          @click="updateSchedule(index)"
-          data-bs-toggle="modal"
-          data-bs-target="#scheduleEditModal"
-          :data-bs-title="index + 1"
-        ></schedule-table-item>
-      </tbody>
-    </table>
+    <div class="p-3 shadow" style="border-radius: 15px">
+      <table class="rtable table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">일정명</th>
+            <th scope="col">기업</th>
+            <th scope="col">날짜</th>
+            <th scope="col">메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <schedule-table-item
+            v-for="(schedule, index) in scheduleList"
+            :key="index"
+            :index="index + 1"
+            v-bind="schedule"
+            @click="updateSchedule(index)"
+            data-bs-toggle="modal"
+            data-bs-target="#scheduleEditModal"
+            :data-bs-title="index + 1"
+          ></schedule-table-item>
+        </tbody>
+      </table>
+    </div>
 
     <div class="modal fade" id="scheduleEditModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -61,7 +61,7 @@
           <div class="modal-footer d-flex">
             <button type="button" @click="executeDelete" id="btn_modal_edit_delete" class="btn btn-danger" data-bs-dismiss="modal">삭제</button>
             <div class="me-auto"></div>
-            <button type="button" @click="executeUpdate" data-bs-dismiss="modal" id="btn_modal_edit_submit" class="btn btn-primary">수정</button>
+            <button type="button" @click="executeUpdate" data-bs-dismiss="modal" id="btn_modal_edit_submit" class="btn btn-info">수정</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
           </div>
         </div>
@@ -251,4 +251,24 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.rtable {
+  -webkit-text-size-adjust: none;
+  background-color: #fff;
+  color: #000;
+  width: 100%;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-vertical-spacing: 0px;
+  outline: none;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  border-collapse: collapse;
+  border-radius: 10px;
+}
+</style>

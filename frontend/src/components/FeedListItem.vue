@@ -8,18 +8,11 @@
       </div>
       <div class="card-footer d-flex justify-content-between">
         <div>{{ feedSource }}</div>
-        <button
-          v-if="isBookmarked == true"
-          :id="'btn-scrap-' + feedId"
-          class="btn btn-sm btn-outline-success"
-          data-bs-toggle="modal"
-          :data-bs-target="'#boardSelectModal-' + feedId"
-          data-bs-whatever="0"
-        >
-          <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 20px" />
+        <button v-if="isBookmarked == true" :id="'btn-scrap-' + feedId" class="btn btn-sm" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
+          <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 25px" />
         </button>
         <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0" style="border: 0">
-          <img class="bookmark-icon" src="@/assets/bookmark_blank.png" style="height: 20px" />
+          <img class="bookmark-icon" src="@/assets/bookmark_blank.png" style="height: 25px" />
         </button>
       </div>
     </div>
