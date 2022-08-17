@@ -61,8 +61,8 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 	
 	@Override
-	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException {
-		return alarmMapper.getAlarmListByDate(alarmDto);
+	public List<AlarmDto> getAlarmListByDate(int receiverId) throws SQLException {
+		return alarmMapper.getAlarmListByDate(receiverId);
 	}
 	
 	@Override
@@ -78,5 +78,10 @@ public class AlarmServiceImpl implements AlarmService {
 	@Override
 	public int checkAlarm(int alarmId) throws SQLException {
 		return alarmMapper.checkAlarm(alarmId);
+	}
+
+	@Override
+	public AlarmDto alreadyExist(AlarmDto alarmDto) throws SQLException {
+		return alarmMapper.alreadyExist(alarmDto);
 	}
 }

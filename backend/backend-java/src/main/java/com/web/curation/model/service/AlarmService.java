@@ -21,7 +21,7 @@ public interface AlarmService {
 	// 알람 내용 기준
 	public List<AlarmDto> getAlarmListByContent(AlarmDto alarmDto) throws SQLException;
 	// 알람 생성 범위 기준
-	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException;
+	public List<AlarmDto> getAlarmListByDate(int receiverId) throws SQLException;
 	// 확인 알람
 	public List<AlarmDto> getCheckedAlarm(int userId) throws SQLException;
 	// 미확인 알람
@@ -30,4 +30,6 @@ public interface AlarmService {
 	public int getUserIdByAlarmId(int alarmId) throws SQLException;
 	// 알람 체크 시 상태 변경
 	public int checkAlarm(int alarmId) throws SQLException;
+	// receiverId, senderId, content, url 을 이용한 알람 존재 여부 체크
+	public AlarmDto alreadyExist(AlarmDto alarmDto) throws SQLException;
 }

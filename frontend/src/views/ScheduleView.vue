@@ -119,6 +119,7 @@ export default {
     return {
       scheduleList: [],
       curSchedule: Object,
+      socket: useStore().modules.userStore.getters.socket(),
     };
   },
   async created() {
@@ -210,6 +211,17 @@ export default {
         },
       );
 
+      let today = new Date();
+      today.setHours(today.getHours() + 9);
+      const date1 = new Date(modalDate.value);
+      const date2 = new Date(today.toISOString().substring(0, 10));
+      const diffDate = date1.getTime() - date2.getTime();
+      const day = diffDate / (1000 * 60 * 60 * 24);
+
+      if (day >= 0 && day <= 7) {
+        let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
+        this.socket.onopen(socketMsg);
+      }
       await scheduleStore.actions.getSchedule();
       this.scheduleList = scheduleStore.getters.getScheduleList();
     },
@@ -222,6 +234,19 @@ export default {
       const modalMemo = modal.querySelector("#schedule-edit-memo");
 
       await scheduleStore.actions.updateSchedule(this.curSchedule.scheduleId, modalName.value, modalCompany.value, modalDate.value, modalMemo.value);
+
+      let today = new Date();
+      today.setHours(today.getHours() + 9);
+      const date1 = new Date(modalDate.value);
+      const date2 = new Date(today.toISOString().substring(0, 10));
+      const diffDate = date1.getTime() - date2.getTime();
+      const day = diffDate / (1000 * 60 * 60 * 24);
+
+      if (day >= 0 && day <= 7) {
+        // let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
+        let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + modalDate.value + "," + modalName.value;
+        this.socket.onopen(socketMsg);
+      }
 
       await scheduleStore.actions.getSchedule();
       this.scheduleList = scheduleStore.getters.getScheduleList();

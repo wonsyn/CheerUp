@@ -1,6 +1,8 @@
 package com.web.curation.config;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,6 @@ import com.web.curation.model.dto.AlarmDto;
 import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.FeedService;
-import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.UserService;
 
 @Component
@@ -70,6 +71,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			String[] strs = msg.split(",");
 			
 			if(strs != null && strs.length == 5) {
+				System.out.println("??????????");
 				for(String s : strs) System.out.println(s);
 				// 요청 종류( follow, scrap, comment_like )
 				String cmd = strs[0];
@@ -79,94 +81,74 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				String receiverId = strs[2];
 				// 피드 번호
 				String feedId = strs[3];
-				// 
-				String content = strs[4];
+				// 피드 제목
+				String title = "";
+				// 댓글 내용 ( comment_like에서만 사용 )
+				String comment = strs[4];
 				// 프론트 toast 클릭 시 이동할 경로
 				String url = "";
-				// 프론트로 전달할 내용을 담는 객체
-				AlarmDto alarmDto = new AlarmDto();
+				// toast body에 들어갈 내용
+				String content = "";
 				// 프론트로 전달하는 객체
 				TextMessage tmpMsg = null;
 
 				WebSocketSession senderSession = userSessionsMap.get(senderId);
 				WebSocketSession receiverSession = userSessionsMap.get(receiverId);
 				
-				alarmDto.setAlarmType(cmd);
-				alarmDto.setAlarmSenderId(userService.getUserIdById(senderId));
-				alarmDto.setAlarmReceiverId(userService.getUserIdById(receiverId));
-				
 				// 팔로우
 				if("follow".equals(cmd) && receiverSession != null) {
-					
-					alarmDto.setAlarmContent(senderId+" 님이 팔로우하였습니다.");
-					
-//					for(String s : strs) System.out.print(s+"\t");
-					System.out.println("follow");
-					//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 글을 DEV했습니다!</a>");
-					tmpMsg = new TextMessage("a"+senderId + " 님이 당신을 팔로우하였습니다!"		
-//							+ "<a href='/http://localhost:8080/cheerup/user/detail/"+replyWriter +"'");  
-							+ "<a href='/profile/"+senderId +"' data-v-c2383e3c=''>"+ senderId +"</a>");
-//							+ "<router-link to = '/profile/"+replyWriter +"'>"+replyWriter + " 님이 당신을 팔로우하였습니다."+"</router-link>");  
-					
-//					<a href="/calendar" class="nav-link" data-v-c2383e3c="">달력</a>
-					
-//					replyWriter + " 님이 당신을 팔로우하였습니다." => content
-//					url = "/profile/"+replyWriter;
-					
-//					boardWriterSession.sendMessage(tmpMsg);
+					content = senderId+" 님이 팔로우하였습니다.";
+					url = "/profile/"+senderId;
 				}
-				else {
-					String title = feedService.readFeedById(Integer.parseInt(feedId)).getFeedTitle();
-//					String content = strs[4];
+				else if( ("scrap".equals(cmd) || "comment_like".equals(cmd) ) && receiverSession != null ) {
+					
+					title = feedService.readFeedById(Integer.parseInt(feedId)).getFeedTitle();
+					url = "/detail/" + feedId;
+					
 					//스크랩
 					if("scrap".equals(cmd) && receiverSession != null) {
-						//replyWriter = 스크랩누른사람 , boardWriter = 게시글작성자
-						alarmDto.setAlarmContent(senderId+" 님이 "+ title + " 을 스크랩하였습니다!");
-						
-						tmpMsg = new TextMessage("b"+senderId + "님이 "
-								+ "<a href='/http://localhost:8080/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
-								+ title+"</strong> 을 스크랩했습니다!</a>");
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 글을 스크랩했습니다!</a>");
-						url = "";
-						
-//						boardWriterSession.sendMessage(tmpMsg);
-//						user1 님이 팔로우하였습니다.
+						content = senderId+" 님이 "+ title + " 을 스크랩하였습니다!";
 					}
-					
 					//좋아요  
 					else if("comment_like".equals(cmd) && receiverSession != null) {
-						//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
-						System.out.println("*************");
-						tmpMsg = new TextMessage("c"+senderId + "님이 "
-								+ "<a href='/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
-								+ title+"</strong> 에 작성한 " + content + " 댓글을 좋아요했습니다!</a>");
-						
-//						<a href="/detail/7" style="color: black"><strong>김부겸 삼성 3년간 총 7만개 청년 일자리창출 기여</strong> 에 작성한 댓글을 좋아요했습니다!</a>
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 댓글을 좋아요했습니다!</a>");
-						url = "/detail/" + feedId;
-						
-//						boardWriterSession.sendMessage(tmpMsg);
+						content = senderId+" 님이 "+ title + "에 작성한 " + comment + "댓글을 좋아요 하였습니다!";
 					}
+					
+				}				
+				// 일정 등록
+				else if("schedule".equals(cmd) && receiverSession != null) {
+					System.out.println("스케쥴");
+
+					String dDay = strs[3];
+					String scheduleName = strs[4];
+					
+					if("0".equals(dDay)) content = "오늘 " + scheduleName + " 일정이 있습니다.";
+					else content = scheduleName + "일정이 @일 남았습니다.";
+					// *********************** url 변경 ??
+					url = "/schedule";
 				}
 				
+				int receiverUserId = userService.getUserIdById(receiverId);
+				int senderUserId = userService.getUserIdById(senderId);
 				// 알림이 이미 존재하는지 확인
-				
 				// 알람이 있다면 날짜 변경, 확인 시간 = null
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				AlarmDto alarmDto = new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date()));
+				alarmDto = alarmService.alreadyExist(alarmDto);
+				System.out.println("결과: " + alarmDto);
+				if(alarmDto != null) {
+					// 
+					System.out.println("yas");
+					alarmDto.setAlarmDateTime(sdf.format(new Date()));
+					alarmService.updateAlarm(alarmDto);
+				} else {					
+					System.out.println("nope");
+					// 알람이 없다면 새로 생성
+					alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date())));			
+				}
 				
-				// 알람이 없다면 새로 생성
-				
-				
-//				(#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl})
-//				alarmService.createAlarm(new AlarmDto(userService.getUserIdById(boardWriter), userService.getUserIdById(replyWriter), 
-//						cmd, tmpMsg.toString(),	url));
-				
+				// 프론트로 메세지 전달
+				tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +sdf.format(new Date()));				
 				receiverSession.sendMessage(tmpMsg);
 				
 				/*
