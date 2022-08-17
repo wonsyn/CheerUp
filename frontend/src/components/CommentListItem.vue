@@ -10,6 +10,7 @@
         <img v-if="like" class="ms-3 align-self-center" src="@/assets/heart_fill.png" alt="like" style="width: 17px; height=17px" />
         <img v-else class="ms-3 align-self-center" src="@/assets/heart_outline.png" alt="like" style="width: 17px; height=17px" />
         <div class="ms-1 align-self-center" style="font-size: 10px">{{ likeNum }}</div>
+        <div class="ms-2 align-self-center" style="font-size: 5px; color: darkgray">{{ commentDate }}</div>
       </div>
       <div :id="'btn' + commentId" class="d-none">
         <button :id="'btn_comment_edit' + commentId" class="btn me-1 align-middle" @click="openCommentEditWindow" style="background-color: #eae784; height: 25px; font-size: 10px">수정</button>

@@ -162,7 +162,7 @@ export default {
     this.followers = userStore.getters.followerList()?.length;
     await userStore.actions.getFollowingList(this.profile.id);
     this.followings = userStore.getters.followingList()?.length;
-    this.imgUrl = this.profile.userImgUrl == null ? require("@/assets/blank_profile.png") : require(this.profile.userImgUrl);
+    this.imgUrl = this.profile.userImgUrl == null ? require("@/assets/blank_profile.png") : require("@/assets/profile_icon/profile-" + this.profile.userImgUrl + ".png");
   },
 
   watch: {

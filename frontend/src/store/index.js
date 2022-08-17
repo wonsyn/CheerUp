@@ -5,6 +5,7 @@ import wordStore from "@/store/modules/Word.js";
 import boardStore from "@/store/modules/Board.js";
 import scrapStore from "@/store/modules/Scrap.js";
 import scheduleStore from "@/store/modules/Schedule.js";
+import notificationStore from "@/store/modules/Notification.js";
 
 const store = {
   modules: {
@@ -15,6 +16,7 @@ const store = {
     boardStore,
     scrapStore,
     scheduleStore,
+    notificationStore,
   },
 };
 
