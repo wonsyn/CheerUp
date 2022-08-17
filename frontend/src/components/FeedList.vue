@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div id="feed-list-component" class="container">
     <div class="row d-flex justify-content-center">
       <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed" :scrapList="scrapList"></feed-list-item>
       <div class="px-3">
@@ -43,6 +43,12 @@ export default {
         }
       }
     },
+    scrollAction() {
+      const bottom = document.getElementById("btn-bottom-expand");
+      if (window.scrollY - bottom.offsetTop + window.innerHeight > 0 && bottom != null) {
+        this.moreFeed();
+      }
+    },
   },
   computed: {
     scrapList() {
@@ -59,13 +65,12 @@ export default {
       }
     }
     scrapStore.actions.getScrapList(sessionStorage.getItem("current_user_num"));
-    window.addEventListener("scroll", () => {
-      //스크롤을 할 때마다 로그로 현재 스크롤의 위치가 찍혀나온다.
-      const bottom = document.getElementById("btn-bottom-expand");
-      if (window.scrollY - bottom.offsetTop + window.innerHeight > 0 && bottom != null) {
-        this.moreFeed();
-      }
-    });
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollAction);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.scrollAction);
   },
   watch: {
     feedList() {
