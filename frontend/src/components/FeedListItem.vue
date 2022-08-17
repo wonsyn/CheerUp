@@ -146,7 +146,11 @@ export default {
       this.$parent.getScrapList();
     },
     moveDetail() {
-      router.push({ name: "detail", params: { feedId: this.feedId } });
+      if (this.feedType == 1) {
+        router.push({ name: "detail", params: { feedId: this.feedId } });
+      } else {
+        window.open(this.feedUrl, "blog");
+      }
     },
     fetchScrapList() {
       scrapStore.actions.getScrapList(this.currentUserId);
