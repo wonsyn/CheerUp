@@ -3,7 +3,7 @@
     <div class="row d-flex justify-content-center">
       <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed" :scrapList="scrapList"></feed-list-item>
       <div class="px-3">
-        <button v-if="hasMore" class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>
+        <button id="btn-bottom-expand" v-if="hasMore" class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>
       </div>
     </div>
   </div>
@@ -44,7 +44,6 @@ export default {
       }
     },
   },
-  mounted() {},
   computed: {
     scrapList() {
       console.log("feedlist computed", scrapStore.getters.scrapList());
@@ -60,11 +59,13 @@ export default {
       }
     }
     scrapStore.actions.getScrapList(sessionStorage.getItem("current_user_num"));
-
-    console.log("FeedList.vue created start");
-    console.log(this.feedList);
-
-    console.log("FeedList.vue created end");
+    window.addEventListener("scroll", () => {
+      //스크롤을 할 때마다 로그로 현재 스크롤의 위치가 찍혀나온다.
+      const bottom = document.getElementById("btn-bottom-expand");
+      if (window.scrollY - bottom.offsetTop + window.innerHeight > 0) {
+        this.moreFeed();
+      }
+    });
   },
   watch: {
     feedList() {

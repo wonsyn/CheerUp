@@ -79,13 +79,16 @@
     </div>
     <hr />
     <div class="text-start ps-3 mb-3" style="font-size: 13px; font-weight: bold">{{ loginUserId }}님이 좋아할 만한 기사들</div>
-    <feed-list :feedList="recommList" class="mt-3 p-3"></feed-list>
+    <div class="row d-flex justify-content-center">
+      <feed-list-item class="col-auto" v-for="feed in recommList" :key="feed.feedId" v-bind="feed" :scrapList="scrapList"></feed-list-item>
+    </div>
   </div>
 </template>
 
 <script>
 import CommentListItem from "@/components/CommentListItem.vue";
 import DetailVocaListItem from "@/components/DetailVocaListItem.vue";
+import FeedListItem from "@/components/FeedListItem.vue";
 import useStore from "@/store";
 
 const userStore = useStore().modules.userStore;
@@ -99,6 +102,7 @@ export default {
   components: {
     CommentListItem,
     DetailVocaListItem,
+    FeedListItem,
   },
   props: {
     feedId: Number,
@@ -118,6 +122,7 @@ export default {
       boardList: [],
       newBoardName: "",
       currentUserId: sessionStorage.getItem("current_user_num"),
+      scrapList: [],
     };
   },
   async created() {
@@ -137,7 +142,7 @@ export default {
     await scrapStore.actions.getScrapList(this.loginUserInfo.userId);
     this.scrapList = scrapStore.getters.scrapList();
     console.log("detail scraplist", this.scrapList);
-    console.log("detail", this.feedId);
+    console.log("detail", this.recommList);
     const filtered = this.scrapList.filter((el) => el.feedId == this.feedId);
 
     if (filtered?.length > 0) {
@@ -155,6 +160,16 @@ export default {
     });
   },
   methods: {
+    detectBottom() {
+      var scrollTop = window.scrollTop();
+      var innerHeight = window.innerHeight();
+      var scrollHeight = document.body.prop("scrollHeight");
+      if (scrollTop + innerHeight >= scrollHeight) {
+        console.log("scroll true");
+      } else {
+        console.log("scroll false");
+      }
+    },
     async createBoard() {
       if (this.newBoardName?.length > 0) {
         const params = {
@@ -252,8 +267,9 @@ export default {
       comment_input.value = "";
     },
     async reload() {
-      console.log("detail created", this.feedId);
-      await feedStore.actions.recommFeed(this.feedId);
+      this.recommList = [];
+      console.log("detail created", this.feedId, this.$route.params);
+      await feedStore.actions.recommFeed(this.$route.params.feedId);
       this.recommList = feedStore.getters.getRecommList();
       console.log("recommend", ...this.recommList);
       await userStore.actions.getProfile(this.loginUserId);
@@ -266,8 +282,6 @@ export default {
       this.feedDetail.feedContent = this.feedDetail.feedContent.replace(/data-src/g, "src");
       await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
       this.scrapList = scrapStore.getters.scrapList();
-      console.log("detail scraplist", this.scrapList);
-      console.log("detail", this.feedId);
       const filtered = this.scrapList.filter((el) => el.feedId == this.feedId);
 
       if (filtered?.length > 0) {
@@ -284,8 +298,15 @@ export default {
       this.vocaList = dbWordList.filter((x) => {
         return this.feedDetail.feedContent.indexOf(x.word) != -1;
       });
+      window.scrollTo(0, 0);
     },
   },
+  computed: {
+    newFeedId() {
+      return this.$route.params.feedId;
+    },
+  },
+  mounted() {},
   watch: {
     $route: "reload",
   },

@@ -4,6 +4,7 @@ const state = {
   feedList: [],
   feedDetail: null,
   recommList: [],
+  commonFeedList: [],
 };
 
 const getters = {
@@ -14,7 +15,6 @@ const getters = {
     return state.feedDetail;
   },
   getRecommList() {
-    console.log("getRecommList");
     return state.recommList;
   },
 };
@@ -27,7 +27,6 @@ const mutations = {
     state.feedDetail = feedDetail;
   },
   SET_RECOMM_LIST(recommList) {
-    console.log("SET_RECOMM_LIST");
     state.recommList = recommList;
   },
 };
