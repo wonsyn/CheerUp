@@ -20,6 +20,7 @@ import com.web.curation.model.dto.AlarmDto;
 import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.FeedService;
+import com.web.curation.model.service.FollowService;
 import com.web.curation.model.service.UserService;
 
 @Component
@@ -38,6 +39,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	FollowService followService;
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {//클라이언트와 서버가 연결
@@ -70,7 +74,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			
 			String[] strs = msg.split(",");
 			
-			if(strs != null && strs.length == 5) {
+			if(strs != null && strs.length >= 5) {
 				System.out.println("??????????");
 				for(String s : strs) System.out.println(s);
 				// 요청 종류( follow, scrap, comment_like )
@@ -96,6 +100,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				WebSocketSession receiverSession = userSessionsMap.get(receiverId);
 				
 				boolean scheduleFlag = false;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				
 				// 팔로우
 				if("follow".equals(cmd) && receiverSession != null) {
@@ -110,10 +115,32 @@ public class WebSocketHandler extends TextWebSocketHandler {
 					//스크랩
 					if("scrap".equals(cmd) && receiverSession != null) {
 						content = senderId+" 님이 "+ title + " 을 스크랩하였습니다!";
+						/*
+						int senderUserId = userService.getUserIdById(senderId);
+						
+						for(UserDto cur : followService.getMyFollowerList(senderUserId)) {
+							
+							AlarmDto alarmDto = new AlarmDto(cur.getUserId(), senderUserId, cmd, content, url,sdf.format(new Date()));
+							alarmDto = alarmService.alreadyExist(alarmDto);
+							System.out.println("결과: " + alarmDto);
+							if(alarmDto != null) { 
+								System.out.println("yas");   
+								alarmDto.setAlarmDateTime(sdf.format(new Date()));
+								alarmService.updateAlarm(alarmDto);
+							} else {					
+								System.out.println("nope");
+								// 알람이 없다면 새로 생성
+								alarmService.createAlarm(new AlarmDto(cur.getUserId(), senderUserId, cmd, content, url,sdf.format(new Date())));			
+							}
+							tmpMsg = new TextMessage(cmd +","+ senderId +","+ cur.getId() +","+ title +","+ content +","+ url +"," +sdf.format(new Date()));							
+							receiverSession.sendMessage(tmpMsg);
+						}
+						return;
+						*/
 					}
 					//좋아요  
 					else if("comment_like".equals(cmd) && receiverSession != null) {
-						content = senderId+" 님이 "+ title + "에 작성한 " + comment + "댓글을 좋아요 하였습니다!";
+						content = senderId+" 님이 "+ title + "에 작성한 " + comment + " 댓글을 좋아요 하였습니다!";
 					}
 					
 				}				
@@ -121,12 +148,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				else if("schedule".equals(cmd) && receiverSession != null) {
 					System.out.println("스케쥴");
 
-//					String dDay = strs[3];
 					String scheduleName = strs[4];
+					String company = strs[5];
 					
 //					if("0".equals(dDay)) content = "오늘 " + scheduleName + " 일정이 있습니다.";
 //					else content = scheduleName + "일정이 @일 남았습니다.";
-					content = scheduleName + "일정이 @일 남았습니다.";
+					content = company + " " + scheduleName + " 일정이 @일 남았습니다.";
 					// *********************** url 변경 ??
 					url = "/schedule";
 					scheduleFlag = true;
@@ -136,28 +163,36 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				int senderUserId = userService.getUserIdById(senderId);
 				// 알림이 이미 존재하는지 확인
 				// 알람이 있다면 날짜 변경, 확인 시간 = null
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				AlarmDto alarmDto = new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date()));
 				// 스케줄일 땐 4번째 배열이 날짜
-				if(scheduleFlag) alarmDto.setAlarmDateTime(strs[3]);
+				if(scheduleFlag) alarmDto.setScheduleDateTime(strs[3]);
 				alarmDto = alarmService.alreadyExist(alarmDto);
 				System.out.println("결과: " + alarmDto);
 				if(alarmDto != null) {
 					// 
 					System.out.println("yas");
-					if(scheduleFlag) alarmDto.setAlarmDateTime(strs[3]);   
-					else alarmDto.setAlarmDateTime(sdf.format(new Date()));
+					if(scheduleFlag) alarmDto.setScheduleDateTime(strs[3]);   
+					else alarmDto.setScheduleDateTime(sdf.format(new Date()));
 					alarmService.updateAlarm(alarmDto);
 				} else {					
 					System.out.println("nope");
 					// 알람이 없다면 새로 생성
-					if(scheduleFlag) alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,strs[3]));
-					else alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date())));			
+					if(scheduleFlag) alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url, sdf.format(new Date()), strs[3]));
+					else alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date()), sdf.format(new Date())));			
 				}
 				
 				// 프론트로 메세지 전달
-				if(scheduleFlag) tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +strs[3]);
-				else tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +sdf.format(new Date()));				
+				if(scheduleFlag) {
+					tmpMsg = new TextMessage(cmd +"%%%"+ senderId +"%%%"+ receiverId +"%%%"+ title +"%%%"+ content +"%%%"+ url +"%%%" +strs[3]);
+					System.out.println("scrap");
+					System.out.println(title + ", " + content + ", " + url + ", " + strs[3]);
+				}
+				else {
+					System.out.println("others");
+					System.out.println(title + ", " + content + ", " + url + ", " + sdf.format(new Date()));
+					tmpMsg = new TextMessage(cmd +"%%%"+ senderId +"%%%"+ receiverId +"%%%"+ title +"%%%"+ content +"%%%"+ url +"%%%" +sdf.format(new Date()));				
+				}
 				receiverSession.sendMessage(tmpMsg);
 				
 				/*

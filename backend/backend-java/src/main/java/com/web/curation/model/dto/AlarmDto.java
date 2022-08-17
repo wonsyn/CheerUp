@@ -13,6 +13,7 @@ public class AlarmDto {
 	private String alarmUrl;
 	private String alarmDateTime;
 	private String alarmCheckDateTime;
+	private String scheduleDateTime;
 	
 	// 검색 조건을 위한 필드
 	private String endDate;
@@ -29,6 +30,18 @@ public class AlarmDto {
 		this.alarmContent = alarmContent;
 		this.alarmUrl = alarmUrl;
 		this.alarmDateTime = alarmDateTime;
+	}
+
+	public AlarmDto(int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent, String alarmUrl,
+			String alarmDateTime, String scheduleDateTime) {
+		super();
+		this.alarmReceiverId = alarmReceiverId;
+		this.alarmSenderId = alarmSenderId;
+		this.alarmType = alarmType;
+		this.alarmContent = alarmContent;
+		this.alarmUrl = alarmUrl;
+		this.alarmDateTime = alarmDateTime;
+		this.scheduleDateTime = scheduleDateTime;
 	}
 
 	public AlarmDto(int alarmId, int alarmReceiverId, int alarmSenderId, String alarmType, String alarmContent,
@@ -115,6 +128,14 @@ public class AlarmDto {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getScheduleDateTime() {
+		return scheduleDateTime;
+	}
+
+	public void setScheduleDateTime(String scheduleDateTime) {
+		this.scheduleDateTime = scheduleDateTime;
 	}
 
 	@Override

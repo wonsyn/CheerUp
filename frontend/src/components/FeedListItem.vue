@@ -11,14 +11,14 @@
         <button
           v-if="isBookmarked == true"
           :id="'btn-scrap-' + feedId"
-          class="btn btn-sm btn-outline-primary"
+          class="btn btn-sm btn-outline-success"
           data-bs-toggle="modal"
           :data-bs-target="'#boardSelectModal-' + feedId"
           data-bs-whatever="0"
         >
           <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 20px" />
         </button>
-        <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
+        <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
           <img class="bookmark-icon" src="@/assets/bookmark_blank.png" style="height: 20px" />
         </button>
         <div class="modal fade" :id="'boardSelectModal-' + feedId" tabindex="-1" :aria-labelledby="'boardSelectModalLabel-' + feedId" aria-hidden="true">
@@ -29,8 +29,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="d-flex justify-content-start mx-2">
-                  <button @click="scrapFeedAction('delete')" type="button" class="btn btn-outline-danger my-2">스크랩 취소</button>
+                <div v-if="isBookmarked == true" class="d-flex justify-content-start mx-2">
+                  <button @click="scrapFeedAction('delete')" type="button" class="btn btn-outline-danger my-2" data-bs-dismiss="modal">스크랩 취소</button>
                 </div>
                 <form @submit.prevent="createBoard()">
                   <h6>보드 추가</h6>
@@ -52,7 +52,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button @click="scrapFeedAction()" type="button" class="btn btn-primary">스크랩</button>
+                <button @click="scrapFeedAction()" type="button" class="btn btn-primary" data-bs-dismiss="modal">스크랩</button>
               </div>
             </div>
           </div>
@@ -66,7 +66,6 @@
 import router from "@/router";
 import scrapStore from "@/store/modules/Scrap";
 import boardStore from "@/store/modules/Board";
-import Modal from "bootstrap/js/src/modal";
 
 export default {
   name: "FeedListItem",
@@ -88,10 +87,9 @@ export default {
     return {
       isBookmarked: false,
       boardId: 0,
-      filteredId: Number,
+      filteredScrap: {},
       boardList: [],
       newBoardName: "",
-      myModal: Object,
     };
   },
   methods: {
@@ -119,47 +117,33 @@ export default {
     },
     async scrapFeedAction(res) {
       const scrapBtn = document.getElementById("btn-scrap-" + this.feedId);
-      if (this.$route.name == "home" || this.$route.name == "detail" || res == "delete") {
-        if (this.isBookmarked == true) {
-          if (confirm("스크랩을 취소하시겠습니까?")) {
-            scrapStore.actions.deleteScrap(this.filteredId);
-            this.isBookmarked = false;
-          }
-        } else {
-          const params = {
-            boardId: this.boardId,
-            feedId: this.feedId,
-            scrapfeedType: this.feedType,
-            userId: Number(this.currentUserId),
-          };
-          await scrapStore.actions.createScrap(params);
-          this.isBookmarked = true;
-          this.boardId = 0;
+      if (this.isBookmarked == true && res == "delete") {
+        if (confirm("스크랩을 취소하시겠습니까?")) {
+          scrapStore.actions.deleteScrap(this.filteredScrap.myfeedId);
+          this.isBookmarked = false;
+          this.$parent.getScrapList();
         }
-      } else {
-        // const params = {
-        //   boardId: this.boardId,
-        //   myfeedId: this.filteredId.myfeedId,
-        //   feedId: this.feedId,
-        //   // scrapfeedType: this.feedType,
-        //   userId: Number(this.currentUserId),
-        // };
-        // await scrapStore.actions.editScrap(params);
+      } else if (this.isBookmarked == false) {
+        const params = {
+          boardId: this.boardId,
+          feedId: this.feedId,
+          scrapfeedType: this.feedType,
+          userId: Number(this.currentUserId),
+        };
+        await scrapStore.actions.createScrap(params);
+        this.isBookmarked = true;
         this.boardId = 0;
-        console.log("edit scrap");
+      } else {
+        const params = {
+          boardId: this.boardId,
+          myfeedId: this.filteredScrap.myfeedId,
+        };
+        await scrapStore.actions.editScrap(params);
+        this.boardId = 0;
       }
-      this.myModal.hide();
-      const backdrop = document.querySelectorAll(".modal-backdrop");
-
-      backdrop[0].remove();
-      backdrop[1].remove();
-      const body = document.querySelector("body");
-      body.classList.remove("modal-open");
-      body.setAttribute("style", "");
-      body.setAttribute("data-bs-overflow", "");
-      body.setAttribute("data-bs-padding-right", "");
       scrapBtn.blur();
       this.fetchScrapList();
+      this.$parent.getScrapList();
     },
     moveDetail() {
       router.push({ name: "detail", params: { feedId: this.feedId } });
@@ -178,14 +162,13 @@ export default {
 
     if (filtered?.length > 0) {
       this.isBookmarked = true;
-      this.filteredId = filtered.at(0);
+      this.filteredScrap = filtered.at(0);
+      console.log("created scrap", this.filteredScrap);
     } else {
       this.isBookmarked = false;
     }
     await boardStore.actions.getBoardList(this.currentUserId);
-    this.subBoardList = boardStore.getters.boardList();
-    this.boardList = this.subBoardList;
-    this.myModal = new Modal(document.getElementById("boardSelectModal-" + this.feedId));
+    this.boardList = boardStore.getters.boardList();
   },
   watch: {},
 };

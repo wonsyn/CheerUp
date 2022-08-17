@@ -233,7 +233,7 @@ export default {
 
       if (day >= 0 && day <= 7) {
         // let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
-        let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + modalDate.value + "," + modalName.value;
+        let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + modalDate.value + "," + modalName.value + "," + modalCompany.value;
         this.socket.onopen(socketMsg);
       }
 
