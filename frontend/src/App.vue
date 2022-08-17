@@ -45,7 +45,20 @@ export default {
       if (this.arr[0] === "follow") this.toast(this.arr, "팔로우 알림!!", "");
       else if (this.arr[0] === "scrap") this.toast(this.arr, "스크랩 알림!!", "");
       else if (this.arr[0] === "comment_like") this.toast(this.arr, "댓글 좋아요 알림!!", "");
-      else if (this.arr[0] === "schedule") this.toast(this.arr, "등록 일정 알림!!", "");
+      else if (this.arr[0] === "schedule") {
+        // 날짜 계산 필요
+        console.log("here: ", this.arr[6]);
+        let today = new Date();
+        today.setHours(today.getHours() + 9);
+        const date1 = new Date(this.arr[6]);
+        const date2 = new Date(today.toISOString().substring(0, 10));
+        const diffDate = date1.getTime() - date2.getTime();
+        const day = diffDate / (1000 * 60 * 60 * 24);
+
+        const tmp = this.arr[4].split("@");
+        this.arr[4] = tmp[0] + day + tmp[1];
+        this.toast(this.arr, "등록 일정 알림!!", "");
+      }
     },
     toast(msg, head, small) {
       const toastWindow = document.getElementById("toast-template");
@@ -61,6 +74,7 @@ export default {
       toast.show();
     },
     move() {
+      console.log("들어오나");
       router.push(userStore.getters.socketUrl());
     },
   },

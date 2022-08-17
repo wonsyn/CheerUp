@@ -8,13 +8,13 @@
 	<insert id="createAlarm" parameterType="alarmDto">
 		insert into alarm (alarm_receiver_id, alarm_sender_id, alarm_type, 
 				alarm_content, alarm_url, alarm_datetime, alarm_check_datetime)
-		values (#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, now(), null)
+		values (#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, #{alarmDateTime}, null)
 	</insert>
 	
 	<!-- 알람 수정 -->
 	<update id="updateAlarm" parameterType="alarmDto">
 		update alarm
-		set  alarm_datetime = now(), alarm_check_datetime = null
+		set  alarm_datetime = #{alarmDateTime}, alarm_check_datetime = null
 		where alarm_id = #{alarmId}
 	</update>
 	
