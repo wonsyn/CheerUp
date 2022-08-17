@@ -62,7 +62,7 @@ export default {
     window.addEventListener("scroll", () => {
       //스크롤을 할 때마다 로그로 현재 스크롤의 위치가 찍혀나온다.
       const bottom = document.getElementById("btn-bottom-expand");
-      if (window.scrollY - bottom.offsetTop + window.innerHeight > 0) {
+      if (window.scrollY - bottom.offsetTop + window.innerHeight > 0 && bottom != null) {
         this.moreFeed();
       }
     });
