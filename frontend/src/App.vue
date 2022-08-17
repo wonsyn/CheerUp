@@ -41,17 +41,11 @@ export default {
       this.socketMessage = userStore.getters.socketMessage();
       console.log("###methods####: ", this.socketMessage);
       this.arr = this.socketMessage.split(",");
-      console.log("arr: ", this.arr[0]);
-      // console.log("arr: ", arr[1]);
-      // console.log("arr: ", arr[2]);
-      // console.log("arr: ", arr[3]);
-      // console.log("arr: ", arr[4]);
-      console.log("arr: ", this.arr[5]);
-      // console.log("arr: ", arr[6]);
       userStore.mutations.SET_SOCKET_URL(this.arr[5]);
       if (this.arr[0] === "follow") this.toast(this.arr, "팔로우 알림!!", "");
       else if (this.arr[0] === "scrap") this.toast(this.arr, "스크랩 알림!!", "");
       else if (this.arr[0] === "comment_like") this.toast(this.arr, "댓글 좋아요 알림!!", "");
+      else if (this.arr[0] === "schedule") this.toast(this.arr, "등록 일정 알림!!", "");
     },
     toast(msg, head, small) {
       const toastWindow = document.getElementById("toast-template");
@@ -67,8 +61,6 @@ export default {
       toast.show();
     },
     move() {
-      // console.log(this);
-      console.log("move: ", userStore.getters.socketUrl());
       router.push(userStore.getters.socketUrl());
     },
   },

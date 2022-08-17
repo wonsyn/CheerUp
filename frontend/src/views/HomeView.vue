@@ -49,6 +49,7 @@ export default {
       feedList: [],
       listKey: 0,
       token: String,
+      socket: useStore().modules.userStore.getters.socket(),
     };
   },
   async created() {
@@ -58,6 +59,10 @@ export default {
     } else {
       await feedStore.actions.getFeed(1, 1);
       this.feedList = feedStore.getters.getFeedList();
+      // 알람 리스트 확인
+      // 오늘 날짜를 백으로 던지고
+      // 백에서 앞으로 일주일 알람 있는지 확인
+      // 있다면 소켓 전송
     }
   },
   methods: {

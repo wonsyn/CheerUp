@@ -1,9 +1,7 @@
 package com.web.curation.config;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +20,6 @@ import com.web.curation.model.dto.AlarmDto;
 import com.web.curation.model.dto.UserDto;
 import com.web.curation.model.service.AlarmService;
 import com.web.curation.model.service.FeedService;
-import com.web.curation.model.service.JwtService;
 import com.web.curation.model.service.UserService;
 
 @Component
@@ -74,6 +71,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			String[] strs = msg.split(",");
 			
 			if(strs != null && strs.length == 5) {
+				System.out.println("??????????");
 				for(String s : strs) System.out.println(s);
 				// 요청 종류( follow, scrap, comment_like )
 				String cmd = strs[0];
@@ -99,30 +97,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				
 				// 팔로우
 				if("follow".equals(cmd) && receiverSession != null) {
-					
 					content = senderId+" 님이 팔로우하였습니다.";
 					url = "/profile/"+senderId;
-					
-//					for(String s : strs) System.out.print(s+"\t");
-					System.out.println("follow");
-					//replyWriter = 좋아요누른사람 , boardWriter = 게시글작성자
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 글을 DEV했습니다!</a>");
-//					tmpMsg = new TextMessage("a"+senderId + " 님이 당신을 팔로우하였습니다!"		
-//							+ "<a href='/http://localhost:8080/cheerup/user/detail/"+replyWriter +"'");  
-//							+ "<a href='/profile/"+senderId +"' data-v-c2383e3c=''>"+ senderId +"</a>");
-//							+ "<router-link to = '/profile/"+replyWriter +"'>"+replyWriter + " 님이 당신을 팔로우하였습니다."+"</router-link>");  
-					
-//					<a href="/calendar" class="nav-link" data-v-c2383e3c="">달력</a>
-					
-//					replyWriter + " 님이 당신을 팔로우하였습니다." => content
-					
-//					boardWriterSession.sendMessage(tmpMsg);
-					
-//					tmpMsg = new TextMessage(senderId+",");
 				}
-				else {
+				else if( ("scrap".equals(cmd) || "comment_like".equals(cmd) ) && receiverSession != null ) {
 					
 					title = feedService.readFeedById(Integer.parseInt(feedId)).getFeedTitle();
 					url = "/detail/" + feedId;
@@ -130,41 +108,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
 					//스크랩
 					if("scrap".equals(cmd) && receiverSession != null) {
 						content = senderId+" 님이 "+ title + " 을 스크랩하였습니다!";
-//						alarmDto.setAlarmContent(senderId+" 님이 "+ title + " 을 스크랩하였습니다!");
-						
-//						tmpMsg = new TextMessage("b"+senderId + "님이 "
-//								+ "<a href='/http://localhost:8080/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
-//								+ title+"</strong> 을 스크랩했습니다!</a>");
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 글을 스크랩했습니다!</a>");
-						
-//						boardWriterSession.sendMessage(tmpMsg);
-//						user1 님이 팔로우하였습니다.
 					}
-					
 					//좋아요  
 					else if("comment_like".equals(cmd) && receiverSession != null) {
-
 						content = senderId+" 님이 "+ title + "에 작성한 " + comment + "댓글을 좋아요 하였습니다!";
-						
-//						tmpMsg = new TextMessage("c"+senderId + "님이 "
-//								+ "<a href='/detail/" + feedId + "'  style=\"color: black; text-decoration: none\"><strong>"
-//								+ title+"</strong> 에 작성한 " + content + " 댓글을 좋아요했습니다!</a>");
-						
-//						<a href="/detail/7" style="color: black"><strong>김부겸 삼성 3년간 총 7만개 청년 일자리창출 기여</strong> 에 작성한 댓글을 좋아요했습니다!</a>
-//					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-//							+ "<a href='/board/readView?bno=" + bno + "&bgno="+bgno+"'  style=\"color: black\"><strong>"
-//							+ title+"</strong> 에 작성한 댓글을 좋아요했습니다!</a>");
-						url = "/detail/" + feedId;
-						
-//						boardWriterSession.sendMessage(tmpMsg);
 					}
 					
-					// 일정 등록
-					else if("schedule".equals(cmd) && receiverSession != null) {
-						
-					}
+				}				
+				// 일정 등록
+				else if("schedule".equals(cmd) && receiverSession != null) {
+					System.out.println("스케쥴");
+
+					String dDay = strs[3];
+					String scheduleName = strs[4];
+					
+					if("0".equals(dDay)) content = "오늘 " + scheduleName + " 일정이 있습니다.";
+					else content = scheduleName + "일정이 @일 남았습니다.";
+					// *********************** url 변경 ??
+					url = "/schedule";
 				}
 				
 				int receiverUserId = userService.getUserIdById(receiverId);
@@ -174,6 +135,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				AlarmDto alarmDto = new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date()));
 				alarmDto = alarmService.alreadyExist(alarmDto);
+				System.out.println("결과: " + alarmDto);
 				if(alarmDto != null) {
 					// 
 					System.out.println("yas");

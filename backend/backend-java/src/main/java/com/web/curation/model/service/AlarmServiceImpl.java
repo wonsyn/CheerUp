@@ -61,8 +61,8 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 	
 	@Override
-	public List<AlarmDto> getAlarmListByDate(AlarmDto alarmDto) throws SQLException {
-		return alarmMapper.getAlarmListByDate(alarmDto);
+	public List<AlarmDto> getAlarmListByDate(int receiverId) throws SQLException {
+		return alarmMapper.getAlarmListByDate(receiverId);
 	}
 	
 	@Override

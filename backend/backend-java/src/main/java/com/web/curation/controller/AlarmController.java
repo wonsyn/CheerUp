@@ -266,19 +266,18 @@ public class AlarmController {
 	@ApiOperation(value="선택 날짜 기준 알람 리스트 조회", 
 			  notes="사용자가 선택한 시작~ 끝 날짜 사이에 존재하는 알람 리스트 조회")
 	@GetMapping("/listByDate")
-	public ResponseEntity<Map<String, Object>> getAlarmListByDate(@RequestParam String startDate, @RequestParam String endDate, HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getAlarmListByDate(HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			AlarmDto alarm = new AlarmDto();
-			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
-			alarm.setAlarmDateTime(startDate);
-			alarm.setEndDate(endDate);
+			int userId = userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")));
+//			alarm.setAlarmReceiverId(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token"))));
 			
 			resultMap.put("message", SUCCESS);
-			resultMap.put("alarmList", alarmService.getAlarmListByDate(alarm));
+			resultMap.put("alarmList", alarmService.getAlarmListByDate(userId));
 		} catch (SQLException e) {
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
