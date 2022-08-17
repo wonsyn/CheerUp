@@ -198,18 +198,7 @@ export default {
       const modalDate = modal.querySelector("#schedule-create-date");
       const modalMemo = modal.querySelector("#schedule-create-memo");
 
-      await scheduleStore.actions.addSchedule(
-        modalName.value,
-        modalCompany.value,
-        modalDate.value,
-        modalMemo.value,
-        ({ data }) => {
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
+      await scheduleStore.actions.addSchedule(modalName.value, modalCompany.value, modalDate.value, modalMemo.value);
 
       let today = new Date();
       today.setHours(today.getHours() + 9);
