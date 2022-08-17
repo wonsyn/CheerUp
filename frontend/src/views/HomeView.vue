@@ -57,7 +57,7 @@ export default {
     if (sessionStorage.getItem("access-token") == null) {
       router.push({ name: "login" });
     } else {
-      await feedStore.actions.getFeed(1, 1);
+      await feedStore.actions.getFeed(0, 0);
       this.feedList = feedStore.getters.getFeedList();
       // 알람 리스트 확인
       // 오늘 날짜를 백으로 던지고
