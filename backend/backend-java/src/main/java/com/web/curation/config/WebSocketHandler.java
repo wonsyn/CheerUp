@@ -95,6 +95,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				WebSocketSession senderSession = userSessionsMap.get(senderId);
 				WebSocketSession receiverSession = userSessionsMap.get(receiverId);
 				
+				boolean scheduleFlag = false;
+				
 				// 팔로우
 				if("follow".equals(cmd) && receiverSession != null) {
 					content = senderId+" 님이 팔로우하였습니다.";
@@ -119,13 +121,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				else if("schedule".equals(cmd) && receiverSession != null) {
 					System.out.println("스케쥴");
 
-					String dDay = strs[3];
+//					String dDay = strs[3];
 					String scheduleName = strs[4];
 					
-					if("0".equals(dDay)) content = "오늘 " + scheduleName + " 일정이 있습니다.";
-					else content = scheduleName + "일정이 @일 남았습니다.";
+//					if("0".equals(dDay)) content = "오늘 " + scheduleName + " 일정이 있습니다.";
+//					else content = scheduleName + "일정이 @일 남았습니다.";
+					content = scheduleName + "일정이 @일 남았습니다.";
 					// *********************** url 변경 ??
 					url = "/schedule";
+					scheduleFlag = true;
 				}
 				
 				int receiverUserId = userService.getUserIdById(receiverId);
@@ -134,21 +138,26 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				// 알람이 있다면 날짜 변경, 확인 시간 = null
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				AlarmDto alarmDto = new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date()));
+				// 스케줄일 땐 4번째 배열이 날짜
+				if(scheduleFlag) alarmDto.setAlarmDateTime(strs[3]);
 				alarmDto = alarmService.alreadyExist(alarmDto);
 				System.out.println("결과: " + alarmDto);
 				if(alarmDto != null) {
 					// 
 					System.out.println("yas");
-					alarmDto.setAlarmDateTime(sdf.format(new Date()));
+					if(scheduleFlag) alarmDto.setAlarmDateTime(strs[3]);   
+					else alarmDto.setAlarmDateTime(sdf.format(new Date()));
 					alarmService.updateAlarm(alarmDto);
 				} else {					
 					System.out.println("nope");
 					// 알람이 없다면 새로 생성
-					alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date())));			
+					if(scheduleFlag) alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,strs[3]));
+					else alarmService.createAlarm(new AlarmDto(receiverUserId, senderUserId, cmd, content, url,sdf.format(new Date())));			
 				}
 				
 				// 프론트로 메세지 전달
-				tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +sdf.format(new Date()));				
+				if(scheduleFlag) tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +strs[3]);
+				else tmpMsg = new TextMessage(cmd +","+ senderId +","+ receiverId +","+ title +","+ content +","+ url +"," +sdf.format(new Date()));				
 				receiverSession.sendMessage(tmpMsg);
 				
 				/*
