@@ -102,6 +102,14 @@ const actions = {
           sessionStorage.setItem("access-token", access_token);
           sessionStorage.setItem("refresh_token", refresh_token);
           sessionStorage.setItem("current_user", user.id);
+
+          // 연결
+          // this.connect();
+          // 알람데이터 중 기한이 1주일 남은 것들 중 가장 빠른 것 1개만 가져오기
+          // console.log("로그인: ", user);
+          // 있다면 toast
+
+          // 없다면 걍 고
         } else {
           console.log("Login Fail");
         }

@@ -40,7 +40,7 @@ export default {
     getSocketMessage() {
       this.socketMessage = userStore.getters.socketMessage();
       console.log("###methods####: ", this.socketMessage);
-      this.arr = this.socketMessage.split(",");
+      this.arr = this.socketMessage.split("%%%");
       userStore.mutations.SET_SOCKET_URL(this.arr[5]);
       if (this.arr[0] === "follow") this.toast(this.arr, "팔로우 알림!!", "");
       else if (this.arr[0] === "scrap") this.toast(this.arr, "스크랩 알림!!", "");
@@ -56,7 +56,10 @@ export default {
         const day = diffDate / (1000 * 60 * 60 * 24);
 
         const tmp = this.arr[4].split("@");
-        this.arr[4] = tmp[0] + day + tmp[1];
+        if (day == 0) this.arr[4] = tmp[0] + " 오늘입니다.";
+        //  신한은행 신한은행 면접일정이 일정이 오늘입니다.
+        //  신한은행 신한은행 면접일정이 일정이 오늘입니다.
+        else this.arr[4] = tmp[0] + day + tmp[1];
         this.toast(this.arr, "등록 일정 알림!!", "");
       }
     },

@@ -122,7 +122,7 @@ export default {
       if (this.$route.name == "home" || this.$route.name == "detail" || res == "delete") {
         if (this.isBookmarked == true) {
           if (confirm("스크랩을 취소하시겠습니까?")) {
-            scrapStore.actions.deleteScrap(this.filteredId);
+            scrapStore.actions.deleteScrap(this.filteredId.myfeedId);
             this.isBookmarked = false;
           }
         } else {
