@@ -1,7 +1,7 @@
 <template>
-  <div class="container px-4 py-3" style="border-radius: 7px; box-shadow: 0 0 10px 7px lightgray">
+  <div class="container px-5 py-5" style="border-radius: 7px; box-shadow: 0 0 10px 7px lightgray">
     <div class="row">
-      <div style="font-size: 30px; font-weight: bold">{{ feedDetail.feedTitle }}</div>
+      <div class="mt-5" style="font-size: 30px; font-weight: bold">{{ feedDetail.feedTitle }}</div>
     </div>
     <div class="d-flex">
       <div class="me-auto"></div>

@@ -13,8 +13,8 @@
         <div class="ms-2 align-self-center" style="font-size: 5px; color: darkgray">{{ commentDate }}</div>
       </div>
       <div :id="'btn' + commentId" class="d-none">
-        <button :id="'btn_comment_edit' + commentId" class="btn me-1 align-middle" @click="openCommentEditWindow" style="background-color: #eae784; height: 25px; font-size: 10px">수정</button>
-        <button :id="'btn_comment_delete' + commentId" class="btn btn-danger align-self-center align-middle" @click="deleteComment" style="color: black; height: 25px; font-size: 10px">삭제</button>
+        <button :id="'btn_comment_edit' + commentId" class="btn btn-info me-1 align-middle" @click="openCommentEditWindow" style="height: 25px; font-size: 10px">수정</button>
+        <button :id="'btn_comment_delete' + commentId" class="btn btn-danger align-self-center align-middle" @click="deleteComment" style="height: 25px; font-size: 10px">삭제</button>
       </div>
     </div>
     <div :id="'comment_edit_item' + commentId" class="d-none">
@@ -25,15 +25,8 @@
       </div>
       <div class="pe-3 d-flex">
         <div class="me-auto" />
-        <button
-          id="btn_comment_edit_done"
-          class="btn btn-primary me-1 align-middle"
-          @click="editComment"
-          style="background-color: #eae784; border-color: #eae784; color: black; height: 25px; font-size: 10px"
-        >
-          수정
-        </button>
-        <button id="btn_comment_cancel" class="btn btn-danger align-self-center align-middle" @click="closeCommentEditWindow" style="color: black; height: 25px; font-size: 10px">취소</button>
+        <button id="btn_comment_edit_done" class="btn btn-success me-1 align-middle" @click="editComment" style="height: 25px; font-size: 10px">수정</button>
+        <button id="btn_comment_cancel" class="btn btn-danger align-self-center align-middle" @click="closeCommentEditWindow" style="height: 25px; font-size: 10px">취소</button>
       </div>
     </div>
   </div>

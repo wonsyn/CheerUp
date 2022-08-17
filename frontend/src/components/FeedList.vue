@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row d-flex justify-content-left">
+    <div class="row d-flex justify-content-center">
       <feed-list-item class="col-auto" v-for="feed in list" :key="feed.feedId" v-bind="feed" :scrapList="scrapList"></feed-list-item>
       <div class="px-3">
         <button id="btn-bottom-expand" v-if="hasMore" class="btn btn-primary" style="width: 100%" @click="moreFeed">더보기</button>

@@ -1,9 +1,9 @@
 <template>
   <div class="my-3">
-    <div class="card mx-auto" style="width: 24rem">
+    <div class="card mx-auto ct-item" style="width: 24rem">
       <img @click="moveDetail" v-if="feedImgUrl != null" :src="feedImgUrl" class="card-img-top pointer" alt="thumbnail" style="width: 100%; max-height: 12rem; object-fit: cover" />
       <img @click="moveDetail" v-else src="@/assets/logo.png" class="card-img-top pointer" alt="thumbnail" style="width: 100%; max-height: 12rem; object-fit: cover" />
-      <div class="card-body">
+      <div class="card-body mt-2" style="margin-top: auto; margin-bottom: auto">
         <p @click="moveDetail" class="card-text pointer">{{ feedTitle }}</p>
       </div>
       <div class="card-footer d-flex justify-content-between">
@@ -18,43 +18,43 @@
         >
           <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 20px" />
         </button>
-        <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
+        <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0" style="border: 0">
           <img class="bookmark-icon" src="@/assets/bookmark_blank.png" style="height: 20px" />
         </button>
-        <div class="modal fade" :id="'boardSelectModal-' + feedId" tabindex="-1" :aria-labelledby="'boardSelectModalLabel-' + feedId" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" :id="'boardSelectModalLabel-' + feedId">스크랩</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div v-if="isBookmarked == true" class="d-flex justify-content-start mx-2">
-                  <button @click="scrapFeedAction('delete')" type="button" class="btn btn-outline-danger my-2" data-bs-dismiss="modal">스크랩 취소</button>
-                </div>
-                <form @submit.prevent="createBoard()">
-                  <h6>보드 추가</h6>
-                  <div class="mb-3 d-flex justify-content-center">
-                    <input v-model="newBoardName" type="text" class="form-control w-75 mx-2" :id="'new-board-name-' + feedId" placeholder="새 보드" />
-
-                    <button class="btn btn-primary w-25">+</button>
-                  </div>
-                </form>
-                <form>
-                  <div class="mb-3">
-                    <label for="message-text" class="col-form-label" :id="'select-board-label-' + feedId">저장 경로</label>
-                    <select v-model="boardId" class="form-select form-control" :id="'board-menu-' + feedId">
-                      <option value="0" selected>기본 프로필에 저장</option>
-                      <option v-for="board in boardList" :key="board.boardId" :value="board.boardId">{{ board.boardName }}</option>
-                    </select>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button @click="scrapFeedAction()" type="button" class="btn btn-primary" data-bs-dismiss="modal">스크랩</button>
-              </div>
+      </div>
+    </div>
+    <div class="modal fade" :id="'boardSelectModal-' + feedId" tabindex="-1" :aria-labelledby="'boardSelectModalLabel-' + feedId" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" :id="'boardSelectModalLabel-' + feedId">스크랩</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div v-if="isBookmarked == true" class="d-flex justify-content-start mx-2">
+              <button @click="scrapFeedAction('delete')" type="button" class="btn btn-outline-danger my-2" data-bs-dismiss="modal">스크랩 취소</button>
             </div>
+            <form @submit.prevent="createBoard()">
+              <h6>보드 추가</h6>
+              <div class="mb-3 d-flex justify-content-center">
+                <input v-model="newBoardName" type="text" class="form-control w-75 mx-2" :id="'new-board-name-' + feedId" placeholder="새 보드" />
+
+                <button class="btn btn-primary w-25">+</button>
+              </div>
+            </form>
+            <form>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label" :id="'select-board-label-' + feedId">저장 경로</label>
+                <select v-model="boardId" class="form-select form-control" :id="'board-menu-' + feedId">
+                  <option value="0" selected>기본 프로필에 저장</option>
+                  <option v-for="board in boardList" :key="board.boardId" :value="board.boardId">{{ board.boardName }}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button @click="scrapFeedAction()" type="button" class="btn btn-primary" data-bs-dismiss="modal">스크랩</button>
           </div>
         </div>
       </div>
@@ -182,4 +182,61 @@ export default {
 .pointer {
   cursor: pointer;
 }
+.ct-item {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  --vh: 7.22px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  box-sizing: inherit;
+  border: 0;
+  font: inherit;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  vertical-align: baseline;
+  backface-visibility: hidden;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 10px 20px 20px 0 rgba(92, 95, 112, 0.08);
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.15s;
+  height: 350px;
+  width: 300px;
+}
+.ct-item:hover {
+  transform: scale(1.025);
+}
+/* .movie-list {
+  display: flex;
+  margin-left: 2rem;
+  margin-right: 2rem;
+} */
+/* .movie-item {
+  position: relative;
+  display: block;
+  flex: 1 1 0px;
+  transform: scale(0.8);
+  transition: all 0.5s ease-in-out;
+  text-align: center;
+}
+#wrap {
+  margin: 0 auto;
+  text-align: center;
+  width: 300px;
+}
+#wrap:hover .more {
+  opacity: 1;
+}
+.movie-item:hover {
+  transform: scale(1.1);
+}
+.movie-item:hover img {
+  opacity: 0.7;
+}
+.movie-item:hover .more {
+  opacity: 1;
+} */
 </style>

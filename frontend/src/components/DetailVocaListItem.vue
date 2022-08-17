@@ -6,7 +6,7 @@
         <div :id="'word_desc' + wordId" class="text-break text-start px-3" style="font-size: 12px">{{ curExp }}</div>
       </div>
       <div :id="'voca_edit' + wordId" class="d-none align-middle my-auto me-3">
-        <button :id="'btn_voca_edit' + wordId" class="btn me-1" @click="openVocaEditWindow" style="background-color: #eae784; height: 25px; font-size: 11px">수정 및 추가</button>
+        <button :id="'btn_voca_edit' + wordId" class="btn me-1 btn-info" @click="openVocaEditWindow" style="height: 25px; font-size: 11px">수정 및 추가</button>
       </div>
     </div>
     <div :id="'voca_edit_window' + wordId" class="d-none">
@@ -43,6 +43,9 @@ export default {
       curExp: this.wordExp,
     };
   },
+  created() {
+    console.log("voca created");
+  },
   methods: {
     displayBtn() {
       const btnWindow = document.getElementById("voca_edit" + this.wordId);
@@ -50,7 +53,7 @@ export default {
 
       btnWindow.classList.add("d-block");
       btnWindow.classList.remove("d-none");
-      vocaItem.style.backgroundColor = "lightgrey";
+      vocaItem.style.backgroundColor = "#eeeeee";
     },
     hideBtn() {
       const btnWindow = document.getElementById("voca_edit" + this.wordId);
