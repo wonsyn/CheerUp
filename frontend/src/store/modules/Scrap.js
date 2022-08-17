@@ -1,5 +1,5 @@
 import { getFeedInBoard, getScrapList, createScrap, deleteScrap, editScrap } from "@/api/Feature/Feed";
-// import useStore from "@/store/index.js";
+import useStore from "@/store/index.js";
 
 const state = {
   scrapsInBoard: [],
@@ -50,14 +50,29 @@ const actions = {
     );
   },
   async createScrap(params) {
+    await useStore().modules.userStore.actions.getFollowerList(sessionStorage.getItem("current_user"));
+    let followerList = useStore().modules.userStore.getters.followerList();
     await createScrap(
       params,
       ({ data }) => {
-        console.log("scrapData: ", data);
-        // let socketMsg = "follow," + sessionStorage.getItem("current_user") + "," + this.profile.id + ",0,0";
-        // store.modules.userStore.actions.connect();
+        console.log(data);
+        console.log("sessionid: ", sessionStorage.getItem("current_user"));
+        console.log("scrapData: ", params);
+
+        console.log("팔로워 리스트: ", followerList);
+        let socketMsg = "";
+        followerList.forEach(function (item) {
+          socketMsg = "scrap," + sessionStorage.getItem("current_user") + "," + item.id + "," + params.feedId + ",0";
+          useStore().modules.userStore.getters.socket().onopen(socketMsg);
+        });
+
+        // for (var follower in followerList) {
+        //   console.log(follower.id);
+        //   // socketMsg = "scrap," + sessionStorage.getItem("current_user") + "," + follower.id + "," + params.feedId + ",0";
+        //   // useStore().modules.userStore.getters.socket().onopen(socketMsg);
+        // }
+
         // this.socket.onopen(socketMsg);
-        // useStore().modules.userStore.getters.socket().send();
       },
       (error) => {
         console.log(error);
