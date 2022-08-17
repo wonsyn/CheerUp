@@ -332,7 +332,7 @@ public class AlarmController {
 		try {
 			if(alarmService.checkAlarm(alarmId) == 1)  {
 				resultMap.put("message", SUCCESS);
-				resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+//				resultMap.put("alaramList", alarmService.getUnCheckedAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
 			}
 			else {
 				resultMap.put("message", FAIL);

@@ -1,4 +1,5 @@
 import { getFeedInBoard, getScrapList, createScrap, deleteScrap, editScrap } from "@/api/Feature/Feed";
+// import useStore from "@/store/index.js";
 
 const state = {
   scrapsInBoard: [],
@@ -52,7 +53,11 @@ const actions = {
     await createScrap(
       params,
       ({ data }) => {
-        console.log(data);
+        console.log("scrapData: ", data);
+        // let socketMsg = "follow," + sessionStorage.getItem("current_user") + "," + this.profile.id + ",0,0";
+        // store.modules.userStore.actions.connect();
+        // this.socket.onopen(socketMsg);
+        // useStore().modules.userStore.getters.socket().send();
       },
       (error) => {
         console.log(error);

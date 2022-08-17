@@ -86,7 +86,7 @@
 			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
 		from alarm
 		where alarm_receiver_id = #{alarmReceiverId}
-		and alarm_datetime between date_format(date_add(now(), interval -1 month), '%Y-%m-%d') and date_format(now(), '%Y-%m-01')
+		and alarm_datetime between date_format(date_add(now(), interval -1 month), '%Y-%m-%d') and date_format(date_add(now(), interval 1 day), '%Y-%m-%d')
 		
 	</select>
 	
