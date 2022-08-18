@@ -42,7 +42,7 @@ public class WordController {
 			  notes="DB에 있는 기본 내장 단어들 불러오기 / 추후 기사 상세페이지에 사용할 수 있을 듯")
 	@GetMapping("/listtest")
 	public ResponseEntity<List<WordDto>> getWordList() {
-		System.out.println(wordService.getWords());
+//		System.out.println(wordService.getWords());
 		return new ResponseEntity<List<WordDto>>(wordService.getWords(), HttpStatus.OK);
 	}
 	
