@@ -51,6 +51,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		logger.info(currentUserName(session));//현재 접속한 사람
 		String senderId = currentUserName(session);
 		userSessionsMap.put(loginUserId,session);
+		
+		System.out.println("연결 유저: " + session);
+		System.out.println("연결 유저: " + userSessionsMap);
+		System.out.println("전체 유저: " + sessions);
 	}
 	
 	private String currentUserName(WebSocketSession session) {
@@ -69,6 +73,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		
 		//자바스크립트에서 넘어온 Msg
 		String msg = message.getPayload();
+		System.out.println("??????????");
 		
 		if (!msg.isBlank()) {
 			
