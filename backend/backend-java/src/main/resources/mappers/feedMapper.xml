@@ -20,7 +20,6 @@
 
 		SELECT *
 		FROM feed		
-		ORDER BY feed_id DESC;
 		<if test='type != 0 and industry == 0'>
 		WHERE feed_type = #{type}
 		</if>
@@ -34,6 +33,7 @@
 			AND
 			  feed_category = #{industry}
 		</if>
+		ORDER BY feed_id DESC
 	</select>
 	
 	<select id="selectFeedById" resultMap="feedMap" parameterType="int">
