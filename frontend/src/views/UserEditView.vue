@@ -58,6 +58,7 @@
 <script>
 import useStore from "@/store/index.js";
 import router from "@/router";
+import Swal from "sweetalert2";
 
 const userStore = useStore().modules.userStore;
 
@@ -81,15 +82,26 @@ export default {
       let path = require("@/assets/profile_icon/profile-" + i + ".png");
       this.iconList.push(path);
     }
-    console.log(this.iconList);
   },
   methods: {
     async edit() {
       if (this.profile.password != this.password_check) {
-        alert("비밀번호를 확인해 주세요.");
+        Swal.fire({
+          icon: "error",
+          text: "비밀번호를 확인해주세요!",
+          confirmButtonColor: "#ee7785",
+        });
       } else {
         await userStore.actions.updateuserInfo(this.profile);
+
         router.push({ name: "profile", params: { username: sessionStorage.getItem("current_user") } });
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "프로필 변경 완료!",
+          showConfirmButton: false,
+          timer: 900,
+        });
       }
     },
     changeImg(path, i) {

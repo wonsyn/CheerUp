@@ -1,5 +1,5 @@
 import { getSchedule, updateSchedule, deleteSchedule, addSchedule } from "@/api/Feature/Schedule.js";
-
+import Swal from "sweetalert2";
 const state = {
   scheduleList: [],
 };
@@ -49,6 +49,13 @@ const actions = {
     await addSchedule(
       body,
       ({ data }) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "일정 추가 성공!",
+          showConfirmButton: false,
+          timer: 1000,
+        });
         console.log(data);
       },
       (error) => {

@@ -102,17 +102,9 @@ export default {
     },
     async submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
-      console.log(autocomplete);
       await this.searchUserById();
       if (this.userInput) {
-        console.log("search");
         autocomplete.classList.remove("disabled");
-        // this.result = this.users.filter((user) => {
-        //   return user.match(new RegExp("^" + this.userInput, "i"));
-        // });
-        // this.result = this.users.map((user) => {
-        //   return user.id;
-        // });
         this.result = this.users
           .sort(function (a, b) {
             var nameA = a.id.toUpperCase(); // ignore upper and lowercase
@@ -136,7 +128,6 @@ export default {
     async searchUserById() {
       await userStore.actions.searchById(this.userInput);
       this.users = userStore.getters.userList();
-      console.log(this.users);
     },
     async searchUserAdd(event) {
       const searchInput = document.getElementById("searchinput");
@@ -148,7 +139,6 @@ export default {
     autoFillInput() {
       this.userInput = this.result[0].id;
       router.push({ name: "profile", params: { username: this.userInput } });
-      console.log(router);
       this.userInput = "";
     },
     goMain() {

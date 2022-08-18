@@ -60,6 +60,7 @@ import router from "@/router";
 import scrapStore from "@/store/modules/Scrap";
 import boardStore from "@/store/modules/Board";
 import Modal from "bootstrap/js/dist/modal.js";
+import Swal from "sweetalert2";
 
 export default {
   name: "FeedListItem",
@@ -117,10 +118,21 @@ export default {
     async scrapFeedAction(res) {
       const scrapBtn = document.getElementById("btn-scrap-" + this.feedId);
       if (this.isBookmarked == true && res == "delete") {
-        if (confirm("스크랩을 취소하시겠습니까?")) {
-          scrapStore.actions.deleteScrap(this.filteredScrap.myfeedId);
-          this.$parent.getScrapList();
-        }
+        Swal.fire({
+          title: "스크랩을 취소하시겠습니까?",
+          // text: "스크랩을 취소합니다!",
+          showCancelButton: true,
+          confirmButtonColor: "#ee7785",
+          cancelButtonColor: "#00dd99",
+          confirmButtonText: "스크랩 취소",
+          cancelButtonText: "이전으로",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            scrapStore.actions.deleteScrap(this.filteredScrap.myfeedId);
+            this.$parent.getScrapList();
+            this.isBookmarked = false;
+          }
+        });
       } else if (this.isBookmarked == false) {
         const params = {
           boardId: this.boardId,
@@ -129,12 +141,26 @@ export default {
           userId: Number(this.currentUserId),
         };
         await scrapStore.actions.createScrap(params);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "성공",
+          showConfirmButton: false,
+          timer: 900,
+        });
       } else {
         const params = {
           boardId: this.boardId,
           myfeedId: this.filteredScrap.myfeedId,
         };
         await scrapStore.actions.editScrap(params);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "성공",
+          showConfirmButton: false,
+          timer: 900,
+        });
       }
       scrapBtn.blur();
       this.fetchScrapList();

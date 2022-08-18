@@ -1,5 +1,6 @@
 import { getFeedInBoard, getScrapList, createScrap, deleteScrap, editScrap } from "@/api/Feature/Feed";
 import useStore from "@/store/index.js";
+import Swal from "sweetalert2";
 
 const state = {
   scrapsInBoard: [],
@@ -101,6 +102,13 @@ const actions = {
       params,
       ({ data }) => {
         console.log(data);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "스크랩 저장 성공!",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       },
       (error) => {
         console.log(error);

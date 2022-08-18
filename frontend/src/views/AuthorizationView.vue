@@ -38,12 +38,8 @@ export default {
   },
   methods: {
     passwordCheck() {
-      console.log(this.credentials.password);
       if (this.credentials.password === this.myProfile.password) {
-        console.log("success");
         router.push({ name: "useredit" });
-      } else {
-        console.log("failed");
       }
     },
   },

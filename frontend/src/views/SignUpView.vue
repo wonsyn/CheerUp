@@ -160,7 +160,6 @@ export default {
     },
     autoFillEmail: function (txt) {
       let emailBack = document.getElementById("email-back");
-      console.log(emailBack);
       if (txt != null) {
         this.email_back = txt;
       } else {

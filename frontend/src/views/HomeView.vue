@@ -73,8 +73,6 @@ export default {
       let type = selectType.options[selectType.selectedIndex].value;
       let category = selectCategory.options[selectCategory.selectedIndex].value;
 
-      console.log(" " + type + category);
-
       await feedStore.actions.getFeed(type, category);
       this.feedList = feedStore.getters.getFeedList();
     },
