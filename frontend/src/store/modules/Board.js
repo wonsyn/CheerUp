@@ -1,4 +1,5 @@
 import { createBoard, getBoardList, updateBoard, deleteBoard } from "@/api/Feature/Feed";
+import Swal from "sweetalert2";
 
 const state = {
   board: {},
@@ -43,11 +44,16 @@ const actions = {
       params,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_BOARD_LIST(data);
           mutations.SET_CREATE_BOARD_FAILED(false);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "보드 추가 성공!",
+            showConfirmButton: false,
+            timer: 1000,
+          });
         } else {
-          console.log("create board failed");
           mutations.SET_CREATE_BOARD_FAILED(true);
         }
       },
@@ -61,7 +67,6 @@ const actions = {
     await getBoardList(
       userId,
       ({ data }) => {
-        console.log(data);
         mutations.SET_BOARD_LIST(data);
       },
       (error) => {
@@ -74,11 +79,9 @@ const actions = {
       params,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_IS_SUCCESS(true);
           mutations.SET_BOARD_LIST(data);
         } else {
-          console.log("update board failed");
           mutations.SET_IS_SUCCESS(false);
         }
       },
@@ -93,10 +96,7 @@ const actions = {
         boardId,
         ({ data }) => {
           if (data["message"] === "success") {
-            console.log(data);
             mutations.SET_BOARD_LIST(data);
-          } else {
-            console.log("delete board failed");
           }
         },
         (error) => {

@@ -97,7 +97,6 @@ const actions = {
     await login(
       user,
       ({ data }) => {
-        console.log(data);
         if (data["message"] === "success") {
           let access_token = data["access-token"];
           let refresh_token = data["refresh-token"];
@@ -137,12 +136,8 @@ const actions = {
     await signup(
       user,
       ({ data }) => {
-        console.log(data);
-        if (data["message"] === "success") {
+        if (data["message"] != "success") {
           console.log(data);
-          console.log(user);
-        } else {
-          console.log("signup failed");
         }
       },
       (error) => {
@@ -154,12 +149,8 @@ const actions = {
     await searchById(
       id,
       ({ data }) => {
-        console.log(data);
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_USER_LIST(data.userList);
-        } else {
-          console.log("search failed");
         }
       },
       (error) => {
@@ -171,12 +162,8 @@ const actions = {
     await getUser(
       id,
       ({ data }) => {
-        console.log(data);
         if (data["message"] === "success") {
-          console.log(data.userDetail);
           mutations.SET_PROFILE(data.userDetail);
-        } else {
-          console.log("else");
         }
       },
       (error) => {
@@ -188,11 +175,8 @@ const actions = {
     await follow(
       id,
       ({ data }) => {
-        console.log(data);
         if (data["message"] === "success") {
           mutations.SET_IS_FOLLOWING(true);
-        } else {
-          console.log("failed");
         }
       },
       (error) => {
@@ -204,11 +188,8 @@ const actions = {
     await unfollow(
       id,
       ({ data }) => {
-        console.log(data);
         if (data["message"] === "success") {
           mutations.SET_IS_FOLLOWING(false);
-        } else {
-          console.log("failed");
         }
       },
       (error) => {
@@ -221,10 +202,7 @@ const actions = {
       id,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_FOLLOWER_LIST(data.followList);
-        } else {
-          console.log("failed");
         }
       },
       (error) => {
@@ -237,10 +215,7 @@ const actions = {
       id,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_FOLLOWING_LIST(data.followList);
-        } else {
-          console.log("failed");
         }
       },
       (error) => {
@@ -253,11 +228,7 @@ const actions = {
       id,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log("is following");
-          console.log(data);
           mutations.SET_IS_FOLLOWING(data.follow);
-        } else {
-          console.log("failed");
         }
       },
       (error) => {
@@ -276,10 +247,9 @@ const actions = {
       param,
       ({ data }) => {
         if (data["message"] === "success") {
-          console.log(data);
           mutations.SET_CHECK_ID(true);
         } else {
-          console.log("failed");
+          console.log(data);
           mutations.SET_CHECK_ID(false);
         }
       },

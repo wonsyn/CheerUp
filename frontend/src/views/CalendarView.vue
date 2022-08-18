@@ -37,6 +37,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import router from "@/router";
 import Popover from "bootstrap/js/src/popover";
 import useStore from "@/store";
+import Swal from "sweetalert2";
 
 const userStore = useStore().modules.userStore;
 const scrapStore = useStore().modules.scrapStore;
@@ -96,13 +97,35 @@ export default {
       const myPopover = Popover.getOrCreateInstance(arg.el);
       myPopover.hide();
       if (arg.event.extendedProps.type < 3) {
-        if (confirm("피드 상세 페이지로 이동")) {
-          router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
-        }
+        let confirmMsg = "해당 피드의 상세 페이지로 이동합니다.";
+        Swal.fire({
+          title: "페이지를 이동하시겠습니까?",
+          text: confirmMsg,
+          showCancelButton: true,
+          confirmButtonColor: "#00dd99",
+          cancelButtonColor: "#ee7785",
+          confirmButtonText: "이동",
+          cancelButtonText: "취소",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
+          }
+        });
       } else if (arg.event.extendedProps.type == 3) {
-        if (confirm("일정 관리 페이지로 이동")) {
-          router.push({ name: "schedule" });
-        }
+        let confirmMsg = "일정 관리 페이지로 이동합니다.";
+        Swal.fire({
+          title: "페이지를 이동하시겠습니까?",
+          text: confirmMsg,
+          showCancelButton: true,
+          confirmButtonColor: "#00dd99",
+          cancelButtonColor: "#ee7785",
+          confirmButtonText: "이동",
+          cancelButtonText: "취소",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push({ name: "schedule" });
+          }
+        });
       }
     },
     handleMouseEnter: function (arg) {
@@ -117,9 +140,7 @@ export default {
     },
     handleMouseLeave: function (arg) {
       const myPopover = new Popover(arg.el);
-      if (!!myPopover === true) {
-        console.log("popover");
-      }
+      console.log(myPopover);
     },
     async fetchData() {
       await userStore.actions.getProfile(this.currentUser);

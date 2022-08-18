@@ -40,7 +40,6 @@ const actions = {
     await getFeed(
       params,
       ({ data }) => {
-        console.log(data);
         mutations.SET_FEEDLIST(data);
       },
       (error) => {
@@ -63,13 +62,10 @@ const actions = {
   },
 
   async recommFeed(feedId) {
-    console.log("call recommFeed");
     await recommFeed(
       feedId,
       ({ data }) => {
-        console.log("call recommFeed2");
         mutations.SET_RECOMM_LIST(data);
-        console.log(data);
       },
       (error) => {
         console.log(error);

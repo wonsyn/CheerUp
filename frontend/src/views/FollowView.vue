@@ -75,7 +75,6 @@ export default {
     submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
       if (this.userInput) {
-        console.log("search");
         autocomplete.classList.remove("disabled");
         this.result = this.followList
           .filter((user) => {
@@ -117,7 +116,6 @@ export default {
     },
   },
   async created() {
-    console.log("created");
     this.username = this.$route.username;
     await userStore.actions.getProfile(this.username);
     this.profile = userStore.getters.profile();

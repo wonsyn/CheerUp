@@ -157,16 +157,6 @@ export default {
     });
   },
   methods: {
-    detectBottom() {
-      var scrollTop = window.scrollTop();
-      var innerHeight = window.innerHeight();
-      var scrollHeight = document.body.prop("scrollHeight");
-      if (scrollTop + innerHeight >= scrollHeight) {
-        console.log("scroll true");
-      } else {
-        console.log("scroll false");
-      }
-    },
     async createBoard() {
       if (this.newBoardName?.length > 0) {
         const params = {
