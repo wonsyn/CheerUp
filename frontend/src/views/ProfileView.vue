@@ -124,12 +124,10 @@ export default {
     },
     passwordCheck() {
       if (this.profile.id === this.currentUser && this.profile.password === this.password) {
-        console.log("success");
         router.push("useredit");
         this.password = "";
       } else {
         this.password = "";
-        console.log("failed");
       }
     },
     async fetchData() {
@@ -186,32 +184,5 @@ export default {
 .tabcursor {
   cursor: pointer;
   color: #a9a9a9;
-}
-.slide-in {
-  animation: change 1s ease forwards;
-}
-.slide-in-right {
-  animation: change2 1s ease forwards;
-}
-
-@keyframes change {
-  from {
-    transform: translateX(80%);
-    visibility: visible;
-  }
-
-  to {
-    transform: translateX(0%);
-  }
-}
-@keyframes change2 {
-  from {
-    transform: translateX(-80%);
-    visibility: visible;
-  }
-
-  to {
-    transform: translateX(0%);
-  }
 }
 </style>
