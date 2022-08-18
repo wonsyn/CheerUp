@@ -84,4 +84,9 @@ public class AlarmServiceImpl implements AlarmService {
 	public AlarmDto alreadyExist(AlarmDto alarmDto) throws SQLException {
 		return alarmMapper.alreadyExist(alarmDto);
 	}
+
+	@Override
+	public AlarmDto getLatestAlarm(int userId) throws SQLException {
+		return alarmMapper.getLatestAlarm(userId);
+	}
 }

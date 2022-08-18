@@ -1,5 +1,6 @@
 import { getUser, login, signup, follow, unfollow, getFollowerList, getFollowingList, isFollowing, searchById, checkId, updateUserInfo } from "@/api/Feature/User.js";
 import main from "../../App.vue";
+// import notification from "@/Notification.js";
 
 const state = {
   profile: {},
@@ -106,6 +107,8 @@ const actions = {
           // 연결
           // this.connect();
           // 알람데이터 중 기한이 1주일 남은 것들 중 가장 빠른 것 1개만 가져오기
+          // notification.getLatestAlarm();
+
           // console.log("로그인: ", user);
           // 있다면 toast
 

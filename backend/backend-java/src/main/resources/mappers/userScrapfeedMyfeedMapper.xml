@@ -16,6 +16,7 @@
       <id column="myfeed_id" property="myfeedId"/>
       <result column="user_id" property="userId"/>
       <result column="feed_id" property="feedId"/>
+      <result column="board_id" property="boardId"/>
       <result column="myfeed_date" property="myfeedDate"/>
       <result column="scrapfeed_type" property="scrapfeedType"/>
       <result column="feed_type" property="feedType"/>
