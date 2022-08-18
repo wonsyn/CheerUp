@@ -114,6 +114,7 @@ export default {
       console.log("세션 아이디: " + sessionStorage.getItem("current_user"));
       // 소켓 발생 종류, 보내는 사람, 받는 사람, 피드 번호, 피드 제목
       let socketMsg = "follow," + sessionStorage.getItem("current_user") + "," + this.profile.id + ",0,0";
+      console.log("LoginView(117): " + this.socket);
       // store.modules.userStore.actions.connect();
       this.socket.onopen(socketMsg);
     },

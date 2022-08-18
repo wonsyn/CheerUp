@@ -78,6 +78,7 @@ const actions = {
   async connect() {
     var ws = new WebSocket("ws://cheerup.kro.kr:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
     mutations.SET_SOCKET(ws);
+    console.log("connect(): " + ws);
     state.socket.onmessage = function (e) {
       mutations.SET_SOCKETMESSAGE(e.data);
       console.log(e.data.alarmReceiverId);

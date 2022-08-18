@@ -207,6 +207,8 @@ export default {
       const diffDate = date1.getTime() - date2.getTime();
       const day = diffDate / (1000 * 60 * 60 * 24);
 
+      console.log("ScheduleView(210):", this.socket);
+
       if (day >= 0 && day <= 7) {
         let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
         this.socket.onopen(socketMsg);

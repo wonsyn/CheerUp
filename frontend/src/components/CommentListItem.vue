@@ -80,6 +80,7 @@ export default {
         this.like = true;
         this.likeNum = this.likeNum + 1;
         let socketMsg = "comment_like," + sessionStorage.getItem("current_user") + "," + this.id + "," + this.feedId + "," + this.commentContent;
+        console.log("commentListItem(83): " + socketMsg);
         this.socket.onopen(socketMsg);
       }
     },
