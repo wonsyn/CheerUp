@@ -153,7 +153,7 @@ server.ssl.key-store-password=b104
 
 - #### scikit-learn
 
-  - ###### ver : 0.0
+  - ###### ver : 1.0.2
 
 
 
