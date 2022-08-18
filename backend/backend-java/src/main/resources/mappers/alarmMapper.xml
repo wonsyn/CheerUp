@@ -4,6 +4,129 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.curation.model.dao.AlarmDao">
 
+	<!-- 알람 생성 -->
+	<insert id="createAlarm" parameterType="alarmDto">
+		insert into alarm (alarm_receiver_id, alarm_sender_id, alarm_type, 
+				alarm_content, alarm_url, alarm_datetime, alarm_check_datetime, schedule_date)
+		values (#{alarmReceiverId}, #{alarmSenderId}, #{alarmType}, #{alarmContent}, #{alarmUrl}, #{alarmDateTime}, null, #{scheduleDateTime})
+	</insert>
+	
+	<!-- 알람 수정 -->
+	<update id="updateAlarm" parameterType="alarmDto">
+		update alarm
+		set  schedule_date = #{scheduleDateTime}, alarm_check_datetime = null
+		where alarm_id = #{alarmId}
+	</update>
+	
+	<!-- 알람 삭제 -->
+	<delete id="deleteAlarm" parameterType="int">
+		delete from alarm
+		where alarm_id = #{alarmId}
+	</delete>
+	
+	
+	<!-- 알람 ID로 유저 id 가져오기 -->
+	<select id="getUserIdByAlarmId" parameterType="int" resultType="alarmDto">
+		select alarm_receiver_id alarmReceiverId 		
+		from alarm
+		where alarm_id = #{alarmId}
+	</select>
+	
+	<!-- 알람 디테일 -->
+	<select id="getAlarmDetail" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime		
+		from alarm
+		and alarm_id = #{alarmId}
+	</select>
+	
+	<!-- 이번 달 알람 모두 가져오기 -->
+	<select id="getAlarmListInThisMonth" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_datetime between date_format(#{alarmDateTime}, '%Y-%m-01') and date_format(last_day(#{alarmDateTime}), '%Y-%m-%d')
+	</select>
+	
+	<!-- 알람 보낸 사람 기준 검색 -->
+	<select id="getAlarmListBySenderId" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and sender_id = #{senderId}
+	</select>
+	
+	<!-- 알람 종류 기준 검색 -->
+	<select id="getAlarmListByType" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_type = #{alarmType}
+	</select>
+	
+	<!-- 알람 내용 기준 검색 -->
+	<select id="getAlarmListByContent" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_content like concat('%',#{alarmContent},'%')
+	</select>
+	
+	<!-- 알람 설정 날짜 기준 검색 -->
+	<select id="getAlarmListByDate" parameterType="int" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_datetime between date_format(date_add(now(), interval -1 month), '%Y-%m-%d') and date_format(date_add(now(), interval 1 day), '%Y-%m-%d')
+		
+	</select>
+	
+	<!-- 확인한 알람 검색 -->
+	<select id="getCheckedAlarm" parameterType="int" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_check_datetime is not null
+	</select>
+	
+	<!-- 미확인 알람 검색 -->
+	<select id="getUnCheckedAlarm" parameterType="int" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime	
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_check_datetime is null
+	</select>
+	
+	<!-- 알람 확인 -->
+	<update id="checkAlarm" parameterType="int">
+		update alarm
+		set alarm_check_datetime = now()
+		where alarm_id = #{alarmId}
+	</update>
+	
+	<select id="alreadyExist" parameterType="alarmDto" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime  		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId} and alarm_sender_id = #{alarmSenderId} 
+		and alarm_type = #{alarmType} and alarm_content = #{alarmContent} and alarm_url = #{alarmUrl}
+	</select>
 
-
+	<!-- 오늘 기준으로 일주일 안에 지정한 알람이 있는지, 있다면 가장 조금 남은 알람 return -->
+	<select id="getLatestAlarm" parameterType="int" resultType="alarmDto">
+		select alarm_id alarmId, alarm_receiver_id alarmReceiverId, alarm_sender_id alarmSenderId, alarm_type alarmType, 
+			alarm_content alarmContent, alarm_url alarmUrl, alarm_datetime alarmDateTime, alarm_check_datetime alarmCheckDateTime, schedule_date scheduleDateTime		
+		from alarm
+		where alarm_receiver_id = #{alarmReceiverId}
+		and alarm_datetime between now() and date_add(now(), interval 7 day)
+		order by alarm_datetime
+        limit 1
+	</select>
 </mapper>

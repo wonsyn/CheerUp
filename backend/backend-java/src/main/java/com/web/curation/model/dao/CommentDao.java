@@ -1,5 +1,6 @@
 package com.web.curation.model.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.web.curation.model.dto.CommentDto;
@@ -12,11 +13,11 @@ public interface CommentDao {
 	List<CommentDto> selectCommentByFeedId(int feedId);
 	
 	// 댓글 작성
-	void createComment(CommentDto commentDto);
+	int createComment(CommentDto commentDto);
 	
 	// 댓글 삭제
-	void deleteComment(int commentId);
+	int deleteComment(int commentId);
 	
 	// 댓글 수정
-	void updateComment(CommentDto commentDto);
+	int updateComment(CommentDto commentDto);
 }

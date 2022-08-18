@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.curation.model.dao.JwtDao">
+
+	<!-- 토큰 테이블 조회 -->
+	<select id="tokenInfo" parameterType="int" resultType="JwtDto">
+		select token_id tokenId, user_id userId, refresh_token_period refreshTokenPeriod
+		from token
+		where user_id = #{userId}
+	</select>
+	
+	<!-- 리프레시 토큰 생성 -->
+	<insert id="createRefreshToken" parameterType="JwtDto">
+		insert into token (token_id, user_id, refresh_token_period) 
+		values (#{tokenId},#{userId},DATE_ADD(NOW(), INTERVAL 1 MONTH));
+	</insert>
+	
+	<!-- 리프레시 토큰 수정 -->
+	<update id="updateRefreshToken" parameterType="JwtDto">
+		update token
+		set refresh_token_period= DATE_ADD(NOW(), INTERVAL 1 MONTH)
+		where token_id=#{tokenId}
+	</update>
+	
+</mapper>

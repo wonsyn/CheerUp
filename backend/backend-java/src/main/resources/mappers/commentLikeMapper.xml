@@ -26,6 +26,13 @@
 		SELECT like_id, user_id, comment_id
 		FROM comment_like
 		WHERE comment_id = #{commentId}
-		
 	</select>	
+	
+	<select id="chkCommentLike" resultMap="commentLikeMap" parameterType="int">
+		SELECT *
+		FROM comment_like
+		WHERE comment_id = #{commentId}
+			AND
+			  user_id = #{userId}
+	</select>
 </mapper>

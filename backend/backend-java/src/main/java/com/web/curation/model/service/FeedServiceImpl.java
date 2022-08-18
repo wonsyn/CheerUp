@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,13 @@ public class FeedServiceImpl implements FeedService{
 	private FeedDao feedDao;
 	
 	@Override
-	public List<FeedDto> searchFeed(int feedType) {
-		return feedDao.selectFeed(feedType);
+	public List<FeedDto> searchFeed(HashMap<String, String> params) {
+		return feedDao.selectFeed(params);
+	}
+
+	@Override
+	public FeedDto readFeedById(int feedId) {
+		return feedDao.selectFeedById(feedId);
 	}
 	
 	
