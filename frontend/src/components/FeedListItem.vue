@@ -125,18 +125,17 @@ export default {
         };
         await scrapStore.actions.createScrap(params);
         this.isBookmarked = true;
-        this.boardId = 0;
       } else {
         const params = {
           boardId: this.boardId,
           myfeedId: this.filteredScrap.myfeedId,
         };
         await scrapStore.actions.editScrap(params);
-        this.boardId = 0;
       }
       scrapBtn.blur();
       this.fetchScrapList();
       this.$parent.getScrapList();
+      this.boardId = 0;
     },
     moveDetail() {
       if (this.feedType == 1) {

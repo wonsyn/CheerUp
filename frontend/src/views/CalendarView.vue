@@ -6,6 +6,7 @@
           <option selected value="0">전체</option>
           <option value="1">뉴스</option>
           <option value="2">정보글</option>
+          <option value="3">일정</option>
         </select>
         <select style="border-width: 0" id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
           <option selected value="0">산업군(전체)</option>
@@ -40,6 +41,7 @@ import useStore from "@/store";
 const userStore = useStore().modules.userStore;
 const scrapStore = useStore().modules.scrapStore;
 const boardStore = useStore().modules.boardStore;
+const scheduleStore = useStore().modules.scheduleStore;
 
 export default {
   name: "CalendarView",
@@ -51,6 +53,7 @@ export default {
       profile: {},
       scrapList: [],
       boardList: [],
+      scheduleList: [],
       eventList: [],
       calendarOptions: {
         plugins: [dayGridPlugin, interactionPlugin],
@@ -90,8 +93,16 @@ export default {
   },
   methods: {
     handleEventClick: function (arg) {
-      if (confirm("피드 상세 페이지로 이동")) {
-        router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
+      const myPopover = Popover.getOrCreateInstance(arg.el);
+      myPopover.hide();
+      if (arg.event.extendedProps.type < 3) {
+        if (confirm("피드 상세 페이지로 이동")) {
+          router.push({ name: "detail", params: { feedId: arg.event.extendedProps.feedId } });
+        }
+      } else if (arg.event.extendedProps.type == 3) {
+        if (confirm("일정 관리 페이지로 이동")) {
+          router.push({ name: "schedule" });
+        }
       }
     },
     handleMouseEnter: function (arg) {
@@ -117,6 +128,8 @@ export default {
       this.scrapList = scrapStore.getters.scrapList();
       await boardStore.actions.getBoardList(this.profile.userId);
       this.boardList = boardStore.getters.boardList();
+      await scheduleStore.actions.getSchedule();
+      this.boardList = scheduleStore.getters.getScheduleList();
     },
     searchFeed() {
       const selectType = document.getElementById("select_feed_type");
@@ -125,22 +138,16 @@ export default {
 
       let type = selectType.options[selectType.selectedIndex].value;
       let category = selectCategory.options[selectCategory.selectedIndex].value;
-      let boardId = selectBoard.options[selectCategory.selectedIndex].value;
-      this.eventList = [...this.scrapList];
+      let boardId = selectBoard.options[selectBoard.selectedIndex].value;
+      this.eventList = [...this.scrapList, ...this.scheduleList];
       if (type > 0) {
-        this.eventList.filter((scrap) => {
-          scrap.scrapfeedType == type;
-        });
+        this.eventList = this.eventList.filter((scrap) => scrap.type == type);
       }
       if (category > 0) {
-        this.eventList.filter((scrap) => {
-          scrap.feedCategory == category;
-        });
+        this.eventList = this.eventList.filter((scrap) => scrap.category == category);
       }
       if (boardId > 0) {
-        this.eventList.filter((scrap) => {
-          scrap.boardId == boardId;
-        });
+        this.eventList = this.eventList.filter((scrap) => scrap.boardId == boardId);
       }
       this.calendarOptions.events = this.eventList;
     },
@@ -155,7 +162,9 @@ export default {
     this.profile = userStore.getters.profile();
     await scrapStore.actions.getScrapList(this.profile.userId);
     this.scrapList = scrapStore.getters.scrapList();
-    this.scrapList.map(function (el) {
+    await scheduleStore.actions.getSchedule();
+    this.scheduleList = scheduleStore.getters.getScheduleList();
+    this.scrapList = this.scrapList.map(function (el) {
       const eventListElement = el;
       const categories = ["전체", "금융", "게임", "보안", "IT 서비스", "모바일"];
       const types = ["기타", "뉴스", "정보"];
@@ -168,16 +177,31 @@ export default {
       if (type == 1) {
         eventListElement["backgroundColor"] = "#00dd99";
       } else if (type == 2) {
-        eventListElement["backgroundColor"] = "#2a00dd";
+        eventListElement["backgroundColor"] = "#c89ec4";
       } else {
         eventListElement["backgroundColor"] = "#000000";
       }
       eventListElement["content"] = typeName + ", " + category + ", " + Intl.DateTimeFormat().format(date) + "," + (el.feedSource || "");
       eventListElement["imgUrl"] = el.feedImgUrl;
       eventListElement["category"] = el.feedCategory;
+      eventListElement["type"] = type;
       return eventListElement;
     });
-    this.calendarOptions.events = this.scrapList;
+    this.scheduleList = this.scheduleList.map(function (el) {
+      const eventListElement = el;
+      const category = el.scheduleCompany;
+      const typeName = "일정";
+      eventListElement["title"] = el.scheduleTitle;
+      eventListElement["date"] = el.scheduleDate;
+      eventListElement["type"] = 3;
+      eventListElement["boardId"] = 0;
+      eventListElement["backgroundColor"] = "#ee7785";
+      eventListElement["content"] = typeName + ", " + category + ", " + el.scheduleDate + "/" + (el.scheduleMemo || "");
+      eventListElement["category"] = 0;
+      return eventListElement;
+    });
+    this.calendarOptions.events.push(...this.scrapList);
+    this.calendarOptions.events.push(...this.scheduleList);
     await boardStore.actions.getBoardList(this.profile.userId);
     this.boardList = boardStore.getters.boardList();
   },
