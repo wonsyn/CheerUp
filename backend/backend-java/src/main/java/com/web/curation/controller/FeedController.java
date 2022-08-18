@@ -198,6 +198,9 @@ public class FeedController {
 			  notes="userId로 내가 스크랩 한 피드 모두 보기")
 	@GetMapping("/scrap/{userId}")
 	public ResponseEntity<List<UserScrapfeedMyfeedJoinDto>> getMyFeed(@PathVariable int userId){
+		for(UserScrapfeedMyfeedJoinDto cur : userScrapfeedMyfeedService.getMyScrap(userId)){
+			System.out.println(cur);
+		}
 		return new ResponseEntity<List<UserScrapfeedMyfeedJoinDto>>(userScrapfeedMyfeedService.getMyScrap(userId), HttpStatus.OK);
 	}
 	

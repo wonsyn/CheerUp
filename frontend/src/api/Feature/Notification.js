@@ -14,5 +14,11 @@ async function checkNotice(alarmId, success, fail) {
     .then(success)
     .catch(fail);
 }
+async function getLatestAlarm(success, fail) {
+  await api
+    .get(`/alarm/getlatestalarm`, { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
 
-export { getNotice, checkNotice };
+export { getNotice, checkNotice, getLatestAlarm };

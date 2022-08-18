@@ -344,4 +344,23 @@ public class AlarmController {
 		}
 		return new ResponseEntity<>(resultMap, status);
 	}
+	
+	@ApiOperation(value="미확인 알람 리스트 조회", 
+			  notes="사용자가 아직 확인하지 못한 알람 리스트 조회")
+	@GetMapping("/getlatestalarm")
+	public ResponseEntity<Map<String, Object>> getlatestalarm(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			resultMap.put("message", SUCCESS);
+			resultMap.put("alarmDetail", alarmService.getLatestAlarm(userService.getUserIdById(jwtService.getUserIdByJwt(request.getHeader("access-token")))));
+		} catch (SQLException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} 
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
 }

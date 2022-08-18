@@ -32,4 +32,6 @@ public interface AlarmDao {
 	public int checkAlarm(int alarmId) throws SQLException;
 	// receiverId, senderId, content, url 을 이용한 알람 존재 여부 체크
 	public AlarmDto alreadyExist(AlarmDto alarmDto) throws SQLException;
+	// 일주일 내 가장 빠른 알람 조회
+	public AlarmDto getLatestAlarm(int userId) throws SQLException;
 }
