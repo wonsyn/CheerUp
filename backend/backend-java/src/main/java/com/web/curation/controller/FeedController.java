@@ -222,8 +222,7 @@ public class FeedController {
 		HashMap<String, String> params = new HashMap<>();
 		params.put("type", type);
 		params.put("industry", industry);
-		System.out.println(type);
-		System.out.println(industry);
+		
 		
 		return new ResponseEntity<List<FeedDto>>(feedService.searchFeed(params), HttpStatus.OK);
 	}

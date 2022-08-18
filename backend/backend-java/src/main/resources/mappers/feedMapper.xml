@@ -20,7 +20,7 @@
 
 		SELECT *
 		FROM feed		
-		
+		ORDER BY feed_id DESC;
 		<if test='type != 0 and industry == 0'>
 		WHERE feed_type = #{type}
 		</if>
