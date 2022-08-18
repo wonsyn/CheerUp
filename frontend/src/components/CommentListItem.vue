@@ -13,27 +13,21 @@
         <div class="ms-2 align-self-center" style="font-size: 5px; color: darkgray">{{ commentDate }}</div>
       </div>
       <div :id="'btn' + commentId" class="d-none">
-        <button :id="'btn_comment_edit' + commentId" class="btn me-1 align-middle" @click="openCommentEditWindow" style="background-color: #eae784; height: 25px; font-size: 10px">수정</button>
-        <button :id="'btn_comment_delete' + commentId" class="btn btn-danger align-self-center align-middle" @click="deleteComment" style="color: black; height: 25px; font-size: 10px">삭제</button>
+        <button :id="'btn_comment_edit' + commentId" class="btn btn-info me-1 align-middle" @click="openCommentEditWindow" style="height: 25px; font-size: 10px">수정</button>
+        <button :id="'btn_comment_delete' + commentId" class="btn btn-danger align-self-center align-middle" @click="deleteComment" style="height: 25px; font-size: 10px">삭제</button>
       </div>
     </div>
     <div :id="'comment_edit_item' + commentId" class="d-none">
       <div class="my-2 py-1 d-flex px-3">
-        <img class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
+        <img v-if="userImgUrl === null" class="profile-icon align-self-center" src="@/assets/blank_profile.png" alt="profile" style="width: 20px; height: 20px" />
+        <img v-else class="profile-icon align-self-center" :src="userImgUrlreq" alt="profile" style="width: 20px; height: 20px" />
         <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
         <input type="text" class="px-2" :id="'input_comment_edit' + commentId" :value="content" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
       </div>
       <div class="pe-3 d-flex">
         <div class="me-auto" />
-        <button
-          id="btn_comment_edit_done"
-          class="btn btn-primary me-1 align-middle"
-          @click="editComment"
-          style="background-color: #eae784; border-color: #eae784; color: black; height: 25px; font-size: 10px"
-        >
-          수정
-        </button>
-        <button id="btn_comment_cancel" class="btn btn-danger align-self-center align-middle" @click="closeCommentEditWindow" style="color: black; height: 25px; font-size: 10px">취소</button>
+        <button id="btn_comment_edit_done" class="btn btn-success me-1 align-middle" @click="editComment" style="height: 25px; font-size: 10px">수정</button>
+        <button id="btn_comment_cancel" class="btn btn-danger align-self-center align-middle" @click="closeCommentEditWindow" style="height: 25px; font-size: 10px">취소</button>
       </div>
     </div>
   </div>

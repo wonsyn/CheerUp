@@ -30,11 +30,11 @@
         <div id="boardtab" class="text-center px-5 py-1 fs-5 tabcursor" @click="clickBoardTab">보드</div>
         <div></div>
       </div>
-      <div v-if="onBoardTab == true">
+      <div class="slide-in-right" v-if="onBoardTab == true">
         <user-board-list :profile="profile" :boardList="boardList" v-if="viewScrapsInBoard === false" @viewBoard="viewBoard"></user-board-list>
         <board-scrap-list :board="board" :profile="profile" @goBoardList="goBoardTab" v-else></board-scrap-list>
       </div>
-      <div v-else>
+      <div class="slide-in" v-else>
         <user-scrap-list :profile="profile"></user-scrap-list>
       </div>
     </div>
@@ -186,5 +186,32 @@ export default {
 .tabcursor {
   cursor: pointer;
   color: #a9a9a9;
+}
+.slide-in {
+  animation: change 1s ease forwards;
+}
+.slide-in-right {
+  animation: change2 1s ease forwards;
+}
+
+@keyframes change {
+  from {
+    transform: translateX(80%);
+    visibility: visible;
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+@keyframes change2 {
+  from {
+    transform: translateX(-80%);
+    visibility: visible;
+  }
+
+  to {
+    transform: translateX(0%);
+  }
 }
 </style>

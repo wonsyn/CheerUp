@@ -3,10 +3,10 @@
     <div :id="'voca_item' + wordId" class="py-2 d-flex" @mouseover="displayBtn" @mouseout="hideBtn" style="border-radius: 5px">
       <div class="me-auto">
         <div :id="'word_name' + wordId" class="text-start ps-3 pb-1" style="font-size: 13px; font-weight: bold">{{ word }}</div>
-        <div :id="'word_desc' + wordId" class="text-break text-start px-3" style="font-size: 12px">{{ curExp }}</div>
+        <div :id="'word_desc' + wordId" class="text-break text-start px-3" style="font-size: 12px">{{ wordExp }}</div>
       </div>
       <div :id="'voca_edit' + wordId" class="d-none align-middle my-auto me-3">
-        <button :id="'btn_voca_edit' + wordId" class="btn me-1" @click="openVocaEditWindow" style="background-color: #eae784; height: 25px; font-size: 11px">수정 및 추가</button>
+        <button :id="'btn_voca_edit' + wordId" class="btn me-1 btn-info" @click="openVocaEditWindow" style="height: 25px; font-size: 11px">수정 및 추가</button>
       </div>
     </div>
     <div :id="'voca_edit_window' + wordId" class="d-none">
@@ -38,10 +38,13 @@ export default {
     wordExp: String,
     wordId: Number,
   },
-  data() {
-    return {
-      curExp: this.wordExp,
-    };
+  // data() {
+  //   return {
+  //     curExp: this.wordExp,
+  //   };
+  // },
+  created() {
+    console.log("voca created");
   },
   methods: {
     displayBtn() {
@@ -50,7 +53,7 @@ export default {
 
       btnWindow.classList.add("d-block");
       btnWindow.classList.remove("d-none");
-      vocaItem.style.backgroundColor = "lightgrey";
+      vocaItem.style.backgroundColor = "#eeeeee";
     },
     hideBtn() {
       const btnWindow = document.getElementById("voca_edit" + this.wordId);
@@ -92,7 +95,9 @@ export default {
       vocaEditTextarea.value = "";
     },
     async editVoca() {
-      await wordStore.actions.addMyWord(this.word, this.curExp);
+      const vocaEditTextarea = document.getElementById("voca_edit_textarea" + this.wordId);
+      let val = vocaEditTextarea.value;
+      await wordStore.actions.addMyWord(this.word, val);
 
       this.closeVocaEditWindow();
     },
@@ -100,4 +105,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+div .test {
+  /* #EE7785#C89EC4#84B1ED */
+  color: #84b1ed;
+}
+</style>

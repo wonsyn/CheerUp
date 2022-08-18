@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isDeleted">
-    <div v-if="!isEdit" class="py-3 px-5 my-3" style="background-color: rgb(245, 245, 245); border-radius: 10px">
+    <div v-if="!isEdit" class="py-3 px-5 my-3" style="background-color: #eeeeee88; border-radius: 10px">
       <div class="d-flex">
         <span class="ps-2" style="font-weight: bold; font-size: 20px">{{ personalWord }}</span>
       </div>
@@ -15,7 +15,7 @@
         <img src="@/assets/delete.png" @click="deleteWord" alt="delete" style="width: 4%; height: 4%" />
       </div>
     </div>
-    <div v-else class="py-3 px-5 my-3" style="background-color: rgb(245, 245, 245); border-radius: 10px">
+    <div v-else class="py-3 px-5 my-3" style="background-color: #eeeeee88; border-radius: 10px">
       <div class="d-flex">
         <span class="ps-2" style="font-weight: bold; font-size: 20px">{{ personalWord }}</span>
       </div>
@@ -29,7 +29,7 @@
         style="font-size: 13px; width: 100%; height: 130px; border-radius: 7px"
       ></textarea>
       <div class="d-flex justify-content-end">
-        <button id="voca_add_btn" class="me-2 btn btn-primary" @click="editWord" style="font-size: 15px; height: 30px">수정</button>
+        <button id="voca_add_btn" class="me-2 btn btn-info" @click="editWord" style="font-size: 15px; height: 30px">수정</button>
         <button id="voca_cancel_btn" class="btn btn-danger" @click="cancelWordEdit" style="font-size: 15px; height: 30px">취소</button>
       </div>
     </div>

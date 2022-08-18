@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <div class="d-flex">
-      <button @click="goBack" class="btn btn-success mx-3 px-5 my-0">이전으로</button>
+    <div>
+      <div class="d-flex"><button @click="goBack" class="btn btn-success mx-3 px-5 my-0">이전으로</button></div>
+
       <h3 class="my-0 align-text-bottom">{{ board.boardName }}</h3>
+      <div></div>
     </div>
 
     <div class="row d-flex justify-content-center">

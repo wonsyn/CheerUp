@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <div class="container">
-      <div style="border: 1px black solid; border-radius: 7px">
+      <div class="mb-4" style="border: 1px solid #41c89f; border-radius: 7px">
         <div class="row p-3">
-          <select id="select_feed_type" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
+          <select id="select_feed_type" style="border-width: 0" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
             <option selected value="0">전체</option>
             <option value="1">뉴스</option>
             <option value="2">정보글</option>
           </select>
-          <select id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
+          <select style="border-width: 0" id="select_feed_category" class="form-select form-select-sm col d-flex mx-3" aria-label=".form-select-sm example">
             <option selected value="0">산업군(전체)</option>
             <option value="1">금융</option>
             <option value="2">게임</option>
@@ -17,7 +17,7 @@
             <option value="5">모바일</option>
           </select>
           <div class="col text-end me-3">
-            <button @click="searchFeed" type="button" class="btn" style="background-color: #00dd99">검색</button>
+            <button @click="searchFeed" type="button" class="btn btn-primary">검색</button>
           </div>
           <!-- <div class="text-start pt-3 align-middle">
             <div class="form-check form-switch">
@@ -27,7 +27,7 @@
           </div> -->
         </div>
       </div>
-      <feed-list v-if="token != null" :feedList="feedList" :key="listKey" class="mt-3 p-3" style="border: 1px black solid; border-radius: 7px"></feed-list>
+      <feed-list v-if="token != null" :feedList="feedList" :key="listKey" class="p-3" style="background-color: #eeeeee88; border-radius: 7px"></feed-list>
     </div>
   </div>
 </template>

@@ -1,20 +1,26 @@
 <template>
   <div class="container my-5">
+    <br />
+    <br />
+
     <div style="font-weight: bold; font-size: 40px" @click="checkData">회원가입</div>
-    <div class="row">
-      <div class="col py-3" style="display: inline-block; vertical-align: middle">
-        <img src="@/assets/logo.png" alt="logo" style="width: 65%; height: 50%" />
-        <br />
-        <div>취Up에 가입하고 다양한 소식을 받아보세요!</div>
+    <div class="row my-3">
+      <div class="d-flex col align-items-center" style="display: inline-block">
+        <div>
+          <img src="@/assets/logo.png" alt="logo" style="width: 65%; height: 50%" />
+          <br />
+          <h5>취업이 고민이신가요?</h5>
+          <h5 class="my-4">저희 <strong class="text-primary">Cheer Up</strong>과 함께 쉬운 취업 준비하세요!</h5>
+        </div>
       </div>
       <div class="col py-3">
         <div class="py-3 px-3">
           <div style="border: 1px black solid; padding: 5%; border-radius: 10px; box-shadow: 5px 5px 5px">
             <form @submit.prevent="signup(credentials)" class="needs-validation">
               <label for="id" class="form-label">ID</label>
-              <div class="input-group mb-3" required>
-                <input @input="dupIdBtn" v-model="credentials.id" id="id" type="text" class="form-control" placeholder="ID" aria-label="User ID" aria-describedby="btn_check_dup" required />
-                <button class="btn btn-outline-primary" id="btn_check_id" @click="checkDup" disabled>중복확인</button>
+              <div class="input-group mb-3" style="border-radius: 10px" required>
+                <input @input="dupIdBtn" v-model="credentials.id" id="id" type="text" class="form-control" placeholder="ID" aria-label="User ID" aria-describedby="btn_check_id" required />
+                <button class="btn btn-outline-primary" style="border-radius: 0 0.375rem 0.375rem 0" id="btn_check_id" @click="checkDup" disabled>중복확인</button>
                 <div v-if="credentials.id.length < 4" id="id-check-invalid" class="invalid-feedback">ID는 4자 이상 입력하세요.</div>
                 <div v-else id="id-check-invalid" class="invalid-feedback">사용 불가능한 ID입니다.</div>
                 <div id="id-check-valid" class="valid-feedback">사용 가능한 ID입니다.</div>
@@ -52,9 +58,11 @@
                 </ul>
               </div>
               <hr />
-              <button class="btn btn-primary mt-3">회원가입</button>
+              <div class="text-end">
+                <button type="submit" class="btn btn-primary mx-2">회원가입</button>
+                <button type="button" @click="escape" class="btn btn-danger">뒤로</button>
+              </div>
             </form>
-            <button @click="escape" class="btn btn-sm btn-outline-danger my-2">뒤로</button>
           </div>
         </div>
       </div>

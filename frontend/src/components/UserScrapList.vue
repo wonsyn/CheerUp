@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <h3>스크랩 리스트</h3>
+  <div class="container my-3">
     <div class="row d-flex justify-content-center">
       <h5 v-if="scrapList === undefined || scrapList === null || scrapList.length === 0">스크랩이 없습니다.</h5>
 
