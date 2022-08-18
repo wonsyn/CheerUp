@@ -10,6 +10,7 @@ import ScheduleView from "@/views/ScheduleView.vue";
 import UserEditView from "@/views/UserEditView.vue";
 import VocaView from "@/views/VocaView.vue";
 import FeedDetailView from "@/views/FeedDetailView.vue";
+import AuthorizationView from "@/views/AuthorizationView";
 
 const routes = [
   {
@@ -33,7 +34,7 @@ const routes = [
     component: CalendarView,
   },
   {
-    path: "/follow",
+    path: "/follow/:username",
     name: "follow",
     component: FollowView,
   },
@@ -63,9 +64,15 @@ const routes = [
     component: NotFoundView,
   },
   {
-    path: "/detail",
+    path: "/detail/:feedId",
     name: "detail",
     component: FeedDetailView,
+    props: true,
+  },
+  {
+    path: "/auth",
+    name: "userauth",
+    component: AuthorizationView,
   },
   // {
   //   path: "*",

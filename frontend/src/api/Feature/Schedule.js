@@ -1,11 +1,33 @@
-import { apiInstance } from "./index.js";
+import { apiInstance } from "@/api/index.js";
 
 const api = apiInstance();
 
-/* example
-function getGugun(param, success, fail) {
-  api.get(`/address/gugun`, { params: param }).then(success).catch(fail);
+async function getSchedule(params, success, fail) {
+  await api
+    .get(`/schedule/list`, { params: params, headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
 }
-*/
 
-export /* getGugun */ {};
+async function addSchedule(body, success, fail) {
+  await api
+    .post(`/schedule/create`, JSON.stringify(body), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+
+async function updateSchedule(body, success, fail) {
+  await api
+    .put(`/schedule/update/`, JSON.stringify(body), { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+
+async function deleteSchedule(scheduleId, success, fail) {
+  await api
+    .delete(`/schedule/delete/${scheduleId}`, { headers: { "access-token": sessionStorage.getItem("access-token") } })
+    .then(success)
+    .catch(fail);
+}
+
+export { getSchedule, addSchedule, updateSchedule, deleteSchedule };

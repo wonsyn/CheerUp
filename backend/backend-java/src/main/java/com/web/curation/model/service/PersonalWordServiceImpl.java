@@ -1,5 +1,6 @@
 package com.web.curation.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,49 +16,44 @@ public class PersonalWordServiceImpl implements PersonalWordService{
 	PersonalWordDao personalWordDao;
 
 	@Override
-	public void createPersonalWord(PersonalWordDto personalWordDto) {
-		personalWordDao.insertPersonalWord(personalWordDto);
+	public int createPersonalWord(PersonalWordDto personalWordDto) {
+		return personalWordDao.insertPersonalWord(personalWordDto);
 	}
 
 	@Override
-	public void deletePersonalWord(int personalWordId) {
-		personalWordDao.deletePersonalWord(personalWordId);
+	public int deletePersonalWord(int personalWordId) {
+		return personalWordDao.deletePersonalWord(personalWordId);
 	}
 
 	@Override
-	public List<PersonalWordDto> getPersonalWordList(int userId) {
-		return personalWordDao.selectPersonalWordList(userId);
+	public List<PersonalWordDto> getPersonalWordList(HashMap params) {
+		return personalWordDao.selectPersonalWordList(params);
 	}
 
 	@Override
-	public List<PersonalWordDto> getPersonalFavWordList(int userId) {
-		return personalWordDao.selectPersonalFavWordList(userId);
+	public List<PersonalWordDto> getPersonalFavWordList(HashMap params) {
+		return personalWordDao.selectPersonalFavWordList(params);
 	}
 
 	@Override
-	public void addPersonalFavWord(int personalWordId) {
+	public int addPersonalFavWord(int personalWordId) {
 //		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordId);
 //		System.out.println(dto);
-		personalWordDao.addPersonalFavWord(personalWordId);
+		return personalWordDao.addPersonalFavWord(personalWordId);
 	}
 
 	@Override
-	public void cancelPersonalFavWord(int personalWordId) {
-		personalWordDao.cancelPersonalFavWord(personalWordId);
+	public int cancelPersonalFavWord(int personalWordId) {
+		return personalWordDao.cancelPersonalFavWord(personalWordId);
 	}
 
 	@Override
-	public void editPersonalWord(PersonalWordDto personalWordDto) {
+	public int editPersonalWord(PersonalWordDto personalWordDto) {
 		PersonalWordDto dto = personalWordDao.selectPersonalWordById(personalWordDto.getPersonalWordId());
 		
-		dto.setPersonalWordId(personalWordDto.getPersonalWordId());
-		dto.setUserId(personalWordDto.getUserId());
-		dto.setPersonalWord(personalWordDto.getPersonalWord());
 		dto.setPersonalWordExp(personalWordDto.getPersonalWordExp());
-		dto.setPersonalFavWord(personalWordDto.getPersonalFavWord());
-		dto.setPersonalWordDate(personalWordDto.getPersonalWordDate());
 		System.out.println("dto : " + dto);
-		personalWordDao.updatePersonalWord(dto);
+		return personalWordDao.updatePersonalWord(dto);
 		
 	}
 
