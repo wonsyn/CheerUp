@@ -1,8 +1,8 @@
-<img src="C:\ssafy\common\S07P12B104\frontend\src\assets\logo.png" alt="logo" style="zoom:50%;" />
+![logo](/uploads/892b6b9c9296ca20b52878aa5b418655/logo.png)
 
 ### SSAFY 공통프로젝트 B104 취UP팀
 
-![팀원소개](C:\ssafy\common\S07P12B104\readme.assets\팀원소개.png)
+![팀원소개](/uploads/7e20b4863b996cd9fe0c8f6d516059b6/팀원소개.png)
 
 
 
