@@ -19,7 +19,8 @@
     </div>
     <div :id="'comment_edit_item' + commentId" class="d-none">
       <div class="my-2 py-1 d-flex px-3">
-        <img class="align-self-center" src="@/assets/logo.png" alt="profile" style="width: 20px; height=20px" />
+        <img v-if="userImgUrl === null" class="profile-icon align-self-center" src="@/assets/blank_profile.png" alt="profile" style="width: 20px; height: 20px" />
+        <img v-else class="profile-icon align-self-center" :src="userImgUrlreq" alt="profile" style="width: 20px; height: 20px" />
         <div class="ms-2 text-start align-self-center" style="width: 100px; font-size: 15px; font-weight: bold">{{ id }}</div>
         <input type="text" class="px-2" :id="'input_comment_edit' + commentId" :value="content" placeholder="댓글을 입력하세요." style="font-size: 14px; width: 100%; border-radius: 7px" />
       </div>

@@ -52,14 +52,6 @@
     <div style="font-family: 'RIDIBatang'" v-html="feedDetail.feedContent"></div>
     <hr />
     <detail-voca-list-item v-for="voca in vocaList" :key="voca.wordId" v-bind="voca"></detail-voca-list-item>
-    <div id="voca_add_window" class="px-3 pb-3" style="display: none">
-      <input id="voca_name_input" class="px-3 py-1 mb-2" type="text" placeholder="단어명" style="font-size: 14px; width: 100%; border-radius: 7px" /> <br />
-      <textarea name="voca_add_textarea" id="voca_add_textarea" class="px-2" placeholder="단어 내용.." style="font-size: 13px; width: 100%; height: 130px; border-radius: 7px"></textarea>
-      <div class="d-flex justify-content-end">
-        <button id="voca_add_btn" class="me-2 btn btn-primary" @click="addVoca" style="font-size: 15px; height: 30px">추가</button>
-        <button id="voca_cancel_btn" class="btn btn-danger" @click="closeVocaAddWindow" style="font-size: 15px; height: 30px">취소</button>
-      </div>
-    </div>
     <hr />
     <div class="text-start ps-3" style="font-size: 13px; font-weight: bold">댓글</div>
     <comment-list-item v-for="comment in commentList" :key="comment.commentId" v-bind="comment"></comment-list-item>
@@ -134,10 +126,8 @@ export default {
     };
   },
   async created() {
-    console.log("detail created", this.feedId);
     await feedStore.actions.recommFeed(this.feedId);
     this.recommList = feedStore.getters.getRecommList();
-    console.log("this", ...this.recommList);
     await userStore.actions.getProfile(this.loginUserId);
     this.loginUserInfo = userStore.getters.profile();
     await commentStore.actions.listComment(this.feedId);
@@ -149,8 +139,6 @@ export default {
     await wordStore.actions.getMyWordList(sessionStorage.getItem("current_user_num"));
     await scrapStore.actions.getScrapList(this.loginUserInfo.userId);
     this.scrapList = scrapStore.getters.scrapList();
-    console.log("detail scraplist", this.scrapList);
-    console.log("detail", this.recommList);
     const filtered = this.scrapList.filter((el) => el.feedId == this.feedId);
 
     if (filtered?.length > 0) {
@@ -162,6 +150,7 @@ export default {
     }
     await boardStore.actions.getBoardList(this.currentUserId);
     this.boardList = boardStore.getters.boardList();
+    await wordStore.actions.getDBWordList();
     const dbWordList = wordStore.getters.getDBWordList();
     this.vocaList = dbWordList.filter((x) => {
       return this.feedDetail.feedContent.indexOf(x.word) != -1;
@@ -238,31 +227,6 @@ export default {
         this.myfeedId = this.filteredScrap.myfeedId;
       }
     },
-    openVocaAddWindow() {
-      const vocaWindow = document.getElementById("voca_add_window");
-      const vocaListAddButton = document.getElementById("vocalist_add_btn");
-
-      vocaWindow.classList.add("d-block");
-      vocaListAddButton.classList.add("d-none");
-      vocaWindow.classList.remove("d-none");
-      vocaListAddButton.classList.remove("d-block");
-    },
-    closeVocaAddWindow() {
-      const vocaWindow = document.getElementById("voca_add_window");
-      const vocaListAddButton = document.getElementById("vocalist_add_btn");
-
-      vocaWindow.classList.add("d-none");
-      vocaListAddButton.classList.add("d-block");
-      vocaWindow.classList.remove("d-block");
-      vocaListAddButton.classList.remove("d-none");
-    },
-    addVoca() {
-      const vocaName = document.getElementById("voca_name_input").value;
-      const vocaDesc = document.getElementById("voca_add_textarea").value;
-
-      console.log("Name: " + vocaName);
-      console.log("Desc: " + vocaDesc);
-    },
     async addComment() {
       const comment_input = document.getElementById("input_comment_create");
       const userId = sessionStorage.getItem("current_user");
@@ -276,10 +240,8 @@ export default {
     },
     async reload() {
       this.recommList = [];
-      console.log("detail created", this.feedId, this.$route.params);
       await feedStore.actions.recommFeed(this.$route.params.feedId);
       this.recommList = feedStore.getters.getRecommList();
-      console.log("recommend", ...this.recommList);
       await userStore.actions.getProfile(this.loginUserId);
       this.loginUserInfo = userStore.getters.profile();
       await commentStore.actions.listComment(this.feedId);
@@ -302,7 +264,6 @@ export default {
       await boardStore.actions.getBoardList(this.currentUserId);
       this.boardList = boardStore.getters.boardList();
       const dbWordList = wordStore.getters.getDBWordList();
-      // const myWordList = wordStore.getters.getMyWordList();
       this.vocaList = dbWordList.filter((x) => {
         return this.feedDetail.feedContent.indexOf(x.word) != -1;
       });
