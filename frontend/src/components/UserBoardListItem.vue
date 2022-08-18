@@ -1,5 +1,5 @@
 <template>
-  <div id="board-list-item" class="ct-item board-list-item card my-3" style="width: 18rem">
+  <div id="board-list-item" class="ct-item board-list-item card my-3 slide-in-right" style="width: 18rem">
     <img v-if="scrapForThumbnail != null" @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" :src="scrapForThumbnail" class="card-img-top" alt="img" />
     <img v-else @click="goBoardDetail" style="width: 100%; max-height: 12rem; object-fit: cover; cursor: pointer" src="@/assets/logo.png" class="card-img-top" alt="img" />
     <div class="card-body">
@@ -50,7 +50,6 @@ export default {
       this.isEdit = false;
     },
     async updateBoard() {
-      console.log("update");
       if (this.currentUser == this.profile.id) {
         const params = {
           userId: this.board.userId,
@@ -61,16 +60,12 @@ export default {
         const isSuccess = boardStore.getters.isSuccess();
         this.scrapsInBoard = scrapStore.getters.scrapsInBoard();
         if (isSuccess) {
-          console.log(isSuccess);
           this.$parent.getBoardList();
           this.isEdit = false;
-        } else {
-          console.log("변경 실패!");
         }
       }
     },
     async deleteBoard() {
-      console.log("delete");
       if (this.currentUser == this.profile.id) {
         await boardStore.actions.deleteBoard(this.board.boardId);
         this.$parent.getBoardList();
@@ -100,5 +95,17 @@ export default {
 .ct-item:hover {
   transform: scale(1.025);
   transition: all 0.15s;
+}
+.slide-in-right {
+  animation: change2 1s ease forwards;
+}
+@keyframes change2 {
+  from {
+    transform: translateX(-100%);
+    visibility: visible;
+  }
+  to {
+    transform: translateX(0%);
+  }
 }
 </style>
