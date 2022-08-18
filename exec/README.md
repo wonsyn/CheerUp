@@ -1,8 +1,8 @@
-<img src="/uploads/892b6b9c9296ca20b52878aa5b418655/logo.png" width="50%" height="50%">
+<p align="center"><img src="img/logo.png" width="50%" height="50%"></p>
 
 ### SSAFY 공통프로젝트 B104 취UP팀
 
-![introduce](/uploads/ed6badebec2cdad58fafed09c985dd93/introduce.png)
+<img src="img/introduce.png">
 
 
 
