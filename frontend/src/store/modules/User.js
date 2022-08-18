@@ -76,7 +76,7 @@ const mutations = {
 
 const actions = {
   async connect() {
-    var ws = new WebSocket("ws://localhost:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
+    var ws = new WebSocket("ws://cheerup.kro.kr:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
     mutations.SET_SOCKET(ws);
     state.socket.onmessage = function (e) {
       mutations.SET_SOCKETMESSAGE(e.data);
