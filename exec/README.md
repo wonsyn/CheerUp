@@ -2,7 +2,7 @@
 
 ### SSAFY 공통프로젝트 B104 취UP팀
 
-![팀원소개](/uploads/7e20b4863b996cd9fe0c8f6d516059b6/팀원소개.png)
+![introduce](/uploads/ed6badebec2cdad58fafed09c985dd93/introduce.png)
 
 
 
