@@ -1,22 +1,22 @@
 <template>
   <div class="my-3">
-    <div class="card mx-auto ct-item" style="width: 24rem">
+    <div :id="'card-' + feedId" class="card mx-auto ct-item" style="width: 24rem">
       <img @click="moveDetail" v-if="feedImgUrl != null" :src="feedImgUrl" class="card-img-top pointer" alt="thumbnail" style="width: 100%; max-height: 12rem; object-fit: cover" />
       <img @click="moveDetail" v-else src="@/assets/logo.png" class="card-img-top pointer" alt="thumbnail" style="width: 100%; max-height: 12rem; object-fit: cover" />
-      <div class="card-body mt-2" style="margin-top: auto; margin-bottom: auto">
-        <p @click="moveDetail" class="card-text pointer">{{ feedTitle }}</p>
+      <div @click="moveDetail" class="card-body mt-2 pointer" style="margin-top: auto; margin-bottom: auto">
+        <p class="card-text">{{ feedTitle }}</p>
       </div>
       <div class="card-footer d-flex justify-content-between">
         <div>{{ feedSource }}</div>
-        <button v-if="isBookmarked == true" :id="'btn-scrap-' + feedId" class="btn btn-sm" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0">
+        <button @click="modalMethod" v-if="isBookmarked == true" :id="'btn-scrap-' + feedId" class="btn btn-sm">
           <img class="bookmark-icon" src="@/assets/bookmark_filled.png" style="height: 25px" />
         </button>
-        <button v-else :id="'btn-scrap-' + feedId" class="btn btn-sm" data-bs-toggle="modal" :data-bs-target="'#boardSelectModal-' + feedId" data-bs-whatever="0" style="border: 0">
+        <button @click="modalMethod" v-else :id="'btn-scrap-' + feedId" class="btn btn-sm" style="border: 0">
           <img class="bookmark-icon" src="@/assets/bookmark_blank.png" style="height: 25px" />
         </button>
       </div>
     </div>
-    <div class="modal fade" :id="'boardSelectModal-' + feedId" tabindex="-1" :aria-labelledby="'boardSelectModalLabel-' + feedId" aria-hidden="true">
+    <div class="modal fade" style="z-index: 10000" :id="'boardSelectModal-' + feedId" tabindex="-1" :aria-labelledby="'boardSelectModalLabel-' + feedId" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -59,6 +59,7 @@
 import router from "@/router";
 import scrapStore from "@/store/modules/Scrap";
 import boardStore from "@/store/modules/Board";
+import Modal from "bootstrap/js/dist/modal.js";
 
 export default {
   name: "FeedListItem",
@@ -80,12 +81,17 @@ export default {
     return {
       isBookmarked: false,
       boardId: 0,
+      newScrapList: [],
       filteredScrap: {},
       boardList: [],
       newBoardName: "",
     };
   },
   methods: {
+    modalMethod() {
+      const newModal = new Modal(document.getElementById("boardSelectModal-" + this.feedId));
+      newModal.show();
+    },
     async createBoard() {
       if (this.newBoardName?.length > 0) {
         const params = {
@@ -113,7 +119,6 @@ export default {
       if (this.isBookmarked == true && res == "delete") {
         if (confirm("스크랩을 취소하시겠습니까?")) {
           scrapStore.actions.deleteScrap(this.filteredScrap.myfeedId);
-          this.isBookmarked = false;
           this.$parent.getScrapList();
         }
       } else if (this.isBookmarked == false) {
@@ -124,7 +129,6 @@ export default {
           userId: Number(this.currentUserId),
         };
         await scrapStore.actions.createScrap(params);
-        this.isBookmarked = true;
       } else {
         const params = {
           boardId: this.boardId,
@@ -144,8 +148,19 @@ export default {
         window.open(this.feedUrl, "blog");
       }
     },
-    fetchScrapList() {
-      scrapStore.actions.getScrapList(this.currentUserId);
+    async fetchScrapList() {
+      await scrapStore.actions.getScrapList(sessionStorage.getItem("current_user_num"));
+      this.newScrapList = scrapStore.getters.scrapList();
+      const filtered = this.newScrapList.filter((el) => el.feedId === this.feedId);
+
+      if (filtered?.length > 0) {
+        this.isBookmarked = true;
+        this.filteredScrap = filtered.at(0);
+      } else {
+        this.isBookmarked = false;
+      }
+      await boardStore.actions.getBoardList(this.currentUserId);
+      this.boardList = boardStore.getters.boardList();
     },
   },
   computed: {
@@ -159,12 +174,16 @@ export default {
     if (filtered?.length > 0) {
       this.isBookmarked = true;
       this.filteredScrap = filtered.at(0);
-      console.log("created scrap", this.filteredScrap);
     } else {
       this.isBookmarked = false;
     }
+
     await boardStore.actions.getBoardList(this.currentUserId);
     this.boardList = boardStore.getters.boardList();
+    const cardEl = document.getElementById("card-" + this.feedId);
+    if (this.$route.name == "profile") {
+      cardEl.classList.add("slide-in");
+    }
   },
   watch: {},
 };
@@ -231,4 +250,17 @@ export default {
 .movie-item:hover .more {
   opacity: 1;
 } */
+.slide-in {
+  animation: change 1s ease forwards;
+}
+
+@keyframes change {
+  from {
+    transform: translateX(100%);
+    visibility: visible;
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
 </style>
