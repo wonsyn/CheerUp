@@ -6,11 +6,11 @@ B104
 
 
 
-<img src="exec/img/main_1.png">
+<img src="exec/img/main_1.PNG">
 
-<img src="exec/img/main_2.png">
+<img src="exec/img/main_2.PNG">
 
-<img src="exec/img/main_3.png">
+<img src="exec/img/main_3.PNG">
 
 ### SSAFY 공통프로젝트 B104 취UP팀
 
