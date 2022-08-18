@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.adapter.standard.StandardWebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.web.curation.model.dto.AlarmDto;
@@ -73,8 +74,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		
 		//자바스크립트에서 넘어온 Msg
 		String msg = message.getPayload();
-		System.out.println("??????????");
-		
+
 		if (!msg.isBlank()) {
 			
 			String[] strs = msg.split(",");
@@ -100,9 +100,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				String content = "";
 				// 프론트로 전달하는 객체
 				TextMessage tmpMsg = null;
-
+				
 				WebSocketSession senderSession = userSessionsMap.get(senderId);
 				WebSocketSession receiverSession = userSessionsMap.get(receiverId);
+				
+				System.out.println("송신 유저: " + senderSession);
+				System.out.println("수신 유저: " + receiverSession);
+				
+				if(receiverSession == null) {
+//					System.out.println("연결된 핸들텍스트메세지 유저: " + session.getUri().toString().split("id=")[0]+"id=" + receiverId);
+//					StandardWebSocketSession aa = new  
+//		
+//					sessions.add(session);
+//					userSessionsMap.put(receiverId,session);
+//					
+					return;
+				}
 				
 				boolean scheduleFlag = false;
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
