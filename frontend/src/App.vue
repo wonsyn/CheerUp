@@ -36,6 +36,12 @@ export default {
     NavBar,
     MainFooter,
   },
+  // created() {
+  //   if (sessionStorage.getItem["access-token"] != null) {
+  //     userStore.actions.connect();
+  //     console.log("APP: ", userStore.getters.socket());
+  //   }
+  // },
   methods: {
     getSocketMessage() {
       this.socketMessage = userStore.getters.socketMessage();

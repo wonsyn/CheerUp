@@ -88,6 +88,12 @@ export default {
   watch: {
     $route: "fetchCurrentUser",
   },
+  // mounted () {
+  //   if (sessionStorage.getItem["access-token"] != null) {
+  //     console.log("APP: ", userStore.getters.socket());
+  //     userStore.actions.connect();
+  //   }
+  // },
   methods: {
     fetchCurrentUser() {
       this.token = sessionStorage.getItem("access-token");

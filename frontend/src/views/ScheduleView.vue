@@ -110,6 +110,7 @@ import ScheduleTableItem from "@/components/SchduleTableItem.vue";
 import useStore from "@/store/index.js";
 
 const scheduleStore = useStore().modules.scheduleStore;
+const userStore = useStore().modules.userStore;
 
 export default {
   components: {
@@ -191,6 +192,14 @@ export default {
       });
     },
     async executeCreate() {
+      if (userStore.getters.socket() === null || userStore.getters.socket().readyState === 3) {
+        // if (this.socket === null) {
+        console.log("schedule socket disconnected", userStore.getters.socket());
+        this.socket = await userStore.getters.socket();
+        console.log("schedule socket disconnected ", this.socket);
+        await userStore.actions.connect();
+      }
+
       const modal = document.getElementById("scheduleCreateModal");
 
       const modalName = modal.querySelector("#schedule-create-name");
@@ -199,6 +208,11 @@ export default {
       const modalMemo = modal.querySelector("#schedule-create-memo");
 
       await scheduleStore.actions.addSchedule(modalName.value, modalCompany.value, modalDate.value, modalMemo.value);
+
+      // if (userStore.getters.socket() === null || userStore.getters.socket().readyState === 3) {
+      //   console.log("schedule socket disconnected");
+      //   await userStore.actions.connect();
+      // }
 
       let today = new Date();
       today.setHours(today.getHours() + 9);
@@ -211,12 +225,20 @@ export default {
 
       if (day >= 0 && day <= 7) {
         let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
-        this.socket.onopen(socketMsg);
+        userStore.getters.socket().onopen(socketMsg);
       }
       await scheduleStore.actions.getSchedule();
       this.scheduleList = scheduleStore.getters.getScheduleList();
     },
     async executeUpdate() {
+      if (userStore.getters.socket() === null || userStore.getters.socket().readyState === 3) {
+        // if (this.socket === null) {
+        console.log("schedule socket disconnected", userStore.getters.socket());
+        this.socket = await userStore.getters.socket();
+        console.log("schedule socket disconnected ", this.socket);
+        await userStore.actions.connect();
+      }
+
       const modal = document.getElementById("scheduleEditModal");
       console.log("update", this.curSchedule.scheduleId);
       const modalName = modal.querySelector("#schedule-edit-name");
@@ -236,7 +258,7 @@ export default {
       if (day >= 0 && day <= 7) {
         // let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + day + "," + modalName.value;
         let socketMsg = "schedule," + sessionStorage.getItem("current_user") + "," + sessionStorage.getItem("current_user") + "," + modalDate.value + "," + modalName.value + "," + modalCompany.value;
-        this.socket.onopen(socketMsg);
+        userStore.getters.socket().onopen(socketMsg);
       }
 
       await scheduleStore.actions.getSchedule();

@@ -50,8 +50,14 @@ const actions = {
     );
   },
   async createScrap(params) {
+    if (useStore().modules.userStore.getters.socket() === null || useStore().modules.userStore.getters.socket().readyState === 3) {
+      console.log("scrap socket disconnected");
+      await useStore().modules.userStore.actions.connect();
+    }
+
     await useStore().modules.userStore.actions.getFollowerList(sessionStorage.getItem("current_user"));
     let followerList = useStore().modules.userStore.getters.followerList();
+
     await createScrap(
       params,
       ({ data }) => {

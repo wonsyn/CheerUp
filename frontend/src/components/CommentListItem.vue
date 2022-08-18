@@ -70,7 +70,11 @@ export default {
     // console.log("imgurl: ", this.userImgUrlreq);
   },
   methods: {
-    updateLike() {
+    async updateLike() {
+      if (userStore.getters.socket() === null || userStore.getters.socket().readyState === 3) {
+        console.log("like socket disconnected");
+        await userStore.actions.connect();
+      }
       if (this.like) {
         commentStore.actions.deleteLike(this.commentId, sessionStorage.getItem("current_user_num")); // like == true 인 경우
         this.like = false;
@@ -81,7 +85,7 @@ export default {
         this.likeNum = this.likeNum + 1;
         let socketMsg = "comment_like," + sessionStorage.getItem("current_user") + "," + this.id + "," + this.feedId + "," + this.commentContent;
         console.log("commentListItem(83): " + socketMsg);
-        this.socket.onopen(socketMsg);
+        await userStore.getters.socket().onopen(socketMsg);
       }
     },
     displayEdit() {

@@ -76,22 +76,46 @@ const mutations = {
 
 const actions = {
   async connect() {
-    var ws = new WebSocket("ws://cheerup.kro.kr:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
+    var ws = new WebSocket("ws://localhost:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
+    // var ws = new WebSocket("wss://cheerup.kro.kr:3000/api/cheerup/ws?id=" + sessionStorage.getItem("current_user"));
+    mutations.SET_SOCKET(ws);
+    ws.onopen = async (msg) => {
+      console.log("onopen connected", ws);
+      ws.send(msg);
+    };
+    ws.onmessage = async (e) => {
+      console.log("onmessage: ", e.data);
+      mutations.SET_SOCKETMESSAGE(e.data);
+      console.log(main.methods.getSocketMessage());
+    };
+    ws.onclose = async (e) => {
+      console.log("disconnect", e);
+      mutations.SET_SOCKET(null);
+      this.connect();
+
+      // setTimeout(() => {
+      // }, 1000);
+    };
+    /*
     mutations.SET_SOCKET(ws);
     console.log("connect(): " + ws);
     state.socket.onmessage = function (e) {
       mutations.SET_SOCKETMESSAGE(e.data);
+      console.log("리턴 데이터: ", e.data);
       console.log(e.data.alarmReceiverId);
       console.log("user.js: " + getters.socketMessage());
       console.log(main.methods.getSocketMessage());
     };
     state.socket.onopen = function (msg) {
       console.log("socket open", msg);
+      // actions.sendMessage(msg);
       state.socket.send(msg);
     };
-    state.socket.onclose = function () {
+    state.socket.onclose = async function () {
       console.log("언제 꺼지냐");
+      mutations.SET_SOCKET(null);
     };
+    */
   },
   async login(user) {
     await login(
